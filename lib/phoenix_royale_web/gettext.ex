@@ -1,11 +1,11 @@
-defmodule LiveViewDemoWeb.Gettext do
+defmodule PhoenixRoyaleWeb.Gettext do
   @moduledoc """
   A module providing Internationalization with a gettext-based API.
 
   By using [Gettext](https://hexdocs.pm/gettext),
   your module gains a set of macros for translations, for example:
 
-      import LiveViewDemoWeb.Gettext
+      import PhoenixRoyaleWeb.Gettext
 
       # Simple translation
       gettext("Here is the string to translate")
@@ -20,5 +20,5 @@ defmodule LiveViewDemoWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :live_view_demo
+  use Gettext, otp_app: :phoenix_royale
 end

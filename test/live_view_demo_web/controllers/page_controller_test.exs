@@ -1,5 +1,5 @@
-defmodule LiveViewDemoWeb.PageControllerTest do
-  use LiveViewDemoWeb.ConnCase
+defmodule PhoenixRoyaleWeb.PageControllerTest do
+  use PhoenixRoyaleWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

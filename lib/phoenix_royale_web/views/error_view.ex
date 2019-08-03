@@ -1,5 +1,5 @@
-defmodule LiveViewDemoWeb.ErrorView do
-  use LiveViewDemoWeb, :view
+defmodule PhoenixRoyaleWeb.ErrorView do
+  use PhoenixRoyaleWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

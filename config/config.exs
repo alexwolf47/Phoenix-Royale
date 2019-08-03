@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :live_view_demo,
-  ecto_repos: [LiveViewDemo.Repo]
+config :phoenix_royale,
+  ecto_repos: [PhoenixRoyale.Repo]
 
 # Configures the endpoint
-config :live_view_demo, LiveViewDemoWeb.Endpoint,
+config :phoenix_royale, PhoenixRoyaleWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "dummy_val_for_dev_env",
-  render_errors: [view: LiveViewDemoWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: LiveViewDemo.PubSub, adapter: Phoenix.PubSub.PG2],
+  render_errors: [view: PhoenixRoyaleWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: PhoenixRoyale.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [
     signing_salt: "another_dummy_val_for_dev_env"
   ]
