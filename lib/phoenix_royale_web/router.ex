@@ -19,6 +19,8 @@ defmodule PhoenixRoyaleWeb.Router do
 
     get "/", PageController, :index
     live "/clock", ClockLive
+
+    live "/play", RoyaleLive
   end
 
   # Other scopes may use custom stacks.
