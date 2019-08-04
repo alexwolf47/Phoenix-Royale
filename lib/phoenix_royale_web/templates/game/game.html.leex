@@ -4,22 +4,45 @@
 <p>You are player <%= player.name %>, your y is <%= player.y %> and acc is <%= player.y_acc %>. Your x is <%= player.x %> </p>
 
 <% player_y = get_player_y(@player_number, @game_state) %>
+<% player_x = get_player_x(@player_number, @game_state) %>
 
 <div style="width:100%; margin: 0px auto; height:600px; background-color: #d3f5f4;" phx-keyup="jump" phx-target="window">
 
-<div style="position: absolute; bottom: <%= player_y * 6 %>px; left: 50px; width: 30px; height: 20px;">
-<img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
-</div>
+        <%= if @game_state.server_status == :countdown do %>
+
+            <div style="position: absolute; top: 200px; font-size: 64px;">
+            <p><%= @game_state.countdown %></p>
+            </div>
+        <% end %>
+
+
+        <%= if @game_state.server_status == :playing do %>
+            <%= for {x, y} <- @game_state.game_map.trees do %>
+                <div style="width:10px; height: <%= y*6 %>px; position: absolute; bottom: 0px; left: <%= (x - player_x)* 6 %>px; background-color: #ff0000;">
+
+                </div>
+
+                 <div style="width:10px; height: <%= 600- (y*6) - 240 %>px; position: absolute;  left: <%= (x - player_x)* 6 %>px; background-color: #ff0000;">
+
+                </div>
+            <% end %>
+
+        <% end %>
+
+        <div style="position: absolute; bottom: <%= player_y * 6 %>px; left: 50px; width: 30px; height: 20px;">
+        <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
+        </div>
 
 
 
-<%= for player <- Map.to_list(@game_state.players) do %>
-<% {number, player_state} = player %>
 
-<div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: 50px; width: 30px; height: 20px; opacity: 0.3;">
-<img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
-</div>
+        <%= for player <- Map.to_list(@game_state.players) do %>
+        <% {number, player_state} = player %>
 
-<% end %>
+        <div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: 50px; width: 30px; height: 20px; opacity: 0.3;">
+        <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
+        </div>
+
+        <% end %>
 
 </div>

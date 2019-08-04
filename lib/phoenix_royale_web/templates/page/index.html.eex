@@ -1,38 +1,7 @@
-<section class="phx-hero">
-  <h1>My Phrenzy Entry</h1>
-  <p><%= link "This clock", to: Routes.live_path(@conn, PhoenixRoyaleWeb.ClockLive) %> is a basic live view in action.</p>
-</section>
+<div style="width: 600px; height: 500px; background-color: blue;">
 
-<section class="row">
-  <article class="column">
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix_live_view">Phoenix LiveView README</a>
-      </li>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Phoenix Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Phoenix Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.4/CHANGELOG.md">Phoenix v1.4 Changelog</a>
-      </li>
-    </ul>
-  </article>
-  <article class="column">
-    <h2>Help</h2>
-    <ul>
-      <li>
-        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
-      </li>
-      <li>
-        <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
-      </li>
-    </ul>
-  </article>
-</section>
+      <div style="width:10px; height: 360px; position: absolute; bottom: 0px; left: 320px; background-color: #ff0000;">
+
+                </div>
+
+</div>

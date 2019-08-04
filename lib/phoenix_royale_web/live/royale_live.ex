@@ -8,10 +8,16 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
       nil ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "join.html", assigns)
 
-      %{server_status: :need_players} = game_state ->
+      %{server_status: :need_players} ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "lobby.html", assigns)
 
-      %{server_status: :full} = game_state ->
+      %{server_status: :full} ->
+        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game.html", assigns)
+
+      %{server_status: :countdown} ->
+        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game.html", assigns)
+
+      %{server_status: :playing} ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game.html", assigns)
 
       :dead ->
@@ -28,22 +34,14 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
 
     player = Map.get(new_game_state.players, socket.assigns.player_number)
 
-    if alive?(player.x, player.y) do
+    if player.alive do
       {:noreply, assign(socket, game_state: new_game_state)}
     else
       {:noreply, assign(socket, game_state: :dead)}
     end
   end
 
-  def alive?(x, y) do
-    if (x > 200 && y < 0) || (x > 200 && y > 100) do
-      false
-    else
-      true
-    end
-  end
-
-  def handle_event("jump", arg, socket) do
+  def handle_event("jump", _arg, socket) do
     player_number = socket.assigns.player_number
     GameServer.jump(player_number)
     {:noreply, socket}
