@@ -20,7 +20,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
       %{server_status: :playing} ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game.html", assigns)
 
-      :dead ->
+      %{dead: true} ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "dead.html", assigns)
     end
   end
@@ -37,7 +37,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
     if player.alive do
       {:noreply, assign(socket, game_state: new_game_state)}
     else
-      {:noreply, assign(socket, game_state: :dead)}
+      {:noreply, assign(socket, game_state: Map.put(new_game_state, :dead, true))}
     end
   end
 
@@ -58,7 +58,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
     # IO.inspect(game_state.server_status == :full, label: "server status")
 
     IO.puts("beingging updates")
-    :timer.send_interval(25, self(), :update)
+    :timer.send_interval(5, self(), :update)
 
     {:noreply, assign(socket, player_number: game_state.player_count, game_state: game_state)}
   end

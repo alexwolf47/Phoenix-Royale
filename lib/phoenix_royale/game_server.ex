@@ -20,7 +20,7 @@ defmodule PhoenixRoyale.GameServer do
               y: 50,
               y_acc: 0,
               x: 0,
-              x_acc: 1
+              x_acc: 5
   end
 
   def start_link(_init_args) do
@@ -30,7 +30,7 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   def init(server) do
-    :timer.send_interval(33, self(), :tick)
+    :timer.send_interval(20, self(), :tick)
     {:ok, server}
   end
 
@@ -57,11 +57,12 @@ defmodule PhoenixRoyale.GameServer do
         {:noreply, new_state}
 
       :full ->
-        {:noreply,
-         %{state | server_status: :countdown, countdown: 3000, game_map: Game.generate_map()}}
+        map = Game.generate_map()
+        IO.inspect(map, label: "game map")
+        {:noreply, %{state | server_status: :countdown, countdown: 3000, game_map: map}}
 
       :countdown ->
-        new_countdown = state.countdown - 33
+        new_countdown = state.countdown - 50
 
         if new_countdown <= 0 do
           {:noreply, %{state | server_status: :playing, countdown: 0}}
@@ -86,11 +87,18 @@ defmodule PhoenixRoyale.GameServer do
     number_of_players = map_size(state.players)
     players = Map.put(state.players, number_of_players + 1, player)
 
+    status =
+      if number_of_players > 0 do
+        :full
+      else
+        :full
+      end
+
     new_state = %{
       state
       | player_count: state.player_count + 1,
         players: players,
-        server_status: :full
+        server_status: status
     }
 
     {:reply, "Joined", new_state}

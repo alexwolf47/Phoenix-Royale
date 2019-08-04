@@ -18,18 +18,20 @@
 
         <%= if @game_state.server_status == :playing do %>
             <%= for {x, y} <- @game_state.game_map.trees do %>
-                <div style="width:10px; height: <%= y*6 %>px; position: absolute; bottom: 0px; left: <%= (x - player_x)* 6 %>px; background-color: #ff0000;">
+                <%= if x - get_player_x(@player_number, @game_state) <= 800 && x - get_player_x(@player_number, @game_state) > - 100 do %>
+                <div style="width:10px; height: <%= y*6 %>px; position: absolute; bottom: 0px; left: <%= (100 + x - player_x) %>px; background-color: #ff0000;">
 
                 </div>
 
-                 <div style="width:10px; height: <%= 600- (y*6) - 240 %>px; position: absolute;  left: <%= (x - player_x)* 6 %>px; background-color: #ff0000;">
+                 <div style="width:10px; height: <%= 600- (y*6) - 240 %>px; position: absolute;  left: <%= (100 + x - player_x) %>px; background-color: #ff0000;">
 
                 </div>
+                <% end %>
             <% end %>
 
         <% end %>
 
-        <div style="position: absolute; bottom: <%= player_y * 6 %>px; left: 50px; width: 30px; height: 20px;">
+        <div style="position: absolute; bottom: <%= player_y * 6 %>px; left: 100px; width: 30px; height: 20px;">
         <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
         </div>
 
@@ -39,7 +41,7 @@
         <%= for player <- Map.to_list(@game_state.players) do %>
         <% {number, player_state} = player %>
 
-        <div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: 50px; width: 30px; height: 20px; opacity: 0.3;">
+        <div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: 100px; width: 30px; height: 20px; opacity: 0.3;">
         <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
         </div>
 

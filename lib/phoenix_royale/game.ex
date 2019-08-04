@@ -12,10 +12,10 @@ defmodule PhoenixRoyale.Game do
               if alive?(player_state, state) do
                 %{
                   player_state
-                  | y: player_state.y + player_state.y_acc * 0.03,
+                  | y: player_state.y + player_state.y_acc * 0.02,
                     y_acc: player_state.y_acc - 4,
                     x: player_state.x + 1 * player_state.x_acc,
-                    x_acc: player_state.x_acc + 0.01
+                    x_acc: player_state.x_acc + 0.02
                 }
               else
                 %{
@@ -54,11 +54,11 @@ defmodule PhoenixRoyale.Game do
   end
 
   def generate_trees(trees_so_far, total_x) do
-    if total_x >= 1000 do
+    if total_x >= 10000 do
       Enum.reverse(trees_so_far)
     else
-      new_tree_x = total_x + Enum.random(30..70)
-      new_tree_y = Enum.random(25..50)
+      new_tree_x = total_x + Enum.random(250..400)
+      new_tree_y = Enum.random(0..70)
       new_tree = {new_tree_x, new_tree_y}
       generate_trees([new_tree | trees_so_far], new_tree_x)
     end
