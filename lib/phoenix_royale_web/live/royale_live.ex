@@ -36,7 +36,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   end
 
   def alive?(x, y) do
-    if x > 500 && y < 30 do
+    if (x > 200 && y < 0) || (x > 200 && y > 100) do
       false
     else
       true
