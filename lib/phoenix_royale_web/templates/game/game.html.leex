@@ -1,7 +1,14 @@
-<h1>HOLA player number <%= @player_number %></h1>
+<h1>Phoenix Royale</h1>
+<% player = Map.get(@game_state.players, @player_number) %>
 
+<p>You are player <%= player.name %>, your y is <%= player.y %> and acc is <%= player.y_acc %> </p>
 
-<form action="#" phx-submit="join_game">  
-        <%= text_input :join, :name %>
-        <%= submit "Join a Game!", phx_disable_with: "Saving..." %>
-</form>
+<% player_y = get_player_y(@player_number, @game_state) %>
+
+<div style="width:100%; margin: 0px auto; height:600px; background-color: #d3f5f4;" phx-keyup="jump" phx-target="window">
+
+<div style="position: absolute; bottom: <%= player_y * 6 %>px; left: 50px; width: 30px; height: 20px;">
+<img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
+</div>
+
+</div>

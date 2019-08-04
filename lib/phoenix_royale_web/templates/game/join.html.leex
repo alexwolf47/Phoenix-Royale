@@ -1,0 +1,7 @@
+<h1>HOLA player number <%= @player_number %></h1>
+
+
+<form action="#" phx-submit="join_game">  
+        <%= text_input :join, :name %>
+        <%= submit "Join a Game!", phx_disable_with: "Saving..." %>
+</form>
