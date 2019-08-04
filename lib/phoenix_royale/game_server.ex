@@ -13,7 +13,8 @@ defmodule PhoenixRoyale.GameServer do
     defstruct name: "",
               pid: nil,
               y: 50,
-              y_acc: 0
+              y_acc: 0,
+              x: 0
   end
 
   def start_link(_init_args) do
@@ -51,18 +52,22 @@ defmodule PhoenixRoyale.GameServer do
 
     updated_players = Map.new(Enum.map(players_list, fn player -> {player_number, player_state} = player
     old_y = player_state.y
+    old_x = player_state.x
+
+
+
     old_y_acc = player_state.y_acc
-    new_player_state = %{ player_state | y: old_y + (old_y_acc * 0.01), y_acc: old_y_acc - 5}
+
+    new_player_state = %{ player_state | y: old_y + (old_y_acc * 0.03), y_acc: old_y_acc - 4, x: player_state.x + 1}
     {player_number, new_player_state}
     end))
 
-
     new_state = %{ state | players: updated_players}
-
-    # IO.inspect(new_state, label: "players afters")
-
     {:noreply, new_state}
+  end
 
+  def alive(x,y) do
+    true
   end
 
       @doc "handles the call and returns the status of the server"
@@ -88,7 +93,8 @@ defmodule PhoenixRoyale.GameServer do
   def handle_cast({:jump, player_number}, state) do
 
     player = Map.get(state.players, player_number)
-    updated_player = %{ player | y_acc: player.y_acc + 80}
+
+    updated_player = %{ player | y_acc: player.y_acc + 100}
     updated_players = Map.put(state.players, player_number, updated_player)
     new_state = %{state | players: updated_players}
     {:noreply, new_state}
