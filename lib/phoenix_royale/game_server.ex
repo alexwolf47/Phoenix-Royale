@@ -45,32 +45,38 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   def handle_info(:tick, state) do
+    if state.server_status == :full do
+      # IO.inspect(state, label: "players befopre")
+      players_list = Map.to_list(state.players)
 
-    # IO.inspect(state, label: "players befopre")
-    players_list = Map.to_list(state.players)
+      updated_players =
+        Map.new(
+          Enum.map(players_list, fn player ->
+            {player_number, player_state} = player
+            old_y = player_state.y
+            old_x = player_state.x
 
+            old_y_acc = player_state.y_acc
 
-    updated_players = Map.new(Enum.map(players_list, fn player -> {player_number, player_state} = player
-    old_y = player_state.y
-    old_x = player_state.x
+            new_player_state = %{
+              player_state
+              | y: old_y + old_y_acc * 0.03,
+                y_acc: old_y_acc - 4,
+                x: player_state.x + 1
+            }
 
+            {player_number, new_player_state}
+          end)
+        )
 
-
-    old_y_acc = player_state.y_acc
-
-    new_player_state = %{ player_state | y: old_y + (old_y_acc * 0.03), y_acc: old_y_acc - 4, x: player_state.x + 1}
-    {player_number, new_player_state}
-    end))
-
-    new_state = %{ state | players: updated_players}
-    {:noreply, new_state}
+      new_state = %{state | players: updated_players}
+      {:noreply, new_state}
+    else
+      {:noreply, state}
+    end
   end
 
-  def alive(x,y) do
-    true
-  end
-
-      @doc "handles the call and returns the status of the server"
+  @doc "handles the call and returns the status of the server"
   def handle_call(:state, _from, state) do
     {:reply, state, state}
   end
@@ -80,21 +86,31 @@ defmodule PhoenixRoyale.GameServer do
   # for first player attempting to join
 
   def handle_call({:join, name}, {pid, _ref} = _from, state) do
-
     player = %Player{name: name, pid: pid}
     number_of_players = Map.size(state.players)
     players = Map.put(state.players, number_of_players + 1, player)
 
+    status =
+      if number_of_players > 0 do
+        :full
+      else
+        :need_players
+      end
 
-    new_state = %{state | player_count: state.player_count + 1, players: players, server_status: :full}
+    new_state = %{
+      state
+      | player_count: state.player_count + 1,
+        players: players,
+        server_status: status
+    }
+
     {:reply, @successful_join_message, new_state}
   end
 
   def handle_cast({:jump, player_number}, state) do
-
     player = Map.get(state.players, player_number)
 
-    updated_player = %{ player | y_acc: player.y_acc + 100}
+    updated_player = %{player | y_acc: player.y_acc + 100}
     updated_players = Map.put(state.players, player_number, updated_player)
     new_state = %{state | players: updated_players}
     {:noreply, new_state}

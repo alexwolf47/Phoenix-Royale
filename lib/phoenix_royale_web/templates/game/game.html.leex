@@ -11,4 +11,15 @@
 <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
 </div>
 
+
+
+<%= for player <- Map.to_list(@game_state.players) do %>
+<% {number, player_state} = player %>
+
+<div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: 50px; width: 30px; height: 20px; opacity: 0.3;">
+<img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
+</div>
+
+<% end %>
+
 </div>
