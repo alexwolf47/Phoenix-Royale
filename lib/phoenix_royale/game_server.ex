@@ -1,5 +1,6 @@
 defmodule PhoenixRoyale.GameServer do
   use GenServer
+  alias PhoenixRoyale.Game
 
   @server_name {:global, Server}
 
@@ -46,30 +47,7 @@ defmodule PhoenixRoyale.GameServer do
 
   def handle_info(:tick, state) do
     if state.server_status == :full do
-      # IO.inspect(state, label: "players befopre")
-      players_list = Map.to_list(state.players)
-
-      updated_players =
-        Map.new(
-          Enum.map(players_list, fn player ->
-            {player_number, player_state} = player
-            old_y = player_state.y
-            old_x = player_state.x
-
-            old_y_acc = player_state.y_acc
-
-            new_player_state = %{
-              player_state
-              | y: old_y + old_y_acc * 0.03,
-                y_acc: old_y_acc - 4,
-                x: player_state.x + 1
-            }
-
-            {player_number, new_player_state}
-          end)
-        )
-
-      new_state = %{state | players: updated_players}
+      new_state = Game.tick(state)
       {:noreply, new_state}
     else
       {:noreply, state}
@@ -90,18 +68,18 @@ defmodule PhoenixRoyale.GameServer do
     number_of_players = Map.size(state.players)
     players = Map.put(state.players, number_of_players + 1, player)
 
-    status =
-      if number_of_players > 0 do
-        :full
-      else
-        :need_players
-      end
+    # status =
+    #   if number_of_players > 0 do
+    #     :full
+    #   else
+    #     :need_players
+    #   end
 
     new_state = %{
       state
       | player_count: state.player_count + 1,
         players: players,
-        server_status: status
+        server_status: :full
     }
 
     {:reply, @successful_join_message, new_state}
