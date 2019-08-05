@@ -50,73 +50,48 @@ defmodule PhoenixRoyale.GameServer do
     GenServer.cast(@server_name, {:jump, player_number})
   end
 
-  def handle_info(:tick, state) do
-    case state.server_status do
-      :playing ->
-        new_state = Game.tick(state)
-        {:noreply, new_state}
-
-      :full ->
-        map = Game.generate_map()
-        IO.inspect(map, label: "game map")
-        {:noreply, %{state | server_status: :countdown, countdown: 3000, game_map: map}}
-
-      :countdown ->
-        new_countdown = state.countdown - 50
-
-        if new_countdown <= 0 do
-          {:noreply, %{state | server_status: :playing, countdown: 0}}
-        else
-          {:noreply, %{state | server_status: :countdown, countdown: new_countdown}}
-        end
-
-      _x ->
-        {:noreply, state}
-    end
+  def kill(player_number) do
+    GenServer.cast(@server_name, {:kill, player_number})
   end
 
-  @doc "handles the call and returns the status of the server"
+  def handle_info(:tick, %{server_status: :playing} = state) do
+    {:noreply, Game.tick(state)}
+  end
+
+  def handle_info(:tick, %{server_status: :full} = state) do
+    {:noreply,
+     %{state | server_status: :countdown, countdown: 3000, game_map: Game.generate_map()}}
+  end
+
+  def handle_info(:tick, %{server_status: :countdown, countdown: countdown} = state)
+      when countdown > 0 do
+    {:noreply, %{state | countdown: state.countdown - 50}}
+  end
+
+  def handle_info(:tick, %{server_status: :countdown} = state) do
+    {:noreply, %{state | server_status: :playing}}
+  end
+
   def handle_call(:state, _from, state) do
     {:reply, state, state}
   end
-
-  ### functions for players joining the server ###
 
   def handle_call({:join, name}, {pid, _ref} = _from, state) do
     player = %Player{name: name, pid: pid}
     number_of_players = map_size(state.players)
     players = Map.put(state.players, number_of_players + 1, player)
 
-    status =
-      if number_of_players > 0 do
-        :full
-      else
-        :full
-      end
-
     new_state = %{
       state
       | player_count: state.player_count + 1,
         players: players,
-        server_status: status
+        server_status: :full
     }
 
-    {:reply, "Joined", new_state}
+    {:reply, "Player joined", new_state}
   end
 
-  def handle_cast({:jump, player_number}, state) do
-    player = Map.get(state.players, player_number)
+  def handle_cast({:jump, player_number}, state), do: Game.jump(player_number, state)
 
-    if player.started do
-      updated_player = %{player | y_acc: player.y_acc + 100}
-      updated_players = Map.put(state.players, player_number, updated_player)
-      new_state = %{state | players: updated_players}
-      {:noreply, new_state}
-    else
-      updated_player = %{player | started: true}
-      updated_players = Map.put(state.players, player_number, updated_player)
-      new_state = %{state | players: updated_players}
-      {:noreply, new_state}
-    end
-  end
+  def handle_cast({:kill, player_number}, state), do: Game.kill(player_number, state)
 end

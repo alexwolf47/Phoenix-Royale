@@ -31,7 +31,7 @@
 
         <% end %>
 
-        <div style="position: absolute; bottom: <%= player_y * 6 %>px; left: 100px; width: 30px; height: 20px;">
+        <div style="position: absolute; bottom: <%= player_y * 6 %>px; left: 100px; width: 50px; height: 28px; transform: scaleX(-1) rotate(<%= player.y_acc/2 %>deg)">
         <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
         </div>
 
@@ -41,7 +41,7 @@
         <%= for player <- Map.to_list(@game_state.players) do %>
         <% {number, player_state} = player %>
 
-        <div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: 100px; width: 30px; height: 20px; opacity: 0.3;">
+        <div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: 100px; width: 50px; height: 28px; opacity: 0.3; transform: scaleX(-1)  rotate(<%= player_state.y_acc /2 %>deg)">
         <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
         </div>
 
