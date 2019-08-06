@@ -55,10 +55,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
 
     game_state = GameServer.state()
 
-    # IO.inspect(game_state.server_status == :full, label: "server status")
-
-    IO.puts("beingging updates")
-    :timer.send_interval(5, self(), :update)
+    :timer.send_interval(20, self(), :update)
 
     {:noreply, assign(socket, player_number: game_state.player_count, game_state: game_state)}
   end

@@ -65,7 +65,7 @@ defmodule PhoenixRoyale.GameServer do
 
   def handle_info(:tick, %{server_status: :countdown, countdown: countdown} = state)
       when countdown > 0 do
-    {:noreply, %{state | countdown: state.countdown - 50}}
+    {:noreply, %{state | countdown: state.countdown - 20}}
   end
 
   def handle_info(:tick, %{server_status: :countdown} = state) do
