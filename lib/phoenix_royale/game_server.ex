@@ -2,31 +2,19 @@ defmodule PhoenixRoyale.GameServer do
   use GenServer
   alias PhoenixRoyale.Game
 
-  @server_name {:global, Server}
-
   defmodule GameState do
     defstruct server_status: :need_players,
+              uuid: nil,
               countdown: nil,
               game_map: %{},
               player_count: 0,
               players: %{}
   end
 
-  defmodule Player do
-    defstruct name: "",
-              started: false,
-              alive: true,
-              pid: nil,
-              y: 50,
-              y_acc: 0,
-              x: 0,
-              x_acc: 5
-  end
-
-  def start_link(_init_args) do
+  def start_link(game_uuid) do
     # you may want to register your server with `name: __MODULE__`
     # as a third argument to `start_link`
-    GenServer.start_link(__MODULE__, %GameState{}, name: @server_name)
+    GenServer.start_link(__MODULE__, %GameState{uuid: game_uuid}, name: {:global, game_uuid})
   end
 
   def init(server) do
@@ -36,22 +24,22 @@ defmodule PhoenixRoyale.GameServer do
 
   @doc "allows the status of the server to be queried - client interface"
 
-  def state() do
-    GenServer.call(@server_name, :state)
+  def state(game_uuid) do
+    GenServer.call({:global, game_uuid}, :state)
   end
 
   @doc "allows a player to join the server - client interface"
 
-  def join(name) do
-    GenServer.call(@server_name, {:join, name})
+  def join(%PhoenixRoyale.Player{} = player, game_uuid) do
+    GenServer.call({:global, game_uuid}, {:join, player})
   end
 
-  def jump(player_number) do
-    GenServer.cast(@server_name, {:jump, player_number})
+  def jump(player_number, game_uuid) do
+    GenServer.cast({:global, game_uuid}, {:jump, player_number})
   end
 
-  def kill(player_number) do
-    GenServer.cast(@server_name, {:kill, player_number})
+  def kill(player_number, game_uuid) do
+    GenServer.cast({:global, game_uuid}, {:kill, player_number})
   end
 
   def handle_info(:tick, %{server_status: :playing} = state) do
@@ -59,6 +47,8 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   def handle_info(:tick, %{server_status: :full} = state) do
+    PhoenixRoyale.GameCoordinator.start_game(state.uuid)
+
     {:noreply,
      %{state | server_status: :countdown, countdown: 3000, game_map: Game.generate_map()}}
   end
@@ -72,23 +62,33 @@ defmodule PhoenixRoyale.GameServer do
     {:noreply, %{state | server_status: :playing}}
   end
 
+  def handle_info(:tick, %{server_status: :need_players} = state) do
+    {:noreply, state}
+  end
+
   def handle_call(:state, _from, state) do
     {:reply, state, state}
   end
 
-  def handle_call({:join, name}, {pid, _ref} = _from, state) do
-    player = %Player{name: name, pid: pid}
+  def handle_call({:join, player}, _from, state) do
     number_of_players = map_size(state.players)
     players = Map.put(state.players, number_of_players + 1, player)
+
+    status =
+      if number_of_players > -1 do
+        :full
+      else
+        :full
+      end
 
     new_state = %{
       state
       | player_count: state.player_count + 1,
         players: players,
-        server_status: :full
+        server_status: status
     }
 
-    {:reply, "Player joined", new_state}
+    {:reply, new_state, new_state}
   end
 
   def handle_cast({:jump, player_number}, state), do: Game.jump(player_number, state)
