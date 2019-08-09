@@ -11,14 +11,16 @@ defmodule PhoenixRoyale.Application do
       # Start the Ecto repository
       PhoenixRoyale.Repo,
       # Start the endpoint when the application starts
-      PhoenixRoyaleWeb.Endpoint
+      PhoenixRoyaleWeb.Endpoint,
       # Starts a worker by calling: PhoenixRoyale.Worker.start_link(arg)
       # {PhoenixRoyale.Worker, arg},
+      PhoenixRoyale.GameCoordinator
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: PhoenixRoyale.Supervisor]
+
     Supervisor.start_link(children, opts)
   end
 

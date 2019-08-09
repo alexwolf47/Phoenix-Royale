@@ -6,5 +6,5 @@ defmodule PhoenixRoyale.Player do
             y: 50,
             y_acc: 0,
             x: 0,
-            x_acc: 5
+            x_speed: 10
 end

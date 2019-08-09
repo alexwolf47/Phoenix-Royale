@@ -8,7 +8,9 @@ defmodule PhoenixRoyale.GameServer do
               countdown: nil,
               game_map: %{},
               player_count: 0,
-              players: %{}
+              players: %{},
+              storm: -1000,
+              storm_speed: 10
   end
 
   def start_link(game_uuid) do
@@ -36,6 +38,10 @@ defmodule PhoenixRoyale.GameServer do
 
   def jump(player_number, game_uuid) do
     GenServer.cast({:global, game_uuid}, {:jump, player_number})
+  end
+
+  def slow(player_number, value, game_uuid) do
+    GenServer.cast({:global, game_uuid}, {:slow, player_number, value})
   end
 
   def kill(player_number, game_uuid) do
@@ -92,6 +98,9 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   def handle_cast({:jump, player_number}, state), do: Game.jump(player_number, state)
+
+  def handle_cast({:slow, player_number, value}, state),
+    do: Game.slow(player_number, value, state)
 
   def handle_cast({:kill, player_number}, state), do: Game.kill(player_number, state)
 end

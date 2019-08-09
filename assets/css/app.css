@@ -2,3 +2,40 @@
 
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
+body {
+    margin: 0px;
+}
+
+img {
+    max-width: 100%;
+}
+
+.mainContainer {
+    margin: 0 auto;
+    padding: 0px;
+    position: relative;
+    width: 100%
+}
+
+.gameWindowContainer {
+    width: 100%;
+    margin: 0px auto;
+    height: 600px;
+    background: url(https://www.joshmorony.com/media/2016/04/mountains-back.png);
+    background-repeat: repeat-x;
+    background-size: 40%;
+    background-position: bottom;
+}
+
+.gameWindow {
+    width: 800px;
+    margin: 0px auto;
+    height: 600px;
+    position: relative;
+}
+
+.playerPhoenix {
+    position: absolute;
+    width: 50px;
+    height: 28px;
+}
