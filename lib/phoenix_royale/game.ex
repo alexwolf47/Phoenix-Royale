@@ -43,7 +43,7 @@ defmodule PhoenixRoyale.Game do
       state
       | players: updated_players,
         storm: state.storm + state.storm_speed,
-        storm_speed: state.storm_speed + 0.0045
+        storm_speed: state.storm_speed + 0.001
     }
   end
 
@@ -60,15 +60,37 @@ defmodule PhoenixRoyale.Game do
 
     Task.start(fn -> check_collisions(player_number, {x, y}, state) end)
 
-    updated_state = %{
+    updated_state = update_coords(player_state, x, y, x_speed, y_acc)
+
+    {player_number, updated_state}
+  end
+
+  def update_coords(player_state, x, y, x_speed, y_acc) when y > 0 do
+    # %{
+    #   player_state
+    #   | y: y + y_acc * 0.06,
+    #     y_acc: y_acc - 3,
+    #     x: x + 0.2 * x_speed,
+    #     x_speed: x_speed + 0.004
+    # }
+
+    %{
       player_state
       | y: y + y_acc * 0.06,
         y_acc: y_acc - 3,
         x: x + 1 * x_speed,
         x_speed: x_speed + 0.004
     }
+  end
 
-    {player_number, updated_state}
+  def update_coords(player_state, x, y, x_speed, y_acc) do
+    %{
+      player_state
+      | y: y + y_acc * 0.03,
+        y_acc: y_acc + 4,
+        x: x + 0.2 * x_speed,
+        x_speed: x_speed + 0.003
+    }
   end
 
   def check_collisions(player_number, {x, y}, %{game_map: map, uuid: uuid} = state) do

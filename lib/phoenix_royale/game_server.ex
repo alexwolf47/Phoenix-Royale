@@ -10,7 +10,7 @@ defmodule PhoenixRoyale.GameServer do
               player_count: 0,
               players: %{},
               storm: -1000,
-              storm_speed: 10
+              storm_speed: -10
   end
 
   def start_link(game_uuid) do
@@ -81,10 +81,10 @@ defmodule PhoenixRoyale.GameServer do
     players = Map.put(state.players, number_of_players + 1, player)
 
     status =
-      if number_of_players > -1 do
+      if number_of_players > 0 do
         :full
       else
-        :full
+        :need_players
       end
 
     new_state = %{

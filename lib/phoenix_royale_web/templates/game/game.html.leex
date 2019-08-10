@@ -9,8 +9,14 @@
 <div style="background: linear-gradient(180deg, rgb(<%= 153 - player.x /400 %>,<%= 102 - player.x /400 %>,<%= 189 - player.x /400 %>), rgb(<%= 112 - player.x /400 %>,<%= 80 - player.x /400 %>,<%= 200 - player.x /400 %>));">
     <div class="gameWindowContainer" style="background-position-x: -<%= player.x/5 %>px">
         <div class="gameWindow" phx-keyup="jump" phx-target="window">
+
+        <%= if player.alive do %>
          <div style="background: red; width: 100vw; opacity: 0.2; z-index: 100; height: 600px; position: absolute; right: <%= 700 + (player.x - @game_state.storm) %>px">
          </div>
+        <% else %>
+         <div style="background: red; width: 100vw; opacity: 0.2; z-index: 100; height: 600px; position: absolute; right: 700px">
+         </div>
+        <% end %>
       
 
 
@@ -26,15 +32,23 @@
                 <div class="playerPhoenix" style="bottom: <%= player.y * 6 %>px; left: 100px; transform: scaleX(-1) rotate(<%= player.y_acc/2 %>deg)">
                 <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
                 </div>
+                <div style="position: absolute; bottom: <%= player.y * 6 - 20 %>px; left: 120px; font-size: 8px; color: #ffffff;">
+                <%= player.name %>
+                </div>
 
 
 
 
-                <%= for player <- Map.to_list(@game_state.players) do %>
-                <% {number, player_state} = player %>
+                <%= for other_player <- Map.to_list(@game_state.players) do %>
+                <% {number, player_state} = other_player %>
+                <% x_diff = player.x - player_state.x %>
 
-                <div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: 100px; width: 50px; height: 28px; opacity: 0.3; transform: scaleX(-1)  rotate(<%= player_state.y_acc /2 %>deg)">
+                <div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: <%= 100 - x_diff %>px; width: 50px; height: 28px; opacity: 0.1; transform: scaleX(-1)  rotate(<%= player_state.y_acc /2 %>deg)">
                 <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
+                </div>
+
+                 <div style="position: absolute; bottom: <%= player_state.y * 6 - 20 %>px; left: <%= 120 - x_diff %>px; font-size: 8px; color: #ffffff;">
+                <%= player_state.name %>
                 </div>
 
                 <% end %>
