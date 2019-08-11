@@ -32,17 +32,6 @@ config :phoenix_royale, PhoenixRoyale.Repo,
   ssl: true,
   pool_size: 1
 
-config :libcluster,
-  topologies: [
-    k8s_example: [
-      strategy: Cluster.Strategy.Kubernetes,
-      config: [
-        kubernetes_selector: "${LIBCLUSTER_KUBERNETES_SELECTOR}",
-        kubernetes_node_basename: "${LIBCLUSTER_KUBERNETES_NODE_BASENAME}"
-      ]
-    ]
-  ]
-
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
