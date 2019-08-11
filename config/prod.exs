@@ -16,9 +16,7 @@ use Mix.Config
 config :phoenix_royale, PhoenixRoyaleWeb.Endpoint,
   load_from_system_env: true,
   url: [host: "brown-likely-bluetickcoonhound.gigalixirapp.com/"],
-  cache_static_manifest: "priv/static/cache_manifest.json"
-
-config :phoenix_royale, PhoenixRoyaleWeb.Endpoint,
+  cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   secret_key_base: "${SECRET_KEY_BASE}"
 
