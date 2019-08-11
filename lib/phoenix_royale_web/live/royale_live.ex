@@ -38,7 +38,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
     player = Map.get(new_game_state.players, socket.assigns.player_number)
 
     if player.alive || socket.assigns.game_state.server_status != :game_over do
-      :timer.send_after(50, self(), :update)
+      :timer.send_after(33, self(), :update)
       {:noreply, assign(socket, game_state: new_game_state)}
     else
       {:noreply, assign(socket, game_state: Map.put(new_game_state, :dead, true))}
@@ -58,7 +58,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
 
     game_state = GameServer.state(game)
 
-    :timer.send_after(50, self(), :update)
+    :timer.send_after(33, self(), :update)
 
     {:noreply,
      assign(socket,

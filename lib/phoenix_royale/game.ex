@@ -37,18 +37,17 @@ defmodule PhoenixRoyale.Game do
   def tick(state) do
     players_list = Map.to_list(state.players)
 
-    updated_players = Map.new(Enum.map(players_list, &tick_player(&1, state)))
+    Enum.map(players_list, fn player -> Task.start(fn -> tick_player(player, state) end) end)
 
     %{
       state
-      | players: updated_players,
-        storm: state.storm + state.storm_speed,
+      | storm: state.storm + state.storm_speed,
         storm_speed: state.storm_speed + 0.001
     }
   end
 
   def tick_player({player_number, %{alive: false} = player_state} = _player, _state),
-    do: {player_number, player_state}
+    do: nil
 
   def tick_player(
         {player_number, %{y: y, y_acc: y_acc, x: x, x_speed: x_speed} = player_state},
@@ -62,7 +61,7 @@ defmodule PhoenixRoyale.Game do
 
     updated_state = update_coords(player_state, x, y, x_speed, y_acc)
 
-    {player_number, updated_state}
+    GameServer.update_player({player_number, updated_state}, state.uuid)
   end
 
   def update_coords(player_state, x, y, x_speed, y_acc) when y > 0 do
