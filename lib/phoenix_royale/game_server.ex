@@ -108,7 +108,7 @@ defmodule PhoenixRoyale.GameServer do
     players = Map.put(state.players, number_of_players + 1, player)
 
     status =
-      if number_of_players > -20 do
+      if number_of_players > 0 do
         :full
       else
         :need_players
