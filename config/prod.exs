@@ -15,8 +15,9 @@ use Mix.Config
 # which you typically run after static files are built.
 config :phoenix_royale, PhoenixRoyaleWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "brown-likely-bluetickcoonhound.gigalixirapp.com/"],
-  cache_static_manifest: "priv/static/cache_manifest.json",
+  # Possibly not needed, but doesn't hurt
+  http: [port: {:system, "PORT"}],
+  url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 80],
   server: true,
   secret_key_base: "${SECRET_KEY_BASE}"
 
@@ -25,8 +26,7 @@ config :logger, level: :info
 
 config :phoenix_royale, PhoenixRoyale.Repo,
   adapter: Ecto.Adapters.Postgres,
-  url: "${DATABASE_URL}",
-  database: "",
+  url: System.get_env("DATABASE_URL"),
   ssl: true,
   pool_size: 1
 
