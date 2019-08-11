@@ -33,6 +33,7 @@ defmodule PhoenixRoyale.GameCoordinator do
   end
 
   def handle_call(:state, _from, state) do
+    IO.inspect(state)
     {:reply, state, state}
   end
 
@@ -50,6 +51,8 @@ defmodule PhoenixRoyale.GameCoordinator do
 
     player = %Player{name: name, pid: pid}
     GameServer.join(player, new_game_uuid)
+
+    IO.puts("game coordinator!!")
 
     new_state = %{state | unstarted_games: %{new_game_uuid => %{pid: new_game_pid}}}
     {:reply, new_game_uuid, new_state}

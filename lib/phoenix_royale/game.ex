@@ -31,7 +31,7 @@ defmodule PhoenixRoyale.Game do
     player = Map.get(state.players, player_number)
     updated_player = Map.update!(player, :alive, fn _x -> false end)
     updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
-    {:noreply, %{state | players: updated_players}}
+    {:noreply, %{state | players: updated_players, alive_count: state.alive_count - 1}}
   end
 
   def tick(state) do
@@ -68,10 +68,10 @@ defmodule PhoenixRoyale.Game do
   def update_coords(player_state, x, y, x_speed, y_acc) when y > 0 do
     %{
       player_state
-      | y: y + y_acc * 0.06,
-        y_acc: y_acc - 3,
+      | y: y + y_acc * 0.08,
+        y_acc: y_acc - 4,
         x: x + 1 * x_speed,
-        x_speed: x_speed + 0.004
+        x_speed: x_speed + 0.006
     }
   end
 
