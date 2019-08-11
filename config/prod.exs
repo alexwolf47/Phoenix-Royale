@@ -15,7 +15,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :phoenix_royale, PhoenixRoyaleWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "catandwolf.co.uk"],
+  url: [host: "brown-likely-bluetickcoonhound.gigalixirapp.com/"],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :phoenix_royale, PhoenixRoyaleWeb.Endpoint,
