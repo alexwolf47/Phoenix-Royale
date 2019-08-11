@@ -54,7 +54,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
 
     game_state = GameServer.state(game)
 
-    :timer.send_interval(10, self(), :update)
+    :timer.send_interval(33, self(), :update)
 
     {:noreply,
      assign(socket,

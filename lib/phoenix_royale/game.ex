@@ -66,14 +66,6 @@ defmodule PhoenixRoyale.Game do
   end
 
   def update_coords(player_state, x, y, x_speed, y_acc) when y > 0 do
-    # %{
-    #   player_state
-    #   | y: y + y_acc * 0.06,
-    #     y_acc: y_acc - 3,
-    #     x: x + 0.2 * x_speed,
-    #     x_speed: x_speed + 0.004
-    # }
-
     %{
       player_state
       | y: y + y_acc * 0.06,

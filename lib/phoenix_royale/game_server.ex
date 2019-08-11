@@ -20,7 +20,8 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   def init(server) do
-    :timer.send_interval(20, self(), :tick)
+    :timer.send_interval(33, self(), :tick)
+    :timer.send_interval(1000 * 60 * 10, self(), :close)
     {:ok, server}
   end
 
@@ -46,6 +47,10 @@ defmodule PhoenixRoyale.GameServer do
 
   def kill(player_number, game_uuid) do
     GenServer.cast({:global, game_uuid}, {:kill, player_number})
+  end
+
+  def handle_info(:close, _state) do
+    Process.exit(self(), "Game Server Closing")
   end
 
   def handle_info(:tick, %{server_status: :playing} = state) do
