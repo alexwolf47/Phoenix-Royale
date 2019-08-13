@@ -33,7 +33,7 @@ defmodule PhoenixRoyale.GameCoordinator do
   end
 
   def handle_call(:state, _from, state) do
-    IO.inspect(state)
+    # IO.inspect(state)
     {:reply, state, state}
   end
 
@@ -49,22 +49,22 @@ defmodule PhoenixRoyale.GameCoordinator do
     new_game_uuid = UUID.uuid4()
     {:ok, new_game_pid} = GameServer.start_link(new_game_uuid)
 
-    player = %Player{name: name, pid: pid}
-    GameServer.join(player, new_game_uuid)
+    player = %Player{name: name, pid: pid, uuid: UUID.uuid4()}
+    gameid = GameServer.join(player, new_game_uuid)
 
-    IO.puts("game coordinator!!")
+    # IO.puts("game coordinator!!")
 
     new_state = %{state | unstarted_games: %{new_game_uuid => %{pid: new_game_pid}}}
-    {:reply, new_game_uuid, new_state}
+    {:reply, gameid, new_state}
   end
 
   def handle_call({:find_game, name}, {pid, _ref} = _from, %{unstarted_games: games} = state) do
-    IO.inspect(state, label: "STATE IN GAME CO")
+    # IO.inspect(state, label: "STATE IN GAME CO")
     game_uuid = Enum.at(Map.keys(games), 0)
 
-    player = %Player{name: name, pid: pid}
-    GameServer.join(player, game_uuid)
+    player = %Player{name: name, pid: pid, uuid: UUID.uuid4()}
+    gameid = GameServer.join(player, game_uuid)
 
-    {:reply, game_uuid, state}
+    {:reply, gameid, state}
   end
 end

@@ -1,6 +1,6 @@
 defmodule PhoenixRoyaleWeb.RoyaleLive do
   use Phoenix.LiveView
-  alias PhoenixRoyale.{GameServer, GameCoordinator}
+  alias PhoenixRoyale.{GameServer, GameCoordinator, GameInstance}
 
   def render(assigns) do
     # IO.inspect(assigns.game_state, label: "game state")
@@ -33,7 +33,8 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   end
 
   def handle_info(:update, socket) do
-    new_game_state = GameServer.state(socket.assigns.game_uuid)
+    # IO.inspect(socket, label: "update socket")
+    new_game_state = GameInstance.state(socket.assigns.game_uuid)
 
     player = Map.get(new_game_state.players, socket.assigns.player_number)
 
@@ -47,24 +48,27 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
 
   def handle_event("jump", _arg, socket) do
     player_number = socket.assigns.player_number
-    GameServer.jump(player_number, socket.assigns.game_uuid)
+    GameInstance.jump(player_number, socket.assigns.game_uuid)
     {:noreply, socket}
   end
 
   def handle_event("join_game", %{"join" => %{"name" => name}}, socket) do
     ## Game server finder stuff would go here.. For now let's just make a GenServer
 
-    game = GameCoordinator.find_game(name)
+    {serverod, gameid} = GameCoordinator.find_game(name)
+    # IO.inspect(game, label: "p1 game id")
 
-    game_state = GameServer.state(game)
+    :timer.sleep(10)
+    game_state = GameInstance.state(gameid)
+    # IO.inspect(game_state)
 
-    :timer.send_after(33, self(), :update)
+    :timer.send_after(25, self(), :update)
 
     {:noreply,
      assign(socket,
        player_number: game_state.player_count,
        game_state: game_state,
-       game_uuid: game
+       game_uuid: gameid
      )}
   end
 end

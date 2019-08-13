@@ -1,5 +1,5 @@
 defmodule PhoenixRoyale.Game do
-  alias PhoenixRoyale.GameServer
+  alias PhoenixRoyale.{GameServer, GameInstance}
 
   def jump(player_number, state) do
     player = Map.get(state.players, player_number)
@@ -35,9 +35,17 @@ defmodule PhoenixRoyale.Game do
   end
 
   def tick(state) do
-    players_list = Map.to_list(state.players)
+    # players_list = Map.to_list(state.players)
 
-    updated_players = Map.new(Enum.map(players_list, &tick_player(&1, state)))
+    # updated_players = Map.new(Enum.map(players_list, &tick_player(&1, state)))
+
+    player = Map.get(state.players, state.player_number)
+
+    updated_player = tick_player({state.player_number, player}, state)
+
+    updated_players =
+      Map.delete(state.players, state.player_number)
+      |> Map.put(state.player_number, updated_player)
 
     %{
       state
@@ -48,30 +56,31 @@ defmodule PhoenixRoyale.Game do
   end
 
   def tick_player({player_number, %{alive: false} = player_state} = _player, _state),
-    do: {player_number, player_state}
+    do: player_state
 
   def tick_player(
         {player_number, %{y: y, y_acc: y_acc, x: x, x_speed: x_speed} = player_state},
         state
       ) do
     if state.storm > x do
-      GameServer.kill(player_number, state.uuid)
+      GameInstance.kill(player_number, state.uuid)
+      GameServer.kill(player_number, state.server_uuid)
     end
 
     Task.start(fn -> check_collisions(player_number, {x, y}, state) end)
 
     updated_state = update_coords(player_state, x, y, x_speed, y_acc)
 
-    {player_number, updated_state}
+    updated_state
   end
 
   def update_coords(player_state, x, y, x_speed, y_acc) when y > 0 do
     %{
       player_state
-      | y: y + y_acc * 0.08,
-        y_acc: y_acc - 4,
+      | y: y + y_acc * 0.05,
+        y_acc: y_acc - 3,
         x: x + 1 * x_speed,
-        x_speed: x_speed + 0.006
+        x_speed: x_speed + 0.005
     }
   end
 
@@ -79,7 +88,7 @@ defmodule PhoenixRoyale.Game do
     %{
       player_state
       | y: y + y_acc * 0.03,
-        y_acc: y_acc + 4,
+        y_acc: y_acc + 2,
         x: x + 0.2 * x_speed,
         x_speed: x_speed + 0.003
     }
@@ -90,7 +99,7 @@ defmodule PhoenixRoyale.Game do
     |> check_trees(map.trees)
     |> case do
       true ->
-        GameServer.slow(player_number, 1, uuid)
+        GameInstance.slow(player_number, 1, uuid)
 
       # GameServer.kill(player_number, uuid)
 

@@ -1,4 +1,5 @@
 <% player = Map.get(@game_state.players, @player_number) %>
+<% #IO.inspect(@player_number, label: "game state in template") %>
 
             <%= if @game_state.server_status == :countdown do %>
                 <div style="position: absolute; top: 200px; font-size: 64px;">
