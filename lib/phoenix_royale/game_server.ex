@@ -6,16 +6,13 @@ defmodule PhoenixRoyale.GameServer do
   defmodule GameState do
     defstruct server_status: :need_players,
               uuid: nil,
-              countdown: nil,
               game_map: %{},
               player_count: 0,
-              alive_count: nil,
+              alive_count: 0,
               players: %{}
   end
 
   def start_link(game_uuid) do
-    # you may want to register your server with `name: __MODULE__`
-    # as a third argument to `start_link`
     game_map = Game.generate_map()
 
     GenServer.start_link(__MODULE__, %GameState{uuid: game_uuid, game_map: game_map},
@@ -28,8 +25,6 @@ defmodule PhoenixRoyale.GameServer do
     {:ok, server}
   end
 
-  @doc "allows the status of the server to be queried - client interface"
-
   def state(game_uuid) do
     GenServer.call({:global, game_uuid}, :state)
   end
@@ -37,8 +32,6 @@ defmodule PhoenixRoyale.GameServer do
   def update_players(game_uuid, updated_players) do
     GenServer.cast({:global, game_uuid}, {:update_players, updated_players})
   end
-
-  @doc "allows a player to join the server - client interface"
 
   def join(%PhoenixRoyale.Player{} = player, game_uuid) do
     GenServer.call({:global, game_uuid}, {:join, player})
@@ -74,7 +67,7 @@ defmodule PhoenixRoyale.GameServer do
     gameid = state.uuid <> "-" <> player.uuid
 
     status =
-      if number_of_players > 0 do
+      if number_of_players > -1 do
         :full
       else
         :need_players
@@ -94,13 +87,13 @@ defmodule PhoenixRoyale.GameServer do
     new_state = %{
       state
       | player_count: state.player_count + 1,
+        alive_count: state.alive_count + 1,
         players: players,
         server_status: status
     }
 
     p1uuid = Map.get(new_state.players, 1).uuid
     p1gameid = state.uuid <> "-" <> p1uuid
-    # IO.inspect(new_state.players, label: "new state players")
 
     if new_state.server_status == :full do
       GameInstance.waterfall(p1gameid, 1, new_state.players)

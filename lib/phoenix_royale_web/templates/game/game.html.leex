@@ -57,8 +57,11 @@
         </div>
     </div>
 </div>
+
+<%= if @dev do %>
 <p>You are player <%= player.name %>, your y is <%= player.y %> and acc is <%= player.y_acc %>. Your x is <%= player.x %> </p>
 
 <br>
 <p>Your speed is <%= player.x_speed %></p>
 <p>Storm: <%= @game_state.storm %>
+<% end %>

@@ -29,7 +29,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   end
 
   def mount(_session, socket) do
-    {:ok, assign(socket, game_state: nil, player_number: nil)}
+    {:ok, assign(socket, game_state: nil, player_number: nil, dev: false)}
   end
 
   def handle_info(:update, socket) do
