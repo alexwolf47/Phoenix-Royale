@@ -37,7 +37,6 @@ defmodule PhoenixRoyale.GameCoordinator do
   end
 
   def handle_call(:state, _from, state) do
-    # IO.inspect(state)
     {:reply, state, state}
   end
 

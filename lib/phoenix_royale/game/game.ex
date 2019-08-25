@@ -1,22 +1,20 @@
 defmodule PhoenixRoyale.Game do
-  alias PhoenixRoyale.{GameServer, GameInstance}
+  alias PhoenixRoyale.{GameServer, GameInstance, GameSettings}
+
+  @tick GameSettings.tick_rate()
 
   def jump(player_number, state) do
     player = Map.get(state.players, player_number)
 
     updated_player =
-      if player.started do
-        Map.update!(player, :started, fn _x -> true end)
-      else
-        Map.update!(player, :y_acc, fn y_acc -> modify_acceleration(y_acc) end)
-      end
+      Map.update!(player, :y_speed, fn y_speed -> modify_speedeleration(y_speed) end)
 
     updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
     {:noreply, %{state | players: updated_players}}
   end
 
-  def modify_acceleration(y_acc) do
-    y_acc * 0.7 + 60
+  def modify_speedeleration(y_speed) do
+    y_speed * 0.6 + 50
   end
 
   def slow(player_number, 1, state) do
@@ -29,16 +27,16 @@ defmodule PhoenixRoyale.Game do
 
   def kill(player_number, state) do
     player = Map.get(state.players, player_number)
-    updated_player = Map.update!(player, :alive, fn _x -> false end)
+
+    updated_player =
+      Map.update!(player, :alive, fn _x -> false end)
+      |> Map.update!(:position, fn _x -> state.alive_count end)
+
     updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
-    {:noreply, %{state | players: updated_players, alive_count: state.alive_count - 1}}
+    {:noreply, %{state | players: updated_players}}
   end
 
   def tick(state) do
-    # players_list = Map.to_list(state.players)
-
-    # updated_players = Map.new(Enum.map(players_list, &tick_player(&1, state)))
-
     player = Map.get(state.players, state.player_number)
 
     updated_player = tick_player({state.player_number, player}, state)
@@ -51,15 +49,15 @@ defmodule PhoenixRoyale.Game do
       state
       | players: updated_players,
         storm: state.storm + state.storm_speed,
-        storm_speed: state.storm_speed + 0.001
+        storm_speed: state.storm_speed + 0.05 / @tick
     }
   end
 
-  def tick_player({player_number, %{alive: false} = player_state} = _player, _state),
+  def tick_player({_player_number, %{alive: false} = player_state} = _player, _state),
     do: player_state
 
   def tick_player(
-        {player_number, %{y: y, y_acc: y_acc, x: x, x_speed: x_speed} = player_state},
+        {player_number, %{y: y, y_speed: y_speed, x: x, x_speed: x_speed} = player_state},
         state
       ) do
     if state.storm > x do
@@ -69,28 +67,28 @@ defmodule PhoenixRoyale.Game do
 
     Task.start(fn -> check_collisions(player_number, {x, y}, state) end)
 
-    updated_state = update_coords(player_state, x, y, x_speed, y_acc)
+    updated_state = update_coords(player_state, x, y, x_speed, y_speed)
 
     updated_state
   end
 
-  def update_coords(player_state, x, y, x_speed, y_acc) when y > 0 do
+  def update_coords(player_state, x, y, x_speed, y_speed) when y > 0 do
     %{
       player_state
-      | y: y + y_acc * 0.05,
-        y_acc: y_acc - 3,
-        x: x + 1 * x_speed,
-        x_speed: x_speed + 0.005
+      | y: y + y_speed * 0.05,
+        y_speed: y_speed - 100 / @tick,
+        x: x + x_speed,
+        x_speed: x_speed + 0.2 / @tick
     }
   end
 
-  def update_coords(player_state, x, y, x_speed, y_acc) do
+  def update_coords(player_state, x, y, x_speed, y_speed) do
     %{
       player_state
-      | y: y + y_acc * 0.03,
-        y_acc: y_acc + 2,
-        x: x + 0.2 * x_speed,
-        x_speed: x_speed + 0.003
+      | y: y + y_speed * 0.03,
+        y_speed: y_speed + 80 / @tick,
+        x: x + 0.5 * x_speed,
+        x_speed: x_speed + 0.12 / @tick
     }
   end
 

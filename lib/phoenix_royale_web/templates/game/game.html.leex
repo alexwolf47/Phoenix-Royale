@@ -1,6 +1,4 @@
 <% player = Map.get(@game_state.players, @player_number) %>
-<% #IO.inspect(@player_number, label: "game state in template") %>
-
             <%= if @game_state.server_status == :countdown do %>
                 <div style="position: absolute; top: 200px; font-size: 64px;">
                 <p><%= @game_state.countdown %></p>
@@ -30,7 +28,7 @@
                     <% end %>
                 <% end %>
 
-                <div class="playerPhoenix" style="bottom: <%= player.y * 6 %>px; left: 100px; transform: scaleX(-1) rotate(<%= player.y_acc/2 %>deg)">
+                <div class="playerPhoenix" style="bottom: <%= player.y * 6 %>px; left: 100px; transform: scaleX(-1) rotate(<%= player.y_speed/2 %>deg)">
                 <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
                 </div>
                 <div style="position: absolute; bottom: <%= player.y * 6 - 20 %>px; left: 120px; font-size: 8px; color: #ffffff;">
@@ -44,7 +42,7 @@
                 <% {number, player_state} = other_player %>
                 <% x_diff = player.x - player_state.x %>
 
-                <div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: <%= 100 - x_diff %>px; width: 50px; height: 28px; opacity: 0.1; transform: scaleX(-1)  rotate(<%= player_state.y_acc /2 %>deg)">
+                <div style="position: absolute; bottom: <%= player_state.y * 6 %>px; left: <%= 100 - x_diff %>px; width: 50px; height: 28px; opacity: 0.1; transform: scaleX(-1)  rotate(<%= player_state.y_speed /2 %>deg)">
                 <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
                 </div>
 
@@ -58,8 +56,10 @@
     </div>
 </div>
 
+<%= @game_state.alive_count %>
+
 <%= if @dev do %>
-<p>You are player <%= player.name %>, your y is <%= player.y %> and acc is <%= player.y_acc %>. Your x is <%= player.x %> </p>
+<p>You are player <%= player.name %>, your y is <%= player.y %> and acc is <%= player.y_speed %>. Your x is <%= player.x %> </p>
 
 <br>
 <p>Your speed is <%= player.x_speed %></p>

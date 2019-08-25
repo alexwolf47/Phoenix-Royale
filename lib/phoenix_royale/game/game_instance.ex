@@ -12,13 +12,13 @@ defmodule PhoenixRoyale.GameInstance do
               alive_count: nil,
               players: %{},
               storm: -1000,
-              storm_speed: 8,
+              storm_speed: 6,
               player_number: nil
   end
 
   @tick GameSettings.tick_interval()
 
-  def start_link(server_uuid, game_uuid, map, player_number, players, player_count, status) do
+  def start_link(server_uuid, game_uuid, map, player_number, players, status) do
     # you may want to register your server with `name: __MODULE__`
     # as a third argument to `start_link`
     GenServer.start_link(
@@ -29,7 +29,7 @@ defmodule PhoenixRoyale.GameInstance do
         game_map: map,
         player_number: player_number,
         players: players,
-        player_count: player_count,
+        player_count: player_number,
         server_status: status
       },
       name: {:global, game_uuid}
@@ -48,10 +48,8 @@ defmodule PhoenixRoyale.GameInstance do
     GenServer.call({:global, game_uuid}, :state)
   end
 
-  def waterfall(game_uuid, player_number, players) do
-    # IO.puts("waterfall public")
-    # IO.inspect({game_uuid, player_number, players}, label: "game uuid of waterfall")
-    GenServer.cast({:global, game_uuid}, {:waterfall, player_number, players})
+  def waterfall(game_uuid, player_number, players, alive_count) do
+    GenServer.cast({:global, game_uuid}, {:waterfall, player_number, players, alive_count})
   end
 
   def jump(player_number, game_uuid) do
@@ -79,9 +77,7 @@ defmodule PhoenixRoyale.GameInstance do
   def handle_info(:tick, %{server_status: :full} = state) do
     :timer.send_after(@tick, self(), :tick)
 
-    total_players = map_size(state.players)
-
-    {:noreply, %{state | server_status: :countdown, alive_count: total_players}}
+    {:noreply, %{state | server_status: :countdown}}
   end
 
   def handle_info(:tick, %{server_status: :countdown, countdown: countdown} = state)
@@ -92,6 +88,7 @@ defmodule PhoenixRoyale.GameInstance do
 
   def handle_info(:tick, %{server_status: :countdown} = state) do
     :timer.send_after(@tick, self(), :tick)
+    # :timer.send_after(GameSettings.server_update_interval(), self(), :server_update)
     {:noreply, %{state | server_status: :playing}}
   end
 
@@ -106,8 +103,14 @@ defmodule PhoenixRoyale.GameInstance do
     {:noreply, state}
   end
 
+  def handle_info(:server_update, state) do
+    :timer.send_after(GameSettings.server_update_interval(), self(), :server_update)
+    {status, count} = GameServer.info(state.server_uuid)
+
+    {:noreply, %{state | server_status: status, alive_count: count}}
+  end
+
   def handle_info(:close, state) do
-    IO.puts("**CLOSING")
     {:stop, :normal, state}
   end
 
@@ -122,43 +125,33 @@ defmodule PhoenixRoyale.GameInstance do
 
   def handle_cast({:kill, player_number}, state), do: Game.kill(player_number, state)
 
-  def handle_cast({:waterfall, wplayer, updated_players}, state) do
-    # IO.puts("WATERFALLING***
-    # ***")
-    # IO.inspect(updated_players, label: "state in waterfall")
+  def handle_cast({:waterfall, next_player_number, updated_players, alive_count}, state) do
+    case Map.get(updated_players, state.player_number + 1) do
+      nil ->
+        GameServer.update_players(state.server_uuid, state.players)
+        this_player = Map.get(state.players, state.player_number)
 
-    if wplayer == state.player_number do
-      # IO.puts("waterfalling for player #{wplayer}")
-      # IO.inspect(state.players, label: "waterfall players")
-      # IO.inspect(Map.get(state.players, state.player_number + 1), label: "Case sattement")
-      # :timer.sleep(20000)
+        {:noreply,
+         %{
+           state
+           | alive_count: alive_count,
+             players: Map.put(updated_players, next_player_number, this_player)
+         }}
 
-      case Map.get(updated_players, state.player_number + 1) do
-        nil ->
-          GameServer.update_players(state.server_uuid, state.players)
-          this_player = Map.get(state.players, state.player_number)
+      player ->
+        this_player = Map.get(state.players, state.player_number)
+        waterfalled_players = Map.put(updated_players, next_player_number, this_player)
+        player_game = state.server_uuid <> "-" <> player.uuid
 
-          update1 = Map.delete(updated_players, wplayer)
-          waterfalled_players = Map.put(update1, wplayer, this_player)
-          new_state = %{state | players: waterfalled_players}
-          {:noreply, new_state}
+        GameInstance.waterfall(
+          player_game,
+          state.player_number + 1,
+          waterfalled_players,
+          alive_count
+        )
 
-        player ->
-          # IO.puts("waterfalling to next player")
-
-          this_player = Map.get(state.players, state.player_number)
-
-          update1 = Map.delete(updated_players, wplayer)
-          waterfalled_players = Map.put(update1, wplayer, this_player)
-
-          player_game = elem(String.split_at(state.uuid, 37), 0) <> player.uuid
-
-          GameInstance.waterfall(player_game, state.player_number + 1, waterfalled_players)
-          new_state = %{state | players: waterfalled_players}
-          {:noreply, new_state}
-      end
-    else
-      {:noreply, state}
+        new_state = %{state | players: waterfalled_players, alive_count: alive_count}
+        {:noreply, new_state}
     end
   end
 end

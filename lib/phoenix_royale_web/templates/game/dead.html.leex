@@ -1,4 +1,8 @@
 dead!
+<% player = Map.get(@game_state.players, @player_number) %>
 
 <%= player_y = get_player_y(@player_number, @game_state) %>
 <%= player_x = get_player_x(@player_number, @game_state) %>
+
+<br>
+<h1>You finished <%= player.position %></h1>
