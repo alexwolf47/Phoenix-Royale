@@ -1,7 +1,6 @@
 defmodule PhoenixRoyale.GameServer do
   use GenServer
-  alias PhoenixRoyale.Game
-  alias PhoenixRoyale.GameInstance
+  alias PhoenixRoyale.{Game, GameInstance, GameSettings}
 
   defmodule GameState do
     defstruct server_status: :need_players,
@@ -46,7 +45,7 @@ defmodule PhoenixRoyale.GameServer do
     p1 = Map.get(state.players, 1)
     gameuuid = state.uuid <> "-" <> p1.uuid
     new_state = %{state | players: updated_players}
-    :timer.sleep(33)
+    :timer.sleep(GameSettings.tick_interval())
     GameInstance.waterfall(gameuuid, 1, updated_players)
     {:noreply, new_state}
   end
@@ -67,7 +66,8 @@ defmodule PhoenixRoyale.GameServer do
     gameid = state.uuid <> "-" <> player.uuid
 
     status =
-      if number_of_players > -1 do
+      if number_of_players > 0 do
+        PhoenixRoyale.GameCoordinator.start_game(serverid)
         :full
       else
         :need_players

@@ -1,12 +1,12 @@
 defmodule PhoenixRoyale.GameInstance do
   use GenServer
-  alias PhoenixRoyale.{Game, GameServer, GameInstance}
+  alias PhoenixRoyale.{Game, GameServer, GameInstance, GameSettings}
 
   defmodule GameInstanceState do
     defstruct server_status: :need_players,
               server_uuid: nil,
               uuid: nil,
-              countdown: nil,
+              countdown: 3000,
               game_map: %{},
               player_count: 0,
               alive_count: nil,
@@ -15,6 +15,8 @@ defmodule PhoenixRoyale.GameInstance do
               storm_speed: 8,
               player_number: nil
   end
+
+  @tick GameSettings.tick_interval()
 
   def start_link(server_uuid, game_uuid, map, player_number, players, player_count, status) do
     # you may want to register your server with `name: __MODULE__`
@@ -35,7 +37,7 @@ defmodule PhoenixRoyale.GameInstance do
   end
 
   def init(server) do
-    :timer.send_after(25, self(), :tick)
+    :timer.send_after(@tick, self(), :tick)
     :timer.send_interval(1000 * 60 * 2, self(), :close)
     {:ok, server}
   end
@@ -64,59 +66,49 @@ defmodule PhoenixRoyale.GameInstance do
     GenServer.cast({:global, game_uuid}, {:kill, player_number})
   end
 
-  def handle_info(:close, state) do
-    {:stop, :normal, state}
-  end
-
   def handle_info(:tick, %{server_status: :playing, alive_count: 0} = state) do
-    # IO.inspect(state, label: "state on tick")
-    :timer.send_after(25, self(), :tick)
+    :timer.send_after(@tick, self(), :tick)
     {:noreply, %{state | server_status: :game_over}}
   end
 
   def handle_info(:tick, %{server_status: :playing} = state) do
-    # IO.inspect(state, label: "state on tick")
-    :timer.send_after(25, self(), :tick)
+    :timer.send_after(@tick, self(), :tick)
     {:noreply, Game.tick(state)}
   end
 
   def handle_info(:tick, %{server_status: :full} = state) do
-    # IO.inspect(state, label: "state on tick")
-    :timer.send_after(25, self(), :tick)
-    PhoenixRoyale.GameCoordinator.start_game(state.uuid)
+    :timer.send_after(@tick, self(), :tick)
 
-    {:noreply,
-     %{
-       state
-       | server_status: :countdown,
-         countdown: 3000,
-         alive_count: map_size(state.players)
-     }}
+    total_players = map_size(state.players)
+
+    {:noreply, %{state | server_status: :countdown, alive_count: total_players}}
   end
 
   def handle_info(:tick, %{server_status: :countdown, countdown: countdown} = state)
       when countdown > 0 do
-    # IO.inspect(state, label: "state on tick")
-    :timer.send_after(25, self(), :tick)
+    :timer.send_after(@tick, self(), :tick)
     {:noreply, %{state | countdown: state.countdown - 50}}
   end
 
   def handle_info(:tick, %{server_status: :countdown} = state) do
-    # IO.inspect(state, label: "state on tick")
-    :timer.send_after(25, self(), :tick)
+    :timer.send_after(@tick, self(), :tick)
     {:noreply, %{state | server_status: :playing}}
   end
 
   def handle_info(:tick, %{server_status: :need_players} = state) do
-    # IO.inspect(state, label: "state on tick")
     game_status = GameServer.state(state.server_uuid).server_status
     :timer.send_after(25, self(), :tick)
     {:noreply, %{state | server_status: game_status}}
   end
 
   def handle_info(:tick, %{server_status: :game_over} = state) do
-    :timer.send_interval(1000 * 4, self(), :close)
+    :timer.send_interval(GameSettings.postgame_screen_timeout(), self(), :close)
     {:noreply, state}
+  end
+
+  def handle_info(:close, state) do
+    IO.puts("**CLOSING")
+    {:stop, :normal, state}
   end
 
   def handle_call(:state, _from, state) do
@@ -129,8 +121,6 @@ defmodule PhoenixRoyale.GameInstance do
     do: Game.slow(player_number, value, state)
 
   def handle_cast({:kill, player_number}, state), do: Game.kill(player_number, state)
-
-  # def handle_cast({:waterfall, wplayer, updated_players}, state), do: {:noreply, state}
 
   def handle_cast({:waterfall, wplayer, updated_players}, state) do
     # IO.puts("WATERFALLING***
