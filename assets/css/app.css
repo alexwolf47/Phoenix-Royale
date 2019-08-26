@@ -4,6 +4,9 @@
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
 body {
     margin: 0px;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
 img {
@@ -38,4 +41,30 @@ img {
     position: absolute;
     width: 50px;
     height: 28px;
+}
+
+.seaContainer {
+    background-color: #363457;
+    height: calc(100vh - 600px);
+}
+
+.seaBlur {
+    background-color: #363457;
+    opacity: 0.5;
+    height: calc(100vh - 600px);
+}
+
+.numberBubble {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 48px;
+    background-color: seashell;
+    color: #000000;
 }

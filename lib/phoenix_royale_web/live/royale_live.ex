@@ -1,6 +1,6 @@
 defmodule PhoenixRoyaleWeb.RoyaleLive do
   use Phoenix.LiveView
-  alias PhoenixRoyale.{GameServer, GameCoordinator, GameInstance, GameSettings}
+  alias PhoenixRoyale.{GameCoordinator, GameInstance, GameSettings}
 
   def render(assigns) do
     case assigns.game_state do
@@ -41,7 +41,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   end
 
   def handle_event("join_game", %{"join" => %{"name" => name}}, socket) do
-    {serverid, gameid} = GameCoordinator.find_game(name)
+    {_serverid, gameid} = GameCoordinator.find_game(name)
     game_state = GameInstance.state(gameid)
     :timer.send_after(GameSettings.tick_interval(), self(), :update)
 

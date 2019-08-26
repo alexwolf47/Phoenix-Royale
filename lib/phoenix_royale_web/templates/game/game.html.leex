@@ -5,9 +5,16 @@
                 </div>
             <% end %>
 
-<div style="background: linear-gradient(180deg, rgb(153,102,189), rgb(112,80,200));">
-    <div class="gameWindowContainer" style="background-position-x: -<%= player.x/5 %>px">
+
+<div style="background: linear-gradient(180deg, rgb(82, 25, 69), rgb(163, 51, 61));">
+
+    <div class="gameWindowContainer" style="opacity: 0.4; background-position-x: -<%= player.x/5 %>px">
         <div class="gameWindow" phx-keyup="jump" phx-target="window">
+        
+        <div class="numberBubble">
+        <%= @game_state.alive_count %> -
+        <%= @game_state.player_count %>
+        </div>
 
         <%= if player.alive do %>
          <div style="background: red; width: 100vw; opacity: 0.2; z-index: 100; height: 600px; position: absolute; right: <%= 700 + (player.x - @game_state.storm) %>px">
@@ -21,9 +28,16 @@
 
                 <%= if @game_state.server_status == :playing do %>
                     <%= for {x, y} <- @game_state.game_map.trees do %>
-                        <%= if x - player.x <= 1000 && x - player.x > - 300 do %>
-                        <div style="width:50px; border-radius: 25px; height: <%= y*6 %>px; position: absolute; bottom: 0px; left: <%= (100 + x - player.x) %>px; background-color: #fffefe;"></div>
-                        <div style="width:50px; border-radius: 25px; height: <%= 600- (y*6) - 240 %>px; position: absolute;  left: <%= (100 + x - player.x) %>px; background-color: #ff07fe;"></div>
+                        <%= if x - player.x <= 1200 && x - player.x > - 500 do %>
+                        <div style="width:100px; border-radius: 25px 25px 0px 0px; height: <%= y*6 %>px; position: absolute; bottom: 0px; left: <%= (100 + x - player.x) %>px; background-color: #fffefe;"></div>
+                       
+                        <% end %>
+                    <% end %>
+
+                      <%= for {x, y} <- @game_state.game_map.pipes do %>
+                        <%= if x - player.x <= 1200 && x - player.x > - 1500 do %>
+                        <div style="width:900px; height: 50px;opacity: 1; line-height: 50px; padding: 0px 12px; color: #ffffff; font-size: 22px; font-weight: 800; letter-spacing: 12px;border-radius: 5px; position: absolute; bottom: <%= y * 6  %>px; left: <%= (100 + x - player.x) %>px; background-color: #11151C; ">
+                         </div>
                         <% end %>
                     <% end %>
                 <% end %>
@@ -34,6 +48,14 @@
                 <div style="position: absolute; bottom: <%= player.y * 6 - 20 %>px; left: 120px; font-size: 8px; color: #ffffff;">
                 <%= player.name %>
                 </div>
+
+                <%= if player.y > 105 do %>
+                <% size = player.y / 100 %>
+
+                <div style="position: absolute; top: 12px; height: <%= 24 - size * 12 %>px; width: <%= 24- size * 12 %>px; border-radius: <%= 24 - size * 12 %>px; left: 120px; background-color: #ffffff;">
+                
+                </div>
+                <% end %>
 
 
 
@@ -56,9 +78,15 @@
     </div>
 </div>
 
-<%= @game_state.alive_count %>
+<div class="seaContainer">
+<div class="seaBlur">
+</div>
+
+</div>
+
 
 <%= if @dev do %>
+<%= @game_state.alive_count %>
 <p>You are player <%= player.name %>, your y is <%= player.y %> and acc is <%= player.y_speed %>. Your x is <%= player.x %> </p>
 
 <br>

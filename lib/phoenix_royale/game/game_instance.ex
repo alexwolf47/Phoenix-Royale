@@ -60,6 +60,10 @@ defmodule PhoenixRoyale.GameInstance do
     GenServer.cast({:global, game_uuid}, {:slow, player_number, value})
   end
 
+  def pipe(player_number, game_uuid) do
+    GenServer.cast({:global, game_uuid}, {:pipe, player_number})
+  end
+
   def kill(player_number, game_uuid) do
     GenServer.cast({:global, game_uuid}, {:kill, player_number})
   end
@@ -122,6 +126,9 @@ defmodule PhoenixRoyale.GameInstance do
 
   def handle_cast({:slow, player_number, value}, state),
     do: Game.slow(player_number, value, state)
+
+  def handle_cast({:pipe, player_number}, state),
+    do: Game.pipe(player_number, state)
 
   def handle_cast({:kill, player_number}, state), do: Game.kill(player_number, state)
 
