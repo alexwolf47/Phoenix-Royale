@@ -172,9 +172,9 @@ defmodule PhoenixRoyale.Game do
     if total_x >= 50000 do
       Enum.reverse(trees_so_far)
     else
-      new_tree_x = total_x + Enum.random(200..500)
+      new_tree_x = total_x + Enum.random(300..600)
       new_tree_y = Enum.random(-30..90)
-      new_tree_length = Enum.random(80..250)
+      new_tree_length = Enum.random(30..280)
       new_tree = {new_tree_x, new_tree_y, new_tree_length}
       generate_trees([new_tree | trees_so_far], new_tree_x + new_tree_length)
     end

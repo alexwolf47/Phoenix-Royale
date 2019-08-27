@@ -43,7 +43,8 @@
                       <%= for {x, y} <- @game_state.game_map.pipes do %>
                         <%= if x - player.x <= 1200 && x - player.x > - 1500 do %>
 
-                        <div style="width:500px; height: 54px;opacity: 1;  line-height: 50px; padding: 0px 12px; color: #ffffff; font-size: 22px; font-weight: 800; letter-spacing: 12px;border-radius: 5px; position: absolute; bottom: <%= y * 6 -22 %>px; left: <%= (100 + x - player.x) %>px; background-color: #11151C; ">
+                        <div style="width:500px; height: 54px;opacity: 1;  line-height: 54px; font-family: 'Fira Sans', sans-serif; padding: 0px 12px; color: #ffffff; font-size: 38px; font-weight: 500; border-radius: 5px; position: absolute; bottom: <%= y * 6 -22 %>px; left: <%= (100 + x - player.x) %>px; background-color: #11151C; ">
+                        |>|>|>|>|>|>|>|>|>|>|>|>|>|>
                          </div>
                         <% end %>
                     <% end %>
