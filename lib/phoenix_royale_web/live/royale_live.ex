@@ -1,11 +1,11 @@
 defmodule PhoenixRoyaleWeb.RoyaleLive do
   use Phoenix.LiveView
-  alias PhoenixRoyale.{GameCoordinator, GameInstance, GameSettings}
+  alias PhoenixRoyale.{GameCoordinator, GameServer, GameInstance, GameSettings}
 
   def render(assigns) do
     case assigns.game_state do
       nil ->
-        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "loading.html", assigns)
+        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "landing.html", assigns)
 
       %{server_status: :need_players} ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "lobby.html", assigns)
@@ -19,14 +19,30 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   end
 
   def mount(session, socket) do
-    :timer.send_after(0, self(), {:find_game, session.account_name})
-    {:ok, assign(socket, game_state: nil, player_number: nil, game_found: false, dev: false)}
+    {:ok,
+     assign(socket,
+       account: session.account_name,
+       game_state: nil,
+       player_number: nil,
+       dev: false,
+       player_list: [],
+       start_countdown: nil
+     )}
   end
 
-  def handle_info({:find_game, name}, %{assigns: %{game_found: false}} = socket) do
-    {_serverid, gameid} = GameCoordinator.find_game(name)
+  def handle_info(:update_player_list, socket) do
+    state = GameServer.state(socket.assigns.game_state.server_uuid)
+    :timer.send_after(500, self(), :update_player_list)
+
+    {:noreply,
+     assign(socket, player_list: state.player_list, start_countdown: state.start_countdown)}
+  end
+
+  def handle_event("find_game", _arg, socket) do
+    {_serverid, gameid} = GameCoordinator.find_game(socket.assigns.account)
     game_state = GameInstance.state(gameid)
     :timer.send_after(GameSettings.tick_interval(), self(), :update)
+    :timer.send_after(10, self(), :update_player_list)
 
     {:noreply,
      assign(socket,
@@ -36,8 +52,18 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
      )}
   end
 
-  def handle_info({:find_game, name}, %{assigns: %{game_found: true}} = socket) do
-    {:noreply, socket}
+  def handle_event("find_sp_game", _arg, socket) do
+    {_serverid, gameid} = GameCoordinator.single_player_game(socket.assigns.account)
+    game_state = GameInstance.state(gameid)
+    :timer.send_after(GameSettings.tick_interval(), self(), :update)
+    :timer.send_after(10, self(), :update_player_list)
+
+    {:noreply,
+     assign(socket,
+       player_number: game_state.player_count,
+       game_state: game_state,
+       game_uuid: gameid
+     )}
   end
 
   def handle_info(:update, socket) do
@@ -57,17 +83,4 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
     GameInstance.jump(player_number, socket.assigns.game_uuid)
     {:noreply, socket}
   end
-
-  # def handle_event("join_game", %{"join" => %{"name" => name}}, socket) do
-  #   {_serverid, gameid} = GameCoordinator.find_game(name)
-  #   game_state = GameInstance.state(gameid)
-  #   :timer.send_after(GameSettings.tick_interval(), self(), :update)
-
-  #   {:noreply,
-  #    assign(socket,
-  #      player_number: game_state.player_count,
-  #      game_state: game_state,
-  #      game_uuid: gameid
-  #    )}
-  # end
 end

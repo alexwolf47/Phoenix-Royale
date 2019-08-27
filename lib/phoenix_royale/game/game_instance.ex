@@ -38,7 +38,7 @@ defmodule PhoenixRoyale.GameInstance do
 
   def init(server) do
     :timer.send_after(@tick, self(), :tick)
-    :timer.send_interval(1000 * 60 * 2, self(), :close)
+    :timer.send_interval(1000 * 60 * 5, self(), :close)
     {:ok, server}
   end
 
@@ -81,7 +81,7 @@ defmodule PhoenixRoyale.GameInstance do
   def handle_info(:tick, %{server_status: :full} = state) do
     :timer.send_after(@tick, self(), :tick)
 
-    {:noreply, %{state | server_status: :countdown}}
+    {:noreply, %{state | server_status: :countdown, player_count: state.alive_count}}
   end
 
   def handle_info(:tick, %{server_status: :countdown, countdown: countdown} = state)

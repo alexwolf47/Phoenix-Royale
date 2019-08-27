@@ -1,1 +1,30 @@
-Waiting for players
+
+<div class="homepage">
+
+    <div class="homeWrapper">
+        <div class="lobbyContainer">
+            <div class="box">
+                <div class="introContainer">
+                    
+                    Game Lobby
+                    <br>
+                    <span style="font-size: 18px;">These players are currently ready to play:</span><br>
+                    <%= for player <- @player_list do %>
+                    <span style="font-size: 14px;"><%= player %></span><br>
+                    <%= end %>
+
+                </div>
+            </div>
+            <div class="box">
+
+                    <div style="font-size: 14px;">
+                    Game will start when either ten people have joined or in
+                    <span style="font-size: 18px;"><%= @start_countdown %> </span>seconds.
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

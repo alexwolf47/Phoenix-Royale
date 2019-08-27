@@ -91,3 +91,14 @@ input[type='text']:focus {
     width: 100%;
     margin-top: 0px;
 }
+
+.lobbyContainer {
+    margin: 0px auto;
+    width: 70%;
+    height: calc(100vh);
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-row: auto auto;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}

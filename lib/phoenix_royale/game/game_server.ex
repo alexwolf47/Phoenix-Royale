@@ -2,30 +2,33 @@ defmodule PhoenixRoyale.GameServer do
   use GenServer
   alias PhoenixRoyale.{Game, GameInstance, GameSettings}
 
-  @players 2
-
   defmodule GameState do
     defstruct server_status: :need_players,
               uuid: nil,
+              start_countdown: 12,
               game_map: %{},
               player_count: 0,
               zzalive_count: 0,
               dead_players: [],
               players: %{},
-              max_players: @players,
+              player_list: [],
+              max_players: nil,
               winner: nil
   end
 
-  def start_link(game_uuid) do
+  def start_link(game_uuid, server_size) do
     game_map = Game.generate_map()
 
-    GenServer.start_link(__MODULE__, %GameState{uuid: game_uuid, game_map: game_map},
+    GenServer.start_link(
+      __MODULE__,
+      %GameState{uuid: game_uuid, game_map: game_map, max_players: server_size},
       name: {:global, game_uuid}
     )
   end
 
   def init(server) do
-    :timer.send_interval(1000 * 60 * 2, self(), :close)
+    :timer.send_interval(1000 * 60 * 5, self(), :close)
+    :timer.send_after(1000, self(), :lobby_timer)
     {:ok, server}
   end
 
@@ -78,6 +81,7 @@ defmodule PhoenixRoyale.GameServer do
       | player_count: next_player_number,
         zzalive_count: next_player_number,
         players: players,
+        player_list: [player.name | state.player_list],
         server_status: status
     }
 
@@ -92,7 +96,7 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   defp check_full_status(state) do
-    if state.player_count >= @players - 1 do
+    if state.player_count >= state.max_players - 1 do
       :full
     else
       :need_players
@@ -126,6 +130,21 @@ defmodule PhoenixRoyale.GameServer do
   defp find_p1_gameid(state) do
     p1 = Map.get(state.players, 1)
     state.uuid <> "-" <> p1.uuid
+  end
+
+  def handle_info(:lobby_timer, state) do
+    if state.start_countdown > 0 do
+      :timer.send_after(1000, self(), :lobby_timer)
+      {:noreply, %{state | start_countdown: state.start_countdown - 1}}
+    else
+      IO.puts("waterfall start")
+      PhoenixRoyale.GameCoordinator.start_game(state.uuid)
+      p1_uuid = Map.get(state.players, 1).uuid
+      p1_gameid = state.uuid <> "-" <> p1_uuid
+
+      GameInstance.waterfall(p1_gameid, 1, state.players, state.zzalive_count)
+      {:noreply, %{state | server_status: :full}}
+    end
   end
 
   def handle_info(:close, state) do

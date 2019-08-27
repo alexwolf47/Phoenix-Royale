@@ -1,33 +1,31 @@
 
-<% player = Map.get(@game_state.players, @player_number) %>
-
-
-
-
-
-
 <div class="homepage">
 
     <div class="homeWrapper">
         <div class="lobbyContainer">
             <div class="box">
-                <div class="introContainer">
+            <a phx-click="find_sp_game" style="color: #fff;">
+                <div class="loginContainer">
                     <div class="loginHeader">
-                    <h1>You finished <%= player.position %> out of <%= @game_state.player_count %></h1>
+                    Play a singleplayer game!
+                    </div>
+                    <div style="font-size: 14px;">
+                    Play a game by yourself to get used to the controls!
                     </div>
                     <div style="padding: 24px 0px;">
       
                     </div>
                 </div>
+            </a>
             </div>
             <div class="box">
                 <a phx-click="find_game" style="color: #fff;">
                 <div class="loginContainer">
                     <div class="loginHeader">
-                    You made it this far:
+                    Play a multiplayer game!
                     </div>
                     <div style="font-size: 14px;">
-<%= player_x = round(get_player_x(@player_number, @game_state)/10) %>m
+                    Play against up to nine other players!
                     </div>
                     <div style="padding: 24px 0px;">
       

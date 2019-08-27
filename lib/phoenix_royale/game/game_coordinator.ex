@@ -3,6 +3,7 @@ defmodule PhoenixRoyale.GameCoordinator do
   alias PhoenixRoyale.{GameServer, Player}
 
   @server_name {:global, __MODULE__}
+  @max_players 5
 
   defmodule GameCoordinator do
     defstruct need_players: %{},
@@ -28,7 +29,12 @@ defmodule PhoenixRoyale.GameCoordinator do
     GenServer.call(@server_name, {:find_game, name})
   end
 
+  def single_player_game(name) do
+    GenServer.call(@server_name, {:onep_game, name})
+  end
+
   def start_game(game_uuid) do
+    IO.puts("**** STARTING GAME")
     GenServer.cast(@server_name, {:start_game, game_uuid})
   end
 
@@ -56,6 +62,17 @@ defmodule PhoenixRoyale.GameCoordinator do
     {:noreply, new_state}
   end
 
+  def handle_call({:onep_game, name}, {pid, _ref} = _from, state) do
+    new_game_uuid = UUID.uuid4()
+    {:ok, new_game_pid} = GameServer.start_link(new_game_uuid, 1)
+
+    player = %Player{name: name, pid: pid, uuid: UUID.uuid4()}
+    gameid = GameServer.join(player, new_game_uuid)
+
+    new_state = %{state | need_players: %{new_game_uuid => %{pid: new_game_pid}}}
+    {:reply, gameid, new_state}
+  end
+
   ## If a player searches whilst there are no servers waiting for players, we start a new one.
   ## We then add the player as player 1 in this server.
   ## And update the list of games looking for players.
@@ -63,7 +80,7 @@ defmodule PhoenixRoyale.GameCoordinator do
   def handle_call({:find_game, name}, {pid, _ref} = _from, %{need_players: games} = state)
       when map_size(games) == 0 do
     new_game_uuid = UUID.uuid4()
-    {:ok, new_game_pid} = GameServer.start_link(new_game_uuid)
+    {:ok, new_game_pid} = GameServer.start_link(new_game_uuid, @max_players)
 
     player = %Player{name: name, pid: pid, uuid: UUID.uuid4()}
     gameid = GameServer.join(player, new_game_uuid)
