@@ -34,7 +34,6 @@ defmodule PhoenixRoyale.GameCoordinator do
   end
 
   def start_game(game_uuid) do
-    IO.puts("**** STARTING GAME")
     GenServer.cast(@server_name, {:start_game, game_uuid})
   end
 
@@ -47,12 +46,17 @@ defmodule PhoenixRoyale.GameCoordinator do
   end
 
   def handle_cast({:start_game, game_uuid}, state) do
-    {:ok, game} = Map.fetch(state.need_players, game_uuid)
-    need_players = Map.drop(state.need_players, [game_uuid])
-    updated_full_games = Map.put(state.full_games, game_uuid, game)
+    case Map.fetch(state.need_players, game_uuid) do
+      {:ok, game} ->
+        need_players = Map.drop(state.need_players, [game_uuid])
+        updated_full_games = Map.put(state.full_games, game_uuid, game)
 
-    new_state = %{state | need_players: need_players, full_games: updated_full_games}
-    {:noreply, new_state}
+        new_state = %{state | need_players: need_players, full_games: updated_full_games}
+        {:noreply, new_state}
+
+      _ ->
+        {:noreply, state}
+    end
   end
 
   def handle_cast({:finish_game, game_uuid}, state) do

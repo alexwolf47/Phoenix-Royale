@@ -1,22 +1,22 @@
 <% player = Map.get(@game_state.players, @player_number) %>
             <%= if @game_state.server_status == :countdown do %>
-                <div style="position: absolute; top: 200px; font-size: 64px;">
-                <p><%= @game_state.countdown %></p>
+                <div style="position: absolute; top: 200px; left: 200px; font-size: 64px;">
+                <p><%= round(@game_state.countdown) %></p>
                 </div>
             <% end %>
 
 
-<div style="background: linear-gradient(180deg, rgb(82, 25, 69), rgb(163, 51, 61));">
+<div style="background: linear-gradient(180deg, rgb(102, 35, 79), rgb(163, 71, 91));">
 
     <div class="gameWindowContainer" style="opacity: 0.4; background-position-x: -<%= player.x/5 %>px">
         <div class="gameWindow" phx-keyup="jump" phx-target="window">
         
         <div class="numberBubble">
-        <%= @game_state.alive_count %> -
+        <%= @game_state.alive_count %> /
         <%= @game_state.player_count %>
         </div>
 
-        <%= if player.alive do %>
+        <%= if player.alive  do %>
          <div style="background: red; width: 100vw; opacity: 0.2; z-index: 100; height: 600px; position: absolute; right: <%= 700 + (player.x - @game_state.storm) %>px">
          </div>
         <% else %>
@@ -27,24 +27,29 @@
 
 
                 <%= if @game_state.server_status == :playing do %>
-                    <%= for {x, y} <- @game_state.game_map.trees do %>
-                        <%= if x - player.x <= 1200 && x - player.x > - 500 do %>
-                        <div style="width:100px; border-radius: 25px 25px 0px 0px; height: <%= y*6 %>px; position: absolute; bottom: 0px; left: <%= (100 + x - player.x) %>px; background-color: #fffefe;"></div>
+
+
+
+                    <%= for {x, y, length} <- @game_state.game_map.trees do %>
+                        <%= if x - player.x <= 1000 && x - player.x > -800 do %>
+                        <div style="width:<%= length %>px; border-radius: 25px 25px 0px 0px; height: <%= y*6 %>px; position: absolute; bottom: 0px; left: <%= (100 + x - player.x) %>px; background-color: #fffefe;"></div>
                        
+                        <div style="width:<%= length %>px; border-radius: 0px 0px 25px 25px; height: <%= 600- (y*6) - 240 %>px; position: absolute;  left: <%= (100 + x - player.x) %>px; background-color: #fffefe;">
+
+                </div>
                         <% end %>
                     <% end %>
 
                       <%= for {x, y} <- @game_state.game_map.pipes do %>
                         <%= if x - player.x <= 1200 && x - player.x > - 1500 do %>
-                        <div style="width: 6px; height: 6px; border-radius: 6px; z-index: 50; background-color: red; position:absolute; bottom: <%= y * 6   %>px; left: <%= (100 + x - player.x) %>px; ">
-                        </div>
-                        <div style="width:900px; height: 50px;opacity: 1; line-height: 50px; padding: 0px 12px; color: #ffffff; font-size: 22px; font-weight: 800; letter-spacing: 12px;border-radius: 5px; position: absolute; bottom: <%= y * 6 -22 %>px; left: <%= (100 + x - player.x) %>px; background-color: #11151C; ">
+
+                        <div style="width:500px; height: 54px;opacity: 1;  line-height: 50px; padding: 0px 12px; color: #ffffff; font-size: 22px; font-weight: 800; letter-spacing: 12px;border-radius: 5px; position: absolute; bottom: <%= y * 6 -22 %>px; left: <%= (100 + x - player.x) %>px; background-color: #11151C; ">
                          </div>
                         <% end %>
                     <% end %>
                 <% end %>
 
-                <div class="playerPhoenix" style="bottom: <%= player.y * 6 %>px; left: 100px; transform: scaleX(-1) rotate(<%= player.y_speed/2 %>deg)">
+                <div class="playerPhoenix" style="bottom: <%= player.y * 6 %>px; left: 100px; transform: scaleX(-1) rotate(<%= player.y_speed/2.5 %>deg)">
                 <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
                 </div>
                 <div style="position: absolute; bottom: <%= player.y * 6 - 20 %>px; left: 120px; font-size: 8px; color: #ffffff;">

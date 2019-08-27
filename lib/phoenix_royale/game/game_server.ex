@@ -133,17 +133,16 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   def handle_info(:lobby_timer, state) do
-    if state.start_countdown > 0 do
+    if state.start_countdown > 0 && state.server_status != :full do
       :timer.send_after(1000, self(), :lobby_timer)
       {:noreply, %{state | start_countdown: state.start_countdown - 1}}
     else
-      IO.puts("waterfall start")
       PhoenixRoyale.GameCoordinator.start_game(state.uuid)
       p1_uuid = Map.get(state.players, 1).uuid
       p1_gameid = state.uuid <> "-" <> p1_uuid
 
       GameInstance.waterfall(p1_gameid, 1, state.players, state.zzalive_count)
-      {:noreply, %{state | server_status: :full}}
+      {:noreply, %{state | start_countdown: :started, server_status: :full}}
     end
   end
 

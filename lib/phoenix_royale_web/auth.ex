@@ -7,7 +7,6 @@ defmodule PhoenixRoyaleWeb.Auth do
   def call(conn, _opts) do
     conn
     |> get_session(:account_name)
-    |> IO.inspect(label: "get session ret")
     |> case do
       nil ->
         conn
