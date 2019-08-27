@@ -5,7 +5,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   def render(assigns) do
     case assigns.game_state do
       nil ->
-        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "join.html", assigns)
+        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "loading.html", assigns)
 
       %{server_status: :need_players} ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "lobby.html", assigns)
@@ -18,8 +18,26 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
     end
   end
 
-  def mount(_session, socket) do
-    {:ok, assign(socket, game_state: nil, player_number: nil, dev: false)}
+  def mount(session, socket) do
+    :timer.send_after(0, self(), {:find_game, session.account_name})
+    {:ok, assign(socket, game_state: nil, player_number: nil, game_found: false, dev: false)}
+  end
+
+  def handle_info({:find_game, name}, %{assigns: %{game_found: false}} = socket) do
+    {_serverid, gameid} = GameCoordinator.find_game(name)
+    game_state = GameInstance.state(gameid)
+    :timer.send_after(GameSettings.tick_interval(), self(), :update)
+
+    {:noreply,
+     assign(socket,
+       player_number: game_state.player_count,
+       game_state: game_state,
+       game_uuid: gameid
+     )}
+  end
+
+  def handle_info({:find_game, name}, %{assigns: %{game_found: true}} = socket) do
+    {:noreply, socket}
   end
 
   def handle_info(:update, socket) do
@@ -40,16 +58,16 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
     {:noreply, socket}
   end
 
-  def handle_event("join_game", %{"join" => %{"name" => name}}, socket) do
-    {_serverid, gameid} = GameCoordinator.find_game(name)
-    game_state = GameInstance.state(gameid)
-    :timer.send_after(GameSettings.tick_interval(), self(), :update)
+  # def handle_event("join_game", %{"join" => %{"name" => name}}, socket) do
+  #   {_serverid, gameid} = GameCoordinator.find_game(name)
+  #   game_state = GameInstance.state(gameid)
+  #   :timer.send_after(GameSettings.tick_interval(), self(), :update)
 
-    {:noreply,
-     assign(socket,
-       player_number: game_state.player_count,
-       game_state: game_state,
-       game_uuid: gameid
-     )}
-  end
+  #   {:noreply,
+  #    assign(socket,
+  #      player_number: game_state.player_count,
+  #      game_state: game_state,
+  #      game_uuid: gameid
+  #    )}
+  # end
 end

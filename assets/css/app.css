@@ -2,11 +2,17 @@
 
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
+@import "./homepage.css";
 body {
     margin: 0px;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 img {

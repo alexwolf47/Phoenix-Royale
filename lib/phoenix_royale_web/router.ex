@@ -10,17 +10,26 @@ defmodule PhoenixRoyaleWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :auth do
+    plug PhoenixRoyaleWeb.Auth
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", PhoenixRoyaleWeb do
     pipe_through :browser
+    get "/", SessionController, :index
+    post "/", SessionController, :login
+    get "/logout", SessionController, :logout
+  end
 
-    get "/", PageController, :index
-    live "/clock", ClockLive
+  scope "/", PhoenixRoyaleWeb do
+    pipe_through [:browser, :auth]
 
-    live "/play", RoyaleLive
+    live "/dashboard", DashboardLive
+    live "/play", RoyaleLive, session: [:account_name]
   end
 
   # Other scopes may use custom stacks.

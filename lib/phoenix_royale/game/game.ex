@@ -87,10 +87,10 @@ defmodule PhoenixRoyale.Game do
   def update_coords(%{pipe: pipe} = player_state, x, y, x_speed, y_speed) when pipe - x > 0 do
     %{
       player_state
-      | y: y + y_speed * 0.003,
+      | y: y + y_speed * 0.001,
         y_speed: y_speed,
-        x: x + 0.6 * x_speed + 20,
-        x_speed: x_speed + 0.28 / @tick
+        x: x + 0.5 * x_speed + 20,
+        x_speed: x_speed + 0.35 / @tick
     }
   end
 
@@ -152,7 +152,7 @@ defmodule PhoenixRoyale.Game do
 
   def check_pipes({x, y}, pipes) do
     Enum.any?(pipes, fn {pipe_x, pipe_y} ->
-      pipe_x - round(x) <= 15 && pipe_x - round(x) >= -15 && pipe_y - round(y) <= 15 &&
+      pipe_x - round(x) <= 25 && pipe_x - round(x) >= -10 && pipe_y - round(y) <= 15 &&
         pipe_y - round(y) >= -15
 
       # tree_x - round(x) <= 5 && tree_x - x >= -5 && (y - tree_y < 0 || y - tree_y > 40)

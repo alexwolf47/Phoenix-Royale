@@ -13,11 +13,11 @@ config :phoenix_royale,
 # Configures the endpoint
 config :phoenix_royale, PhoenixRoyaleWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "dummy_val_for_dev_env",
+  secret_key_base: "RaYpLSw1ARJ4lyMoxEz4R9jH4udPC25YdbaxE2QcdU1j1ILK14gLSDqgNGDVVFG5",
   render_errors: [view: PhoenixRoyaleWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: PhoenixRoyale.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [
-    signing_salt: "another_dummy_val_for_dev_env"
+    signing_salt: "RaYpLSw1ARJ4lyMoxEz4R9jH4udPC25YdbaxE2QcdU1j1ILK14gLSDqgNGDVVFG5"
   ]
 
 # Configures Elixir's Logger
