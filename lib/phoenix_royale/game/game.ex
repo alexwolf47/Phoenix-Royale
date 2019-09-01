@@ -66,7 +66,8 @@ defmodule PhoenixRoyale.Game do
       state
       | players: updated_players,
         storm: state.storm + state.storm_speed,
-        storm_speed: state.storm_speed + 0.05 / @tick
+        storm_speed: state.storm_speed + 0.05 / @tick,
+        tick: state.tick + 1
     }
   end
 
@@ -82,7 +83,7 @@ defmodule PhoenixRoyale.Game do
       GameServer.kill(player_number, state.server_uuid)
     end
 
-    Task.start(fn -> check_collisions(player_number, {x, y}, state) end)
+    # Task.start(fn -> check_collisions(player_number, {x, y}, state) end)
 
     updated_state = update_coords(player_state, x, y, x_speed, y_speed)
 

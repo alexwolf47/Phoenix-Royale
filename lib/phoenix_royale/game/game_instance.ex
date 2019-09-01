@@ -13,7 +13,8 @@ defmodule PhoenixRoyale.GameInstance do
               players: %{},
               storm: -1000,
               storm_speed: 6,
-              player_number: nil
+              player_number: nil,
+              tick: 0
   end
 
   @tick GameSettings.tick_interval()

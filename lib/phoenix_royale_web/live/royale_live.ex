@@ -26,7 +26,8 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
        player_number: nil,
        dev: false,
        player_list: [],
-       start_countdown: nil
+       start_countdown: nil,
+       tick: 0
      )}
   end
 
@@ -72,7 +73,9 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
 
     if player.alive || socket.assigns.game_state.server_status != :game_over do
       :timer.send_after(GameSettings.tick_interval(), self(), :update)
-      {:noreply, assign(socket, game_state: updated_game_state)}
+
+      {:noreply,
+       assign(socket, game_state: updated_game_state, tick: socket.assigns.game_state.tick + 1)}
     else
       {:noreply, assign(socket, game_state: Map.put(updated_game_state, :dead, true))}
     end

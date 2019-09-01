@@ -49,6 +49,14 @@ img {
     height: 28px;
 }
 
+.playerPhoenixSimple {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    background-color: #0a0a0a;
+}
+
 .seaContainer {
     background-color: #363457;
     height: calc(100vh - 600px);
