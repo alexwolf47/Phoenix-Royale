@@ -14,7 +14,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "dead.html", assigns)
 
       _ ->
-        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game.html", assigns)
+        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game_v2.html", assigns)
     end
   end
 
@@ -23,6 +23,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
      assign(socket,
        account: session.account_name,
        game_state: nil,
+       game_settings: %{height: 800},
        player_number: nil,
        dev: false,
        player_list: [],

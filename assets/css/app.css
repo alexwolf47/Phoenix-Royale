@@ -29,7 +29,7 @@ img {
 .gameWindowContainer {
     width: 100%;
     margin: 0px auto;
-    height: 600px;
+    height: 800px;
     background: url(https://www.joshmorony.com/media/2016/04/mountains-back.png);
     background-repeat: repeat-x;
     background-size: 40%;
@@ -39,14 +39,14 @@ img {
 .gameWindow {
     width: 800px;
     margin: 0px auto;
-    height: 600px;
+    height: 800px;
     position: relative;
 }
 
 .playerPhoenix {
     position: absolute;
-    width: 50px;
-    height: 28px;
+    width: 40px;
+    height: 22px;
 }
 
 .playerPhoenixSimple {
@@ -59,13 +59,13 @@ img {
 
 .seaContainer {
     background-color: #363457;
-    height: calc(100vh - 600px);
+    height: calc(100vh - 800px);
 }
 
 .seaBlur {
     background-color: #363457;
     opacity: 0.5;
-    height: calc(100vh - 600px);
+    height: calc(100vh - 800px);
 }
 
 .numberBubble {

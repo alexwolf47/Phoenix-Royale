@@ -1,6 +1,6 @@
 defmodule PhoenixRoyale.GameServer do
   use GenServer
-  alias PhoenixRoyale.{Game, GameInstance, GameSettings}
+  alias PhoenixRoyale.{Game, GameInstance, GameSettings, GameMap}
 
   defmodule GameState do
     defstruct server_status: :need_players,
@@ -17,7 +17,7 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   def start_link(game_uuid, server_size) do
-    game_map = Game.generate_map()
+    game_map = GameMap.generate_map()
 
     GenServer.start_link(
       __MODULE__,

@@ -1,5 +1,5 @@
 defmodule PhoenixRoyale.Game do
-  alias PhoenixRoyale.{GameServer, GameInstance, GameSettings}
+  alias PhoenixRoyale.{GameServer, GameInstance, GameSettings, GameMap}
 
   @tick GameSettings.tick_rate()
 
@@ -32,6 +32,14 @@ defmodule PhoenixRoyale.Game do
       updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
       {:noreply, %{state | players: updated_players}}
     end
+  end
+
+  def block(player_number, state) do
+    player = Map.get(state.players, player_number)
+    updated_player = Map.update!(player, :x, fn _x -> player.x - player.x_speed end)
+
+    updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
+    {:noreply, %{state | players: updated_players}}
   end
 
   def pipe(player_number, state) do
@@ -83,7 +91,7 @@ defmodule PhoenixRoyale.Game do
       GameServer.kill(player_number, state.server_uuid)
     end
 
-    # Task.start(fn -> check_collisions(player_number, {x, y}, state) end)
+    Task.start(fn -> check_collisions(player_number, {x, y}, state) end)
 
     updated_state = update_coords(player_state, x, y, x_speed, y_speed)
 
@@ -130,24 +138,36 @@ defmodule PhoenixRoyale.Game do
     }
   end
 
-  def check_collisions(player_number, {x, y}, %{game_map: map, uuid: uuid} = state) do
+  def player_zone_from_x(x) do
+    Kernel.round(x / GameMap.zone_total() + 0.5)
+  end
+
+  def check_collisions(player_number, {x, y}, %{game_map: map, uuid: uuid} = _state) do
+    zone_number = player_zone_from_x(x)
+    zone = String.to_atom("zone_#{zone_number}")
+    zone_map = Map.get(map, zone, [])
+
     {x, y}
-    |> check_pipes(map.pipes)
+    |> check_pipes(filter(zone_map, :pipe))
     |> case do
       true ->
         GameInstance.pipe(player_number, uuid)
 
       false ->
         {x, y}
-        |> check_trees(map.trees)
+        |> check_trees(filter(zone_map, :tree))
         |> case do
           true ->
-            GameInstance.slow(player_number, 0.995, uuid)
+            GameInstance.kill(player_number, uuid)
 
           false ->
             nil
         end
     end
+  end
+
+  def filter(zone_map, object) do
+    Enum.filter(zone_map, &(elem(&1, 0) == object))
   end
 
   def check_trees({x, y}, trees) do
@@ -161,34 +181,5 @@ defmodule PhoenixRoyale.Game do
       pipe_x - round(x) <= 0 && pipe_x - round(x) >= -30 && pipe_y - round(y) <= 5 &&
         pipe_y - round(y) >= -5
     end)
-  end
-
-  def generate_map() do
-    trees = generate_trees([{500, 25, 100}], 500)
-    pipes = generate_pipes([], 2500)
-    %{trees: trees, pipes: pipes}
-  end
-
-  def generate_trees(trees_so_far, total_x) do
-    if total_x >= 50000 do
-      Enum.reverse(trees_so_far)
-    else
-      new_tree_x = total_x + Enum.random(300..600)
-      new_tree_y = Enum.random(-30..90)
-      new_tree_length = Enum.random(30..280)
-      new_tree = {new_tree_x, new_tree_y, new_tree_length}
-      generate_trees([new_tree | trees_so_far], new_tree_x + new_tree_length)
-    end
-  end
-
-  defp generate_pipes(pipes_so_far, total_x) do
-    if total_x >= 50000 do
-      Enum.reverse(pipes_so_far)
-    else
-      new_pipe_x = total_x + Enum.random(2000..4000)
-      new_pipe_y = Enum.random(10..90)
-      new_pipe = {new_pipe_x, new_pipe_y}
-      generate_pipes([new_pipe | pipes_so_far], new_pipe_x)
-    end
   end
 end
