@@ -8,7 +8,7 @@ defmodule PhoenixRoyale.Game do
 
     updated_player =
       if player.x > 30 do
-        Map.update!(player, :y_speed, fn y_speed -> modify_speedeleration(y_speed) end)
+        Map.update!(player, :y_speed, fn y_speed -> modify_y_speed(y_speed) end)
       else
         player
       end
@@ -17,8 +17,8 @@ defmodule PhoenixRoyale.Game do
     {:noreply, %{state | players: updated_players}}
   end
 
-  def modify_speedeleration(y_speed) do
-    y_speed * 0.6 + 50
+  def modify_y_speed(y_speed) do
+    round(y_speed * 0.6 + 50)
   end
 
   def slow(player_number, value, state) do
@@ -27,7 +27,7 @@ defmodule PhoenixRoyale.Game do
     if player.pipe > 0 do
       {:noreply, state}
     else
-      updated_player = Map.update!(player, :x_speed, fn x -> x * value end)
+      updated_player = Map.update!(player, :x_speed, fn x -> round(x * value) end)
 
       updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
       {:noreply, %{state | players: updated_players}}
@@ -36,7 +36,7 @@ defmodule PhoenixRoyale.Game do
 
   def block(player_number, state) do
     player = Map.get(state.players, player_number)
-    updated_player = Map.update!(player, :x, fn _x -> player.x - player.x_speed end)
+    updated_player = Map.update!(player, :x, fn _x -> round(player.x - player.x_speed) end)
 
     updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
     {:noreply, %{state | players: updated_players}}
@@ -44,7 +44,7 @@ defmodule PhoenixRoyale.Game do
 
   def pipe(player_number, state) do
     player = Map.get(state.players, player_number)
-    updated_player = Map.update!(player, :pipe, fn _x -> player.x + 500 end)
+    updated_player = Map.update!(player, :pipe, fn _x -> round(player.x + 500) end)
 
     updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
     {:noreply, %{state | players: updated_players}}
@@ -73,8 +73,8 @@ defmodule PhoenixRoyale.Game do
     %{
       state
       | players: updated_players,
-        storm: state.storm + state.storm_speed,
-        storm_speed: state.storm_speed + 0.05 / @tick,
+        storm: round(state.storm + state.storm_speed),
+        storm_speed: round(state.storm_speed + 0.05 / @tick),
         tick: state.tick + 1
     }
   end
@@ -101,10 +101,10 @@ defmodule PhoenixRoyale.Game do
   def update_coords(%{pipe: pipe} = player_state, x, y, x_speed, y_speed) when pipe - x > 0 do
     %{
       player_state
-      | y: y + y_speed * 0.02,
+      | y: round(y + y_speed * 0.02),
         y_speed: y_speed,
-        x: x + 0.8 * x_speed + 20,
-        x_speed: x_speed + 0.3 / @tick
+        x: round(x + 0.8 * x_speed + 20),
+        x_speed: round(x_speed + 0.3 / @tick)
     }
   end
 
@@ -121,20 +121,20 @@ defmodule PhoenixRoyale.Game do
   def update_coords(player_state, x, y, x_speed, y_speed) when y > 0 do
     %{
       player_state
-      | y: y + y_speed * 0.05,
-        y_speed: y_speed - 100 / @tick,
-        x: x + x_speed,
-        x_speed: x_speed + 0.06 / @tick
+      | y: round(y + y_speed * 0.05),
+        y_speed: round(y_speed - 100 / @tick),
+        x: round(x + x_speed),
+        x_speed: round(x_speed + 0.06 / @tick)
     }
   end
 
   def update_coords(player_state, x, y, x_speed, y_speed) do
     %{
       player_state
-      | y: y + y_speed * 0.03,
-        y_speed: y_speed + 80 / @tick,
-        x: x + 0.5 * x_speed,
-        x_speed: x_speed + 0.04 / @tick
+      | y: round(y + y_speed * 0.03),
+        y_speed: round(y_speed + 80 / @tick),
+        x: round(x + 0.5 * x_speed),
+        x_speed: round(x_speed + 0.04 / @tick)
     }
   end
 
@@ -142,10 +142,14 @@ defmodule PhoenixRoyale.Game do
     Kernel.round(x / GameMap.zone_total() + 0.5)
   end
 
-  def check_collisions(player_number, {x, y}, %{game_map: map, uuid: uuid} = _state) do
+  def fetch_zone_map_from_x(map, x) do
     zone_number = player_zone_from_x(x)
     zone = String.to_atom("zone_#{zone_number}")
-    zone_map = Map.get(map, zone, [])
+    Map.get(map, zone, [])
+  end
+
+  def check_collisions(player_number, {x, y}, %{game_map: map, uuid: uuid} = _state) do
+    zone_map = fetch_zone_map_from_x(map, x)
 
     {x, y}
     |> check_pipes(filter(zone_map, :pipe))
@@ -171,13 +175,13 @@ defmodule PhoenixRoyale.Game do
   end
 
   def check_trees({x, y}, trees) do
-    Enum.any?(trees, fn {tree_x, tree_y, length} ->
+    Enum.any?(trees, fn {:tree, tree_x, tree_y, length} ->
       tree_x - round(x) <= 0 && tree_x - x >= -1 * length && (y - tree_y < 0 || y - tree_y > 40)
     end)
   end
 
   def check_pipes({x, y}, pipes) do
-    Enum.any?(pipes, fn {pipe_x, pipe_y} ->
+    Enum.any?(pipes, fn {:pipe, pipe_x, pipe_y} ->
       pipe_x - round(x) <= 0 && pipe_x - round(x) >= -30 && pipe_y - round(y) <= 5 &&
         pipe_y - round(y) >= -5
     end)

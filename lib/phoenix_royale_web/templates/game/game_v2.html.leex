@@ -25,11 +25,18 @@
                 <% end %>
 
                 <!-- MAP ELEMENTS -->
-                <%= for {x, y, length} <- @game_state.game_map.trees do %>
+
+                <% zone_map = PhoenixRoyale.Game.fetch_zone_map_from_x(@game_state.game_map, player.x) %>
+
+
+                <%= for {:tree, x, y, length} <- PhoenixRoyale.Game.filter(zone_map, :tree) do %>
+
                     <%= if x - player.x <= 1200 && x - player.x > -1000 do %>
                     <div style="width:<%= length %>px; border-radius: 25px 25px 0px 0px; height: <%= y * 8 %>px; position: absolute; bottom: 0px; left: <%= (130 + x - player.x) %>px;  background-color: #fffefe;"></div>
                     <div style="width:<%= length %>px; border-radius: 0px 0px 25px 25px; height: <%= 800- (y* 8) - 320 %>px; position: absolute;  left: <%= (130 + x - player.x) %>px; background-color: #fffefe;"></div>
                     <% end %>
+
+
                 <% end %>
 
                 <!-- TOO MUCH ALTITUDE INDICATOR -->
