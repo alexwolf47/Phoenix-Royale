@@ -150,7 +150,7 @@ defmodule PhoenixRoyale.Game do
     Map.get(map, zone, [])
   end
 
-  def check_collisions(player_number, {x, y}, %{game_map: map, uuid: uuid} = _state) do
+  def check_collisions(player_number, {x, y}, %{game_map: map, uuid: uuid} = state) do
     zone_map = fetch_zone_map_from_x(map, x)
 
     {x, y}
@@ -175,6 +175,7 @@ defmodule PhoenixRoyale.Game do
           true ->
             IO.puts("**lighthouse")
             GameInstance.kill(player_number, :collision, uuid)
+            GameServer.kill(player_number, state.server_uuid)
             {x, y}
 
           false ->

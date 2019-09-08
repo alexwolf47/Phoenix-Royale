@@ -103,18 +103,20 @@ img {
     z-index: 10;
 }
 
-.numberBubble {
+.infoCard {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 48px;
-    height: 48px;
+    top: 32px;
+    left: 32px;
+    width: 140px;
+    height: 80px;
     line-height: 48px;
+    padding: 8px;
     font-weight: bold;
-    font-size: 12px;
-    text-align: center;
-    border-radius: 48px;
+    font-size: 14px;
+    text-align: left;
+    border-radius: 2px;
     background-color: seashell;
+    opacity: 1;
     color: #000000;
 }
 
