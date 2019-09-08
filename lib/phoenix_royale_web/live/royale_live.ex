@@ -11,7 +11,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "lobby.html", assigns)
 
       %{server_status: :game_over} ->
-        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "dead.html", assigns)
+        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game_v2.html", assigns)
 
       _ ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game_v2.html", assigns)
@@ -30,14 +30,6 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
        start_countdown: nil,
        tick: 0
      )}
-  end
-
-  def handle_info(:update_player_list, socket) do
-    state = GameServer.state(socket.assigns.game_state.server_uuid)
-    :timer.send_after(500, self(), :update_player_list)
-
-    {:noreply,
-     assign(socket, player_list: state.player_list, start_countdown: state.start_countdown)}
   end
 
   def handle_event("find_game", _arg, socket) do
@@ -68,6 +60,21 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
      )}
   end
 
+  def handle_event("jump", _arg, socket) do
+    player_number = socket.assigns.player_number
+    GameInstance.jump(player_number, socket.assigns.game_uuid)
+    send(self(), :update)
+    {:noreply, socket}
+  end
+
+  def handle_info(:update_player_list, socket) do
+    state = GameServer.state(socket.assigns.game_state.server_uuid)
+    :timer.send_after(500, self(), :update_player_list)
+
+    {:noreply,
+     assign(socket, player_list: state.player_list, start_countdown: state.start_countdown)}
+  end
+
   def handle_info(:update, socket) do
     updated_game_state = GameInstance.state(socket.assigns.game_uuid)
     player = Map.get(updated_game_state.players, socket.assigns.player_number)
@@ -80,11 +87,5 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
     else
       {:noreply, assign(socket, game_state: Map.put(updated_game_state, :dead, true))}
     end
-  end
-
-  def handle_event("jump", _arg, socket) do
-    player_number = socket.assigns.player_number
-    GameInstance.jump(player_number, socket.assigns.game_uuid)
-    {:noreply, socket}
   end
 end

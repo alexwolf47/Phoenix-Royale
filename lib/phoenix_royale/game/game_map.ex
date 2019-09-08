@@ -4,7 +4,7 @@ defmodule PhoenixRoyale.GameMap do
   def zone_total(), do: zone_size() + zone_interval()
 
   def generate_map() do
-    zone_one = generate_zone([], [:trees], 0, zone_size())
+    zone_one = generate_zone([], [:lighthouses], 0, zone_size())
     zone_two = generate_zone([], [:trees], 1 * zone_total(), 1 * zone_total() + zone_size())
 
     zone_three =
@@ -20,6 +20,9 @@ defmodule PhoenixRoyale.GameMap do
   def generate_zone(map_so_far, zone_objects, x, x_limit) do
     {new_x, new_object} =
       case Enum.random(zone_objects) do
+        :lighthouses ->
+          generate_lighthouse(x)
+
         :trees ->
           generate_tree(x)
 
@@ -28,6 +31,12 @@ defmodule PhoenixRoyale.GameMap do
       end
 
     generate_zone([new_object | map_so_far], zone_objects, new_x, x_limit)
+  end
+
+  defp generate_lighthouse(x) do
+    new_lighthouse_x = x + Enum.random(400..800)
+    new_lighthouse_y = Enum.random(-10..10)
+    {new_lighthouse_x + Enum.random(700..1000), {:lighthouse, new_lighthouse_x, new_lighthouse_y}}
   end
 
   defp generate_tree(x) do

@@ -20,6 +20,7 @@
                     Enter a username to get started, or your account id if you want to log back in!
                     </div>
                     <div style="padding: 24px 0px;">
+
                         <%= form_for @conn, Routes.session_path(@conn, :login), fn f ->  %>
                             <%= text_input f, :name, class: "loginInput" %>
                             <%= submit "Get Started!", class: "loginSubmit" %>

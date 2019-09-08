@@ -18,7 +18,7 @@ defmodule PhoenixRoyale.Game do
   end
 
   def modify_y_speed(y_speed) do
-    round(y_speed * 0.6 + 50)
+    y_speed * 0.6 + 50
   end
 
   def slow(player_number, value, state) do
@@ -27,7 +27,7 @@ defmodule PhoenixRoyale.Game do
     if player.pipe > 0 do
       {:noreply, state}
     else
-      updated_player = Map.update!(player, :x_speed, fn x -> round(x * value) end)
+      updated_player = Map.update!(player, :x_speed, fn x -> x * value end)
 
       updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
       {:noreply, %{state | players: updated_players}}
@@ -36,7 +36,7 @@ defmodule PhoenixRoyale.Game do
 
   def block(player_number, state) do
     player = Map.get(state.players, player_number)
-    updated_player = Map.update!(player, :x, fn _x -> round(player.x - player.x_speed) end)
+    updated_player = Map.update!(player, :x, fn _x -> player.x - player.x_speed end)
 
     updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
     {:noreply, %{state | players: updated_players}}
@@ -44,18 +44,20 @@ defmodule PhoenixRoyale.Game do
 
   def pipe(player_number, state) do
     player = Map.get(state.players, player_number)
-    updated_player = Map.update!(player, :pipe, fn _x -> round(player.x + 500) end)
+    updated_player = Map.update!(player, :pipe, fn _x -> player.x + 500 end)
 
     updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
     {:noreply, %{state | players: updated_players}}
   end
 
-  def kill(player_number, state) do
+  def kill(player_number, death_type, state) do
     player = Map.get(state.players, player_number)
 
     updated_player =
       Map.update!(player, :alive, fn _x -> false end)
       |> Map.update!(:position, fn _x -> state.alive_count end)
+      |> Map.update!(:death_type, fn _x -> death_type end)
+      |> Map.update!(:storm_at_death, fn _x -> state.storm end)
 
     updated_players = Map.update!(state.players, player_number, fn _x -> updated_player end)
     {:noreply, %{state | players: updated_players}}
@@ -73,8 +75,8 @@ defmodule PhoenixRoyale.Game do
     %{
       state
       | players: updated_players,
-        storm: round(state.storm + state.storm_speed),
-        storm_speed: round(state.storm_speed + 0.05 / @tick),
+        storm: state.storm + state.storm_speed,
+        storm_speed: state.storm_speed + 0.7 / @tick,
         tick: state.tick + 1
     }
   end
@@ -87,7 +89,7 @@ defmodule PhoenixRoyale.Game do
         state
       ) do
     if state.storm > x do
-      GameInstance.kill(player_number, state.uuid)
+      GameInstance.kill(player_number, :storm, state.uuid)
       GameServer.kill(player_number, state.server_uuid)
     end
 
@@ -101,10 +103,10 @@ defmodule PhoenixRoyale.Game do
   def update_coords(%{pipe: pipe} = player_state, x, y, x_speed, y_speed) when pipe - x > 0 do
     %{
       player_state
-      | y: round(y + y_speed * 0.02),
+      | y: y + y_speed * 0.02,
         y_speed: y_speed,
-        x: round(x + 0.8 * x_speed + 20),
-        x_speed: round(x_speed + 0.3 / @tick)
+        x: x + 0.8 * x_speed + 20,
+        x_speed: x_speed + 0.3 / @tick
     }
   end
 
@@ -121,20 +123,20 @@ defmodule PhoenixRoyale.Game do
   def update_coords(player_state, x, y, x_speed, y_speed) when y > 0 do
     %{
       player_state
-      | y: round(y + y_speed * 0.05),
-        y_speed: round(y_speed - 100 / @tick),
-        x: round(x + x_speed),
-        x_speed: round(x_speed + 0.06 / @tick)
+      | y: y + y_speed * 0.035,
+        y_speed: y_speed - 70 / @tick,
+        x: x + x_speed,
+        x_speed: x_speed + 0.06 / @tick
     }
   end
 
   def update_coords(player_state, x, y, x_speed, y_speed) do
     %{
       player_state
-      | y: round(y + y_speed * 0.03),
-        y_speed: round(y_speed + 80 / @tick),
-        x: round(x + 0.5 * x_speed),
-        x_speed: round(x_speed + 0.04 / @tick)
+      | y: y + y_speed * 0.03,
+        y_speed: y_speed + 80 / @tick,
+        x: x + 0.5 * x_speed,
+        x_speed: x_speed + 0.04 / @tick
     }
   end
 
@@ -162,10 +164,21 @@ defmodule PhoenixRoyale.Game do
         |> check_trees(filter(zone_map, :tree))
         |> case do
           true ->
-            GameInstance.kill(player_number, uuid)
+            # GameInstance.kill(player_number, uuid)
+            {x, y}
 
           false ->
-            nil
+            {x, y}
+        end
+        |> check_lighthouses(filter(zone_map, :lighthouse))
+        |> case do
+          true ->
+            IO.puts("**lighthouse")
+            GameInstance.kill(player_number, :collision, uuid)
+            {x, y}
+
+          false ->
+            {x, y}
         end
     end
   end
@@ -184,6 +197,13 @@ defmodule PhoenixRoyale.Game do
     Enum.any?(pipes, fn {:pipe, pipe_x, pipe_y} ->
       pipe_x - round(x) <= 0 && pipe_x - round(x) >= -30 && pipe_y - round(y) <= 5 &&
         pipe_y - round(y) >= -5
+    end)
+  end
+
+  def check_lighthouses({x, y}, lighthouses) do
+    Enum.any?(lighthouses, fn {:lighthouse, lighthouse_x, lighthouse_y} ->
+      lighthouse_y - round(y) <= 20 && lighthouse_y - round(y) >= -20 &&
+        lighthouse_x - round(x) <= 270 && lighthouse_x - round(x) >= 220
     end)
   end
 end

@@ -2,6 +2,8 @@ defmodule PhoenixRoyale.Player do
   defstruct name: "",
             uuid: nil,
             alive: true,
+            death_type: nil,
+            storm_at_death: nil,
             pid: nil,
             y: 50,
             y_speed: 0,

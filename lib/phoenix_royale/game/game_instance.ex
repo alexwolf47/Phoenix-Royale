@@ -12,7 +12,7 @@ defmodule PhoenixRoyale.GameInstance do
               alive_count: nil,
               players: %{},
               storm: -1000,
-              storm_speed: 6,
+              storm_speed: 7,
               player_number: nil,
               tick: 0
   end
@@ -69,8 +69,8 @@ defmodule PhoenixRoyale.GameInstance do
     GenServer.cast({:global, game_uuid}, {:pipe, player_number})
   end
 
-  def kill(player_number, game_uuid) do
-    GenServer.cast({:global, game_uuid}, {:kill, player_number})
+  def kill(player_number, death_type, game_uuid) do
+    GenServer.cast({:global, game_uuid}, {:kill, death_type, player_number})
   end
 
   def handle_info(:tick, %{server_status: :playing, alive_count: 0} = state) do
@@ -138,7 +138,8 @@ defmodule PhoenixRoyale.GameInstance do
   def handle_cast({:pipe, player_number}, state),
     do: Game.pipe(player_number, state)
 
-  def handle_cast({:kill, player_number}, state), do: Game.kill(player_number, state)
+  def handle_cast({:kill, death_type, player_number}, state),
+    do: Game.kill(player_number, death_type, state)
 
   def handle_cast({:waterfall, next_player_number, updated_players, alive_count}, state) do
     case Map.get(updated_players, state.player_number + 1) do
