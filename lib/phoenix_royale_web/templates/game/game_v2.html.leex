@@ -37,23 +37,23 @@
 
                 <!--SHIP DECORATION -->
                 <div style="position: absolute; width: 260px; height: 198px; top: 900px; right: <%= -1000 +  round(player.x/10) %>px; z-index: 1000;">
-<img src="/images/ship.png" style="width: 260px; height: 198px; z-index: 1000;" > 
+                    <img src="/images/ship.png" style="width: 260px; height: 198px; z-index: 1000;" > 
                 </div>
 
 <div style="background: linear-gradient(180deg, rgb(102, 35, 79), rgb(163, 71, 91));">
 
-            <%= if @game_state.server_status == :playing do %>
+<%= if @game_state.server_status == :playing do %>
+    <div  style="position: relative; width: 800px; margin: 0 auto;">
+        <%= for {:lighthouse, x, y} <- PhoenixRoyale.Game.filter(zone_map, :lighthouse) do %>
+            <%= if Integer.is_even(round(x)) do %>
+                <img src="/images/lighthouse.png" style="position: absolute; top: <%= 800 - 150 - y * 8  %>px; left: <%= round(( - 123 - 100 + x - player.x)) %>px; z-index: 1000; width: 246px; height: 300px;" > 
+            <% else %>
+                <img src="/images/boat.png" style="position: absolute; top: <%= 800 - 150 - y * 8  %>px; left: <%= round(( - 123 - 100 + x - player.x))  %>px; z-index: 1000; width: 246px; height: 300px;" > 
+            <% end %>
+        <% end %>
 
-<div  style="position: absolute; width: 800px; margin: 0 auto;">
-    <%= for {:lighthouse, x, y} <- PhoenixRoyale.Game.filter(zone_map, :lighthouse) do %>
 
-    <%= if Integer.is_even(round(x)) do %>
-            <img src="/images/lighthouse.png" style="position: absolute; top: <%= 800 - 150 - y * 8  %>px; left: <%= round((100 + 246 + x - player.x)) %>px; z-index: 1000; width: 246px; height: 300px;" > 
-    <% else %>
-        <img src="/images/boat.png" style="position: absolute; top: <%= 800 - 150 - y * 8  %>px; left: <%= round((100 + 246 + x - player.x)) %>px; z-index: 1000; width: 246px; height: 300px;" > 
-    <% end %>
-    <% end %>
-</div>
+    </div>
 <% end %>
 <%# <div style="background-color: #363457;"> %>
     <div class="gameWindowContainer" style="opacity: 0.6; background-position-x: -<%= round(player.x/5) %>px">
@@ -74,71 +74,55 @@ viewBox="0 24 150 57" preserveAspectRatio="none" shape-rendering="auto">
 </svg>
 </div>
 <!--Waves end-->
-
-
-
      <div class="gameWindow" phx-keyup="jump" phx-target="window">
-
             <%= if @game_state.server_status == :playing do %>
-
-   
-
                 <!-- THE STORM -->
-                <%= if player.alive  do %>
-                <div style="background: #0a0a0a; width: 100vw; opacity: 0.2; z-index: 100; height: 800px; position: absolute; right: <%= round(700 + (player.x - @game_state.storm)) %>px">
-                </div>
-                <% else %>
-                <div style="background: #0a0a0a; width: 100vw; opacity: 0.2; z-index: 100; height: 800px; position: absolute; right: <%= 700 + (player.x - player.storm_at_death) %>px">
-                </div>
-                <% end %>
-
+                    <%= if player.alive  do %>
+                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.2; z-index: 100; height: 800px; position: absolute; right: <%= round(700 + (player.x - @game_state.storm)) %>px">
+                    </div>
+                    <% else %>
+                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.2; z-index: 100; height: 800px; position: absolute; right: <%= 700 + (player.x - player.storm_at_death) %>px">
+                    </div>
+                    <% end %>
                 <!-- MAP ELEMENTS -->
+                    <%= for {:tree, x, y, length} <- PhoenixRoyale.Game.filter(zone_map, :tree) do %>
+                        <%= if x - player.x <= 1200 && x - player.x > -1000 do %>
+                        <% height = y * 8 %>
+                        <% bottom_height = 800 - (y*8) - 320 %>
+                        <div style="width:50px; height: <%= height %>px; position: absolute; bottom: 0px; left: <%= round((130 + x - player.x)) %>px;  background-color: #fffefe;"></div>
+                        <div style="width:50px; height: <%= bottom_height %>px; position: absolute;  left: <%= round((130 + x - player.x)) %>px; background-color: #fffefe;"></div>
+                        <% end %> 
+                    <% end %>
 
+                    <%= for {:elixir, x, y} <- PhoenixRoyale.Game.filter(zone_map, :elixir) do %>        
+                         <img src="/images/elixir-logo.png" style="position: absolute; bottom: <%=  (y * 8) %>px; left: <%= round((130 + x - player.x)) %>px; z-index: 1000; width: 48px; height: 48px;" > 
+                    <% end %>
 
-
-                <%= for {:tree, x, y, length} <- PhoenixRoyale.Game.filter(zone_map, :tree) do %>
-
-                    <%= if x - player.x <= 1200 && x - player.x > -1000 do %>
-                    <% height = y * 8 %>
-                    <% bottom_height = 800 - (y*8) - 320 %>
-                    <div style="width:50px; height: <%= height %>px; position: absolute; bottom: 0px; left: <%= round((130 + x - player.x)) %>px;  background-color: #fffefe;"></div>
-                    <div style="width:50px; height: <%= bottom_height %>px; position: absolute;  left: <%= round((130 + x - player.x)) %>px; background-color: #fffefe;"></div>
-                    <% end %> 
-
-
-                <% end %>
-
-
-
+                    <%= for {:comet, x, y} <- PhoenixRoyale.Game.filter(zone_map, :comet) do %>        
+                         <img src="/images/comet.png" style="position: absolute; bottom: <%=  (y * 8) %>px; left: <%= round(((x - player.x) * 0.7)+100) %>px; z-index: 1000; width: 300px; height: 300px; transform: rotate(135deg);" > 
+                    <% end %>
                 <!-- TOO MUCH ALTITUDE INDICATOR -->
                 <%= if player.y > 105 do %>
                     <% size = player.y / 100 %>
                     <div style="position: absolute; top: 12px; height: <%= round(24 - size * 12) %>px; width: <%= round(24- size * 12) %>px; border-radius: <%= round(24 - size * 12) %>px; left: 120px; background-color: #ffffff;"></div>
                 <% end %>
-
             <% end %>
-
             <!-- THIS PLAYER -->
             <div class="playerPhoenix" style="bottom: <%= round(player.y * 8) %>px; left: 100px; transform: scaleX(-1) rotate(<%= round(player.y_speed/2.5) %>deg)"><img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img></div>
-            <div style="position: absolute; bottom: <%= round(player.y * 8 - 20) %>px; left: 100px; font-size: 8px; color: #ffffff;"><%= player.name %></div>
-
-
-
+            <div style="position: absolute; bottom: <%= round(player.y * 8 - 20) %>px; left: 110px; font-size: 8px; color: #ffffff;"><%= player.name %></div>
+            <!-- OTHER PLAYERS -->
+            <%= if false do %>
                 <%= for other_player <- Map.to_list(@game_state.players) do %>
                 <% {number, player_state} = other_player %>
                 <% x_diff = player.x - player_state.x %>
-
                 <div style="position: absolute; bottom: <%= player_state.y * 8 %>px; left: <%= 100 - x_diff %>px; width: 25px; height: 14px; opacity: 0.1; transform: scaleX(-1);">
                 <img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
                 </div>
-
                  <div style="position: absolute; bottom: <%= player_state.y * 8 - 20 %>px; left: <%= 120 - x_diff %>px; font-size: 8px; color: #ffffff;">
                 <%= player_state.name %>
                 </div>
-
                 <% end %>
-
-
+            <% end %>
         </div>
     </div>
 </div>

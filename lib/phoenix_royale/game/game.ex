@@ -63,6 +63,15 @@ defmodule PhoenixRoyale.Game do
     {:noreply, %{state | players: updated_players}}
   end
 
+  def remove_object_from_map(player_number, object, state) do
+    player = Map.get(state.players, player_number)
+
+    zone_map = fetch_zone_map_from_x(state.game_map, player.x)
+    updated_zone_map = Enum.filter(zone_map, fn map_object -> map_object != object end)
+    updated_game_map = update_zone_in_map(state.game_map, updated_zone_map, player.x)
+    {:noreply, %{state | game_map: updated_game_map}}
+  end
+
   def tick(state) do
     player = Map.get(state.players, state.player_number)
 
@@ -150,6 +159,12 @@ defmodule PhoenixRoyale.Game do
     Map.get(map, zone, [])
   end
 
+  def update_zone_in_map(game_map, updated_zone_map, player_x) do
+    zone_number = player_zone_from_x(player_x)
+    zone = String.to_atom("zone_#{zone_number}")
+    Map.update!(game_map, zone, fn _ -> updated_zone_map end)
+  end
+
   def check_collisions(player_number, {x, y}, %{game_map: map, uuid: uuid} = state) do
     zone_map = fetch_zone_map_from_x(map, x)
 
@@ -173,13 +188,31 @@ defmodule PhoenixRoyale.Game do
         |> check_lighthouses(filter(zone_map, :lighthouse))
         |> case do
           true ->
-            IO.puts("**lighthouse")
             GameInstance.kill(player_number, :collision, uuid)
             GameServer.kill(player_number, state.server_uuid)
             {x, y}
 
           false ->
             {x, y}
+            |> check_comets(filter(zone_map, :comet))
+            |> case do
+              true ->
+                GameInstance.kill(player_number, :comet, uuid)
+                GameServer.kill(player_number, state.server_uuid)
+                {x, y}
+
+              false ->
+                {x, y}
+                |> check_elixirs(filter(zone_map, :elixir), player_number, uuid)
+                |> case do
+                  true ->
+                    GameInstance.slow(player_number, 1.09, uuid)
+                    {x, y}
+
+                  false ->
+                    {x, y}
+                end
+            end
         end
     end
   end
@@ -205,6 +238,25 @@ defmodule PhoenixRoyale.Game do
     Enum.any?(lighthouses, fn {:lighthouse, lighthouse_x, lighthouse_y} ->
       lighthouse_y - round(y) <= 20 && lighthouse_y - round(y) >= -20 &&
         lighthouse_x - round(x) <= 270 && lighthouse_x - round(x) >= 220
+    end)
+  end
+
+  defp check_comets({x, y}, comets) do
+    Enum.any?(comets, fn {:comet, comet_x, comet_y} ->
+      comet_x - round(x) <= 20 && comet_x - round(x) >= -60 && comet_y - round(y) <= -15 &&
+        comet_y - round(y) >= -22.5
+    end)
+  end
+
+  defp check_elixirs({x, y}, elixirs, player_number, uuid) do
+    Enum.any?(elixirs, fn {:elixir, elixir_x, elixir_y} = elixir ->
+      if elixir_x - round(x) <= 0 && elixir_x - round(x) >= -50 && elixir_y - round(y) <= 7 &&
+           elixir_y - round(y) >= -7 do
+        GameInstance.pop_object_from_map(player_number, uuid, elixir)
+        true
+      else
+        false
+      end
     end)
   end
 end

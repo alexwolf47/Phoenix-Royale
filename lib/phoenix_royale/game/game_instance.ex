@@ -73,6 +73,10 @@ defmodule PhoenixRoyale.GameInstance do
     GenServer.cast({:global, game_uuid}, {:kill, death_type, player_number})
   end
 
+  def pop_object_from_map(player_number, game_uuid, object) do
+    GenServer.cast({:global, game_uuid}, {:remove_object_from_map, object, player_number})
+  end
+
   def handle_info(:tick, %{server_status: :playing, alive_count: 0} = state) do
     :timer.send_after(@tick, self(), :tick)
     {:noreply, %{state | server_status: :game_over}}
@@ -140,6 +144,9 @@ defmodule PhoenixRoyale.GameInstance do
 
   def handle_cast({:kill, death_type, player_number}, state),
     do: Game.kill(player_number, death_type, state)
+
+  def handle_cast({:remove_object_from_map, object, player_number}, state),
+    do: Game.remove_object_from_map(player_number, object, state)
 
   def handle_cast({:waterfall, next_player_number, updated_players, alive_count}, state) do
     case Map.get(updated_players, state.player_number + 1) do
