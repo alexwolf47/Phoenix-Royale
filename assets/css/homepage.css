@@ -4,7 +4,7 @@
 }
 
 .homeWrapper {
-    background-color: #E84855;
+    background-color: #E26D5C;
     width: 100%;
 }
 
@@ -22,7 +22,7 @@
 .box {
     width: 100%;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 0px;
     color: #fff;
     display: flex;
     align-items: center;
@@ -41,19 +41,20 @@
 
 .loginContainer {
     margin: 32px;
-    border: 5px solid #ffffff;
-    border-radius: 32px;
-    background: rgba(0, 0, 0, 0.02);
-    padding: 32px;
+    border: 0px solid #ffffff;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0);
+    padding: 48px;
+    color: #fefefe;
     transition: all 0.25s;
 }
 
 .loginContainer:hover {
-    transform: scale(1.1);
+    transform: scale(1.01);
 }
 
 .loginHeader {
-    font-size: 24px;
+    font-size: 78px;
     font-family: 'Fira Sans', sans-serif;
 }
 
@@ -79,7 +80,7 @@ input[type='text']:focus {
     text-transform: none;
     border: 2px solid #E0DFD5;
     height: 48px;
-    width: 50%;
+    width: 100%;
     transition: all 0.5s;
 }
 

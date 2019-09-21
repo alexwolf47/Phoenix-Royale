@@ -8,7 +8,7 @@
                     
                     Phoenix Royale
                     <br>
-                    <span style="font-size: 14px;">A side scrolling battle royale made with Phoenix LiveView!</span>
+                    <span style="font-size: 18px;">A side scrolling battle royale made with Phoenix LiveView!</span>
                 </div>
             </div>
             <div class="box">
@@ -16,7 +16,7 @@
                     <div class="loginHeader">
                     Play a game!
                     </div>
-                    <div style="font-size: 14px;">
+                    <div style="font-size: 18px;">
                     Enter a username to get started, or your account id if you want to log back in!
                     </div>
                     <div style="padding: 24px 0px;">
