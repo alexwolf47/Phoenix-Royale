@@ -1,6 +1,6 @@
 defmodule PhoenixRoyaleWeb.RoyaleLive do
   use Phoenix.LiveView
-  alias PhoenixRoyale.{GameCoordinator, GameServer, GameInstance, GameSettings}
+  alias PhoenixRoyale.{Account, GameCoordinator, GameServer, GameInstance, GameSettings}
 
   def render(assigns) do
     case assigns.game_state do
@@ -19,9 +19,12 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   end
 
   def mount(session, socket) do
+    account = Account.by_id(session.account_id)
+
     {:ok,
      assign(socket,
-       account: session.account_name,
+       account_id: session.account_id,
+       account: account,
        game_state: nil,
        game_settings: %{height: 800},
        player_number: nil,
@@ -32,8 +35,9 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
      )}
   end
 
+  @spec handle_event(<<_::32, _::_*8>>, any, atom | %{assigns: atom | map}) :: {:noreply, any}
   def handle_event("find_game", _arg, socket) do
-    {_serverid, gameid} = GameCoordinator.find_game(socket.assigns.account)
+    {_serverid, gameid} = GameCoordinator.find_game(socket.assigns.account.name)
     game_state = GameInstance.state(gameid)
     :timer.send_after(GameSettings.tick_interval(), self(), :update)
     :timer.send_after(10, self(), :update_player_list)
@@ -47,7 +51,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   end
 
   def handle_event("find_sp_game", _arg, socket) do
-    {_serverid, gameid} = GameCoordinator.single_player_game(socket.assigns.account)
+    {_serverid, gameid} = GameCoordinator.single_player_game(socket.assigns.account.name)
     game_state = GameInstance.state(gameid)
     :timer.send_after(GameSettings.tick_interval(), self(), :update)
     :timer.send_after(10, self(), :update_player_list)

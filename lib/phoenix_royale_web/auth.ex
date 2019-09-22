@@ -6,7 +6,7 @@ defmodule PhoenixRoyaleWeb.Auth do
 
   def call(conn, _opts) do
     conn
-    |> get_session(:account_name)
+    |> get_session(:account_id)
     |> case do
       nil ->
         conn
@@ -15,7 +15,7 @@ defmodule PhoenixRoyaleWeb.Auth do
         )
         |> halt()
 
-      _account_name ->
+      _account_id ->
         conn
     end
   end

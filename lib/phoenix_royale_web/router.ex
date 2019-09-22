@@ -28,8 +28,8 @@ defmodule PhoenixRoyaleWeb.Router do
   scope "/", PhoenixRoyaleWeb do
     pipe_through [:browser, :auth]
 
-    live "/dashboard", DashboardLive
-    live "/play", RoyaleLive, session: [:account_name]
+    live "/dashboard", DashboardLive, session: [:account_id]
+    live "/play", RoyaleLive, session: [:account_id]
   end
 
   # Other scopes may use custom stacks.

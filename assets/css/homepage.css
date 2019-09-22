@@ -11,7 +11,7 @@
 .homeContainer {
     margin: 0px auto;
     width: 70%;
-    height: calc(100vh - 240px);
+    height: calc(100vh - 320px);
     display: grid;
     grid-template-columns: 50% 50%;
     grid-row: auto auto;
@@ -28,7 +28,17 @@
     align-items: center;
     justify-content: center;
     font-size: 40px;
-    font-family: sans-serif;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.dashboardBox {
+    width: 100%;
+    padding: 20px;
+    border-radius: 0px;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fira Sans', sans-serif;
 }
 
 .introContainer {
@@ -44,7 +54,7 @@
     border: 0px solid #ffffff;
     border-radius: 2px;
     background: rgba(0, 0, 0, 0);
-    padding: 48px;
+    padding: 16px;
     color: #fefefe;
     transition: all 0.25s;
 }
@@ -54,20 +64,16 @@
 }
 
 .loginHeader {
-    font-size: 78px;
+    font-size: 46px;
     font-family: 'Fira Sans', sans-serif;
 }
 
 input[type='text'] {
     height: 64px;
-    background: #E0DFD5;
+    background: rgba(255, 255, 255, 0.1);
     font-size: 36px;
     line-height: 36px;
     color: #313638;
-}
-
-input[type='text']:focus {
-    border: 1px solid #ffffff;
 }
 
 .loginSubmit {
@@ -102,4 +108,13 @@ input[type='text']:focus {
     grid-row: auto auto;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
+}
+
+.footerlink {
+    line-height: 32px;
+    vertical-align: top;
+}
+
+.footerlink:hover {
+    opacity: 0.6;
 }
