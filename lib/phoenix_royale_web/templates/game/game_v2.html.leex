@@ -111,8 +111,8 @@ viewBox="0 24 150 57" preserveAspectRatio="none" shape-rendering="auto">
             <div class="playerPhoenix" style="bottom: <%= round(player.y * 8) %>px; left: 100px; transform: scaleX(-1) rotate(<%= round(player.y_speed/2.5) %>deg)"><img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img></div>
             <div style="position: absolute; bottom: <%= round(player.y * 8 - 20) %>px; left: 110px; font-size: 8px; color: #ffffff;"><%= player.name %></div>
             <!-- OTHER PLAYERS -->
-            <%= if false do %>
-                <%= for other_player <- Map.to_list(@game_state.players) do %>
+            <%= if true do %>
+                <%= for other_player <- Map.to_list(Map.delete(@game_state.players, @player_number)) do %>
                 <% {number, player_state} = other_player %>
                 <% x_diff = player.x - player_state.x %>
                 <div style="position: absolute; bottom: <%= player_state.y * 8 %>px; left: <%= 100 - x_diff %>px; width: 25px; height: 14px; opacity: 0.1; transform: scaleX(-1);">

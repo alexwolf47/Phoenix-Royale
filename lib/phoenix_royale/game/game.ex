@@ -249,8 +249,8 @@ defmodule PhoenixRoyale.Game do
 
   defp check_comets({x, y}, comets) do
     Enum.any?(comets, fn {:comet, comet_x, comet_y} ->
-      comet_x - round(x) <= 20 && comet_x - round(x) >= -60 && comet_y - round(y) <= -15 &&
-        comet_y - round(y) >= -22.5
+      comet_x - round(x) <= 20 && comet_x - round(x) >= -80 && comet_y - round(y) <= -15 &&
+        comet_y - round(y) >= -25
     end)
   end
 

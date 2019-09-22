@@ -82,14 +82,10 @@ defmodule PhoenixRoyale.GameMap do
             generate_lighthouse(x)
 
           :comet ->
-            if Enum.random(0..100) >= 25 do
-              generate_comet(x)
-            else
-              generate_lighthouse(x)
-            end
+            generate_comet(x)
 
           :elixir ->
-            if Enum.random(0..100) >= 15 do
+            if Enum.random(0..100) >= 4 do
               generate_elixir(x)
             else
               generate_lighthouse(x)
