@@ -37,7 +37,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
 
   @spec handle_event(<<_::32, _::_*8>>, any, atom | %{assigns: atom | map}) :: {:noreply, any}
   def handle_event("find_game", _arg, socket) do
-    {_serverid, gameid} = GameCoordinator.find_game(socket.assigns.account.name)
+    {_serverid, gameid} = GameCoordinator.find_game(socket.assigns.account)
     game_state = GameInstance.state(gameid)
     :timer.send_after(GameSettings.tick_interval(), self(), :update)
     :timer.send_after(10, self(), :update_player_list)
@@ -50,8 +50,8 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
      )}
   end
 
-  def handle_event("find_sp_game", _arg, socket) do
-    {_serverid, gameid} = GameCoordinator.single_player_game(socket.assigns.account.name)
+  def handle_event("find_single_player_game", _arg, socket) do
+    {_serverid, gameid} = GameCoordinator.single_player_game(socket.assigns.account)
     game_state = GameInstance.state(gameid)
     :timer.send_after(GameSettings.tick_interval(), self(), :update)
     :timer.send_after(10, self(), :update_player_list)

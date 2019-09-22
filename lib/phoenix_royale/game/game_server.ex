@@ -44,8 +44,8 @@ defmodule PhoenixRoyale.GameServer do
     GenServer.cast({:global, game_uuid}, {:update_players, updated_players})
   end
 
-  def join(%PhoenixRoyale.Player{} = player, game_uuid) do
-    GenServer.call({:global, game_uuid}, {:join, player})
+  def join(%PhoenixRoyale.Account{} = account, %PhoenixRoyale.Player{} = player, game_uuid) do
+    GenServer.call({:global, game_uuid}, {:join, account, player})
   end
 
   def kill(player_number, server_uuid) do
@@ -60,7 +60,7 @@ defmodule PhoenixRoyale.GameServer do
     {:reply, {state.server_status, state.zzalive_count}, state}
   end
 
-  def handle_call({:join, %{uuid: uuid} = player}, _, %{uuid: server_uuid} = state) do
+  def handle_call({:join, account, %{uuid: uuid} = player}, _, %{uuid: server_uuid} = state) do
     players = Map.put(state.players, state.player_count + 1, player)
     gameid = server_uuid <> "-" <> uuid
 
@@ -71,6 +71,7 @@ defmodule PhoenixRoyale.GameServer do
       server_uuid,
       gameid,
       state.game_map,
+      account,
       next_player_number,
       players,
       status

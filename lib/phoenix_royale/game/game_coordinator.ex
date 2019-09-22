@@ -25,12 +25,12 @@ defmodule PhoenixRoyale.GameCoordinator do
     GenServer.call(@server_name, :state)
   end
 
-  def find_game(name) do
-    GenServer.call(@server_name, {:find_game, name})
+  def find_game(account) do
+    GenServer.call(@server_name, {:find_game, account})
   end
 
   def single_player_game(name) do
-    GenServer.call(@server_name, {:onep_game, name})
+    GenServer.call(@server_name, {:single_player_game, name})
   end
 
   def start_game(game_uuid) do
@@ -39,10 +39,6 @@ defmodule PhoenixRoyale.GameCoordinator do
 
   def finish_game(game_uuid) do
     GenServer.cast(@server_name, {:finish_game, game_uuid})
-  end
-
-  def handle_call(:state, _from, state) do
-    {:reply, state, state}
   end
 
   def handle_cast({:start_game, game_uuid}, state) do
@@ -66,12 +62,16 @@ defmodule PhoenixRoyale.GameCoordinator do
     {:noreply, new_state}
   end
 
-  def handle_call({:onep_game, name}, {pid, _ref} = _from, state) do
+  def handle_call(:state, _from, state) do
+    {:reply, state, state}
+  end
+
+  def handle_call({:single_player_game, account}, {pid, _ref} = _from, state) do
     new_game_uuid = UUID.uuid4()
     {:ok, new_game_pid} = GameServer.start_link(new_game_uuid, 1)
 
-    player = %Player{name: name, pid: pid, uuid: UUID.uuid4()}
-    gameid = GameServer.join(player, new_game_uuid)
+    player = %Player{name: account.name, pid: pid, uuid: UUID.uuid4()}
+    gameid = GameServer.join(account, player, new_game_uuid)
 
     new_state = %{state | need_players: %{new_game_uuid => %{pid: new_game_pid}}}
     {:reply, gameid, new_state}
@@ -81,23 +81,23 @@ defmodule PhoenixRoyale.GameCoordinator do
   ## We then add the player as player 1 in this server.
   ## And update the list of games looking for players.
 
-  def handle_call({:find_game, name}, {pid, _ref} = _from, %{need_players: games} = state)
+  def handle_call({:find_game, account}, {pid, _ref} = _from, %{need_players: games} = state)
       when map_size(games) == 0 do
     new_game_uuid = UUID.uuid4()
     {:ok, new_game_pid} = GameServer.start_link(new_game_uuid, @max_players)
 
-    player = %Player{name: name, pid: pid, uuid: UUID.uuid4()}
-    gameid = GameServer.join(player, new_game_uuid)
+    player = %Player{name: account.name, pid: pid, uuid: UUID.uuid4()}
+    gameid = GameServer.join(account, player, new_game_uuid)
 
     new_state = %{state | need_players: %{new_game_uuid => %{pid: new_game_pid}}}
     {:reply, gameid, new_state}
   end
 
-  def handle_call({:find_game, name}, {pid, _ref} = _from, %{need_players: games} = state) do
+  def handle_call({:find_game, account}, {pid, _ref} = _from, %{need_players: games} = state) do
     game_uuid = Enum.at(Map.keys(games), 0)
 
-    player = %Player{name: name, pid: pid, uuid: UUID.uuid4()}
-    gameid = GameServer.join(player, game_uuid)
+    player = %Player{name: account.name, pid: pid, uuid: UUID.uuid4()}
+    gameid = GameServer.join(account, player, game_uuid)
 
     {:reply, gameid, state}
   end

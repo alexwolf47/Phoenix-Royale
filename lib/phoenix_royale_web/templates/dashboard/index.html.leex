@@ -17,13 +17,13 @@
                               <li class="collection-item blue-grey darken-4 "><span style="font-weight: 300; font-size: 12px;">Display Name:</span> <%= @account.name %></li>
                             </ul>
 
-                          <span class="card-title" style="margin-top: 32px;">Game Stats</span>
+                          <span class="card-title" style="margin-top: 32px;">Account Stats</span>
 
                           <div style="display: flex;">
                                   <div class="row">
                                     <div class="col s12 m12">
                                       <div class="card-panel teal">
-                                        <span class="white-text">
+                                        <span class="white-text" style="font-size:20px; font-weightL 300;">
                                         Games Played:
                                         </span>
                                          <span class="white-text">
@@ -36,11 +36,40 @@
                                   <div class="row">
                                     <div class="col s12 m12">
                                       <div class="card-panel orange darken-4">
-                                                    <span class="white-text">
+                                       <span class="white-text" style="font-size:20px; font-weightL 300;">
                                         Wins:
                                         </span>
                                          <span class="white-text">
                                         <%= @account.wins %>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                          </div>
+
+                          <div style="display: flex;">
+                                  <div class="row">
+                                    <div class="col s12 m12">
+                                      <div class="card-panel blue-grey darken-2">
+                                        <span class="white-text" style="font-size:20px; font-weightL 300;">
+                                        Experience:
+                                        </span>
+                                         <span class="white-text">
+                                        <%= @account.experience %>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+          
+                                  <div class="row">
+                                    <div class="col s12 m12">
+                                      <div class="card-panel grey darken-4">
+                                      <span class="white-text" style="font-size:20px; font-weightL 300;">
+                                        Level:
+                                        </span>
+                                         <span class="white-text">
+                                        <%= determine_level(@account.experience) %>
                                         </span>
                                       </div>
                                     </div>

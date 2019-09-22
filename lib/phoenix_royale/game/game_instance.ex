@@ -5,6 +5,7 @@ defmodule PhoenixRoyale.GameInstance do
   defmodule GameInstanceState do
     defstruct server_status: :need_players,
               server_uuid: nil,
+              account: %{},
               uuid: nil,
               countdown: 3000,
               game_map: %{},
@@ -19,7 +20,7 @@ defmodule PhoenixRoyale.GameInstance do
 
   @tick GameSettings.tick_interval()
 
-  def start_link(server_uuid, game_uuid, map, player_number, players, status) do
+  def start_link(server_uuid, game_uuid, map, account, player_number, players, status) do
     # you may want to register your server with `name: __MODULE__`
     # as a third argument to `start_link`
     GenServer.start_link(
@@ -28,6 +29,7 @@ defmodule PhoenixRoyale.GameInstance do
         server_uuid: server_uuid,
         uuid: game_uuid,
         game_map: map,
+        account: account,
         player_number: player_number,
         players: players,
         player_count: player_number,

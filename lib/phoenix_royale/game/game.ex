@@ -1,5 +1,5 @@
 defmodule PhoenixRoyale.Game do
-  alias PhoenixRoyale.{GameServer, GameInstance, GameSettings, GameMap}
+  alias PhoenixRoyale.{Account, GameServer, GameInstance, GameSettings, GameMap}
 
   @tick GameSettings.tick_rate()
 
@@ -50,8 +50,14 @@ defmodule PhoenixRoyale.Game do
     {:noreply, %{state | players: updated_players}}
   end
 
-  def kill(player_number, death_type, state) do
+  def kill(player_number, death_type, %{account: account} = state) do
     player = Map.get(state.players, player_number)
+    experience_earned = player.x / 10
+
+    Account.update(state.account, %{
+      experience: round(account.experience + experience_earned),
+      games_played: account.games_played + 1
+    })
 
     updated_player =
       Map.update!(player, :alive, fn _x -> false end)
