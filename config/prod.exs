@@ -18,7 +18,7 @@ config :phoenix_royale, PhoenixRoyaleWeb.Endpoint,
   # Possibly not needed, but doesn't hurt
   http: [port: {:system, "PORT"}],
   # url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 80],
-  [host: "www.phoenixroyale.com"],
+  [host: "phoenixroyale.com"],
   server: true,
   secret_key_base: "${SECRET_KEY_BASE}"
 
