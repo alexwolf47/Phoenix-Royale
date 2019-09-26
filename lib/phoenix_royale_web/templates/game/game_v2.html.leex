@@ -75,7 +75,7 @@ viewBox="0 24 150 57" preserveAspectRatio="none" shape-rendering="auto">
 </div>
 <!--Waves end-->
      <div class="gameWindow" phx-keyup="jump" phx-target="window">
-            <%= if @game_state.server_status == :playing do %>
+            <%= if @game_state.server_status do %>
                 <!-- THE STORM -->
                     <%= if player.alive  do %>
                     <div style="background: #0a0a0a; width: 100vw; opacity: 0.2; z-index: 100; height: 800px; position: absolute; right: <%= round(700 + (player.x - @game_state.storm)) %>px">
