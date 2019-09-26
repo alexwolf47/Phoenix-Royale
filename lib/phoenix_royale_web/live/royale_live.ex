@@ -11,7 +11,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "lobby.html", assigns)
 
       %{server_status: :game_over} ->
-        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game_v2.html", assigns)
+        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "dead.html", assigns)
 
       _ ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game_v2.html", assigns)
@@ -31,7 +31,8 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
        dev: false,
        player_list: [],
        start_countdown: nil,
-       tick: 0
+       tick: 0,
+       game_over: 1000
      )}
   end
 
@@ -89,7 +90,20 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
       {:noreply,
        assign(socket, game_state: updated_game_state, tick: socket.assigns.game_state.tick + 1)}
     else
+      :timer.send_after(GameSettings.tick_interval(), self(), :game_over_update)
+
       {:noreply, assign(socket, game_state: Map.put(updated_game_state, :dead, true))}
+    end
+  end
+
+  def handle_info(:game_over_update, socket) do
+    cond do
+      socket.assigns.game_over > 0 ->
+        :timer.send_after(GameSettings.tick_interval(), self(), :game_over_update)
+        {:noreply, assign(socket, game_over: socket.assigns.game_over - 1)}
+
+      true ->
+        {:noreply, socket}
     end
   end
 end

@@ -2,7 +2,8 @@
 <% player = Map.get(@game_state.players, @player_number) %>
 
 
-
+<% previous_distance = @game_state.account.experience %>
+<% game_distance = round(player.x/10) %>
 
 
 
@@ -15,10 +16,16 @@
                     <div class="loginHeader">
                     <h1>You finished <%= player.position %> out of <%= @game_state.player_count %></h1>
                     </div>
+                  
                     <div style="padding: 24px 0px;">
                     <a style="color: #ffffff;" href="/dashboard">
                     Back to menu
                     </a>
+                    </div>
+
+                    <div style="padding: 60px 0px;">
+                        <p style="font-size: 32px"><%= round(game_distance * @game_over /1000) %></p>
+                        <p style="font-size: 68px;"><%= round(previous_distance + (game_distance - (game_distance * @game_over /1000))) %></p>
                     </div>
                 </div>
             </div>
