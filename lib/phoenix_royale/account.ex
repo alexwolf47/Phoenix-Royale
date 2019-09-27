@@ -1,6 +1,7 @@
 defmodule PhoenixRoyale.Account do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
   alias PhoenixRoyale.Repo
 
   schema "accounts" do
@@ -22,6 +23,16 @@ defmodule PhoenixRoyale.Account do
 
   def by_id(account_id) do
     Repo.get!(__MODULE__, account_id)
+  end
+
+  def by_unique_id(unique_id) do
+    query =
+      from(
+        a in __MODULE__,
+        where: a.unique_id == ^unique_id
+      )
+
+    Repo.all(query)
   end
 
   def create(params) do
