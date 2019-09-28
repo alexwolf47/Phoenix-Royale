@@ -2,6 +2,7 @@ defmodule PhoenixRoyale.GameRecord do
   use Ecto.Schema
   alias PhoenixRoyale.Repo
   import Ecto.Changeset
+  import Ecto.Query, only: [from: 2]
 
   schema "game_records" do
     field :winner, :string
@@ -24,5 +25,14 @@ defmodule PhoenixRoyale.GameRecord do
 
   def get_all() do
     Repo.all(__MODULE__)
+  end
+
+  def get_account_wins(account_name) do
+    from(gr in PhoenixRoyale.GameRecord,
+      where: gr.winner == ^account_name,
+      where: gr.player_count != 1,
+      select: count(gr)
+    )
+    |> Repo.one()
   end
 end
