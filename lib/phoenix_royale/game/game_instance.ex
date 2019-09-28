@@ -7,7 +7,7 @@ defmodule PhoenixRoyale.GameInstance do
               server_uuid: nil,
               account: %{},
               uuid: nil,
-              countdown: 3000,
+              countdown: 3499,
               game_map: %{},
               player_count: 0,
               alive_count: nil,
@@ -98,7 +98,7 @@ defmodule PhoenixRoyale.GameInstance do
   def handle_info(:tick, %{server_status: :countdown, countdown: countdown} = state)
       when countdown > 0 do
     :timer.send_after(@tick, self(), :tick)
-    {:noreply, %{state | countdown: state.countdown - 50}}
+    {:noreply, %{state | countdown: state.countdown - 33}}
   end
 
   def handle_info(:tick, %{server_status: :countdown} = state) do
