@@ -1,6 +1,6 @@
 defmodule PhoenixRoyaleWeb.DashboardLive do
   use Phoenix.LiveView
-  alias PhoenixRoyale.{Account, GameStats, GameChat}
+  alias PhoenixRoyale.{Account, GameStats, GameChat, GameRecord}
 
   def render(assigns) do
     Phoenix.View.render(PhoenixRoyaleWeb.DashboardView, "index.html", assigns)
@@ -12,6 +12,7 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
     :timer.send_after(500, self(), :chat_update)
     stats = GameStats.fetch_stats()
     live_games = GameStats.live_games()
+    account_wins = GameRecord.get_account_wins(account.name)
 
     {:ok,
      assign(socket,
@@ -19,6 +20,7 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
        account: account,
        stats: stats,
        live_games: live_games,
+       account_wins: account_wins,
        chat_messages: GameChat.state().messages
      )}
   end
