@@ -1,6 +1,6 @@
 defmodule PhoenixRoyaleWeb.DashboardLive do
   use Phoenix.LiveView
-  alias PhoenixRoyale.{Account, GameStats}
+  alias PhoenixRoyale.{Account, GameStats, GameChat}
 
   def render(assigns) do
     Phoenix.View.render(PhoenixRoyaleWeb.DashboardView, "index.html", assigns)
@@ -9,6 +9,7 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
   def mount(session, socket) do
     account = Account.by_id(session.account_id)
     :timer.send_after(3000, self(), :update)
+    :timer.send_after(500, self(), :chat_update)
     stats = GameStats.fetch_stats()
     live_games = GameStats.live_games()
 
@@ -17,7 +18,8 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
        account_id: session.account_id,
        account: account,
        stats: stats,
-       live_games: live_games
+       live_games: live_games,
+       chat_messages: GameChat.state().messages
      )}
   end
 
@@ -25,10 +27,20 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
     {:noreply, socket}
   end
 
+  def handle_event("new_message", %{"message" => message}, socket) do
+    GameChat.new_message(socket.assigns.account.name, message)
+    {:noreply, assign(socket, chat_messages: GameChat.state().messages)}
+  end
+
   def handle_info(:update, socket) do
     :timer.send_after(3000, self(), :update)
     stats = GameStats.fetch_stats()
     live_games = GameStats.live_games()
     {:noreply, assign(socket, stats: stats, live_games: live_games)}
+  end
+
+  def handle_info(:chat_update, socket) do
+    :timer.send_after(500, self(), :chat_update)
+    {:noreply, assign(socket, chat_messages: GameChat.state().messages)}
   end
 end
