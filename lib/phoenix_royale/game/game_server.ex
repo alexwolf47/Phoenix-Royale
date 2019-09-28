@@ -8,7 +8,7 @@ defmodule PhoenixRoyale.GameServer do
               start_countdown: 12,
               game_map: %{},
               player_count: 0,
-              zzalive_count: 0,
+              alive_count: 0,
               dead_players: [],
               players: %{},
               player_list: [],
@@ -57,7 +57,7 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   def handle_call(:info, _from, state) do
-    {:reply, {state.server_status, state.zzalive_count}, state}
+    {:reply, {state.server_status, state.alive_count}, state}
   end
 
   def handle_call({:join, account, %{uuid: uuid} = player}, _, %{uuid: server_uuid} = state) do
@@ -80,7 +80,7 @@ defmodule PhoenixRoyale.GameServer do
     new_state = %{
       state
       | player_count: next_player_number,
-        zzalive_count: next_player_number,
+        alive_count: next_player_number,
         players: players,
         player_list: [player.name | state.player_list],
         server_status: status
@@ -90,7 +90,7 @@ defmodule PhoenixRoyale.GameServer do
       PhoenixRoyale.GameCoordinator.start_game(server_uuid)
       p1_uuid = Map.get(new_state.players, 1).uuid
       p1_gameid = server_uuid <> "-" <> p1_uuid
-      GameInstance.waterfall(p1_gameid, 1, new_state.players, new_state.zzalive_count)
+      GameInstance.waterfall(p1_gameid, 1, new_state.players, new_state.alive_count)
     end
 
     {:reply, {server_uuid, gameid}, new_state}
@@ -104,18 +104,20 @@ defmodule PhoenixRoyale.GameServer do
     end
   end
 
-  def handle_cast({:kill, player_number}, %{zzalive_count: 1} = state) do
+  def handle_cast({:kill, player_number}, %{alive_count: 1} = state) do
     winner = Map.get(state.players, player_number)
-    {:noreply, %{state | zzalive_count: 0, server_status: :game_over, winner: winner}}
+    updated_state = %{state | alive_count: 0, server_status: :game_over, winner: winner.name}
+    PhoenixRoyale.GameCoordinator.finish_game(updated_state)
+    {:noreply, updated_state}
   end
 
   def handle_cast(
         {:kill, player_number},
-        %{dead_players: dead_players, zzalive_count: zzalive_count} = state
+        %{dead_players: dead_players, alive_count: alive_count} = state
       ) do
     unless Enum.any?(dead_players, fn pn -> pn == player_number end) do
       {:noreply,
-       %{state | dead_players: [player_number | dead_players], zzalive_count: zzalive_count - 1}}
+       %{state | dead_players: [player_number | dead_players], alive_count: alive_count - 1}}
     else
       {:noreply, state}
     end
@@ -124,7 +126,7 @@ defmodule PhoenixRoyale.GameServer do
   def handle_cast({:update_players, updated_players}, state) do
     gameuuid = find_p1_gameid(state)
 
-    GameInstance.waterfall(gameuuid, 1, updated_players, state.zzalive_count)
+    GameInstance.waterfall(gameuuid, 1, updated_players, state.alive_count)
     {:noreply, %{state | players: updated_players}}
   end
 
@@ -142,7 +144,7 @@ defmodule PhoenixRoyale.GameServer do
       p1_uuid = Map.get(state.players, 1).uuid
       p1_gameid = state.uuid <> "-" <> p1_uuid
 
-      GameInstance.waterfall(p1_gameid, 1, state.players, state.zzalive_count)
+      GameInstance.waterfall(p1_gameid, 1, state.players, state.alive_count)
       {:noreply, %{state | start_countdown: :started, server_status: :full}}
     end
   end

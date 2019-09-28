@@ -194,3 +194,9 @@ img {
         font-size: 24px;
     }
 }
+
+.playTitle {
+    font-size: 32px;
+    padding: 80px 0px;
+    text-align: right;
+}

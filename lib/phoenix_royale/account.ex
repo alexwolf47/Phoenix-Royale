@@ -35,6 +35,10 @@ defmodule PhoenixRoyale.Account do
     Repo.all(query)
   end
 
+  def get_all() do
+    Repo.all(__MODULE__)
+  end
+
   def create(params) do
     changeset(%__MODULE__{experience: 0, wins: 0, games_played: 0}, params)
     |> Repo.insert()
