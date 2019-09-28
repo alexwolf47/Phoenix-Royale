@@ -26,7 +26,11 @@ defmodule PhoenixRoyale.GameChat do
   end
 
   def handle_cast({:new_message, author, content}, state) do
-    message = {author, content}
-    {:noreply, %{state | messages: [message | state.messages]}}
+    if content == "" do
+      {:noreply, state}
+    else
+      message = {author, content}
+      {:noreply, %{state | messages: [message | state.messages]}}
+    end
   end
 end
