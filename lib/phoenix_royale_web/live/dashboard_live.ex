@@ -20,7 +20,7 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
        account: account,
        stats: stats,
        live_games: live_games,
-       account_wins: account_wins
+       account_wins: account_wins,
        chat_messages: GameChat.state().messages
      )}
   end
