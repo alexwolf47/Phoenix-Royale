@@ -230,7 +230,22 @@
     
                 </div>
             </div>
- <div class="dashboardBox">
+            <div class="dashboardBox">
+                  <a href="/play">
+                    <div>
+                      <div class="row">
+                          <div class="col s12 m12">
+                            <div class="card play-game-title" style="border-radius: 4px;">
+                              <div class="card-content white-text">
+                                <span class="card-title" style="font-size: 48px; padding: 32px 0px; color: #fff; font-weight: 800;">Play a game!</span>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </a>
+
                 <div>
                  <div class="row">
                     <div class="col s12 m12">
@@ -242,7 +257,7 @@
                             <% Enum.count(@live_games) == 0 -> %>
                             There are no games being played right now :(
 
-                          <% Enum.count(@live_games) <= 20 -> %>
+                          <% Enum.count(@live_games) <= 12 -> %>
                             <ul class="collection" style="margin-top: 32px; font-size: 16px;">
                               <%= for game <- @live_games do %>
 
@@ -253,12 +268,12 @@
 
 
                             <ul class="collection" style="margin-top: 32px; font-size: 16px;">
-                              <%= for game <- Enum.slice(@live_games, 0..19) do %>
+                              <%= for game <- Enum.slice(@live_games, 0..11) do %>
 
                                 <li class="collection-item blue-grey darken-4 "><span style="font-weight: 300; font-size: 12px;">Total:</span> <%= game.player_count %> <span style="font-weight: 300; font-size: 12px;">Alive:</span> <%= game.alive_count %></li>                          
                               <% end %>
                             </ul>
-                            There are more than 20 games being played right now!
+                            There are more than 12 games being played right now!
 
                           
                           <% end %>
@@ -272,9 +287,40 @@
     
                 </div>
             </div>
+            <div class="dashboardBox">
+                <div>
+                 <div class="row">
+                    <div class="col s12 m12">
+                      <div class="card blue-grey darken-4">
+                        <div class="card-content white-text">
+                          <span class="card-title">Chat</span>
+                            <%= unless @chat_messages == [] do %>
+                            <ul class="collection" style="margin-top: 32px; font-size: 16px;">
+                              
+                                <%= for {author, content} <- Enum.slice(@chat_messages, 0..12) do %>
+                                  <li class="collection-item blue-grey darken-4 "><span style="font-weight: 300; font-size: 12px; color: #E84855;"><%= author %>:</span> <%= content %></li>                          
+                                <% end %>
+                              
+                            </ul>
+                          <% end %>
+                          <%= f = form_for :message, "#", [phx_submit: :new_message] %>
+                          <input id="message" name="message"" type="text" value="" class="chatInput grey lighten-3" style="padding: 8px 0px; color: #E84855;">
+                          <%= submit "enter" %>
+                          </form>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                    
+    
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
 
 
     <div class="dashboard-footer">

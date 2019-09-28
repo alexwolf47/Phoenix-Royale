@@ -14,7 +14,8 @@ defmodule PhoenixRoyale.Application do
       PhoenixRoyaleWeb.Endpoint,
       # Starts a worker by calling: PhoenixRoyale.Worker.start_link(arg)
       # {PhoenixRoyale.Worker, arg},
-      PhoenixRoyale.GameCoordinator
+      PhoenixRoyale.GameCoordinator,
+      PhoenixRoyale.GameChat
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
