@@ -1,0 +1,147 @@
+.homepage {
+    width: 100%;
+    height: 100vh;
+}
+
+.homeWrapper {
+    background-color: #E26D5C;
+    width: 100%;
+}
+
+.homeContainer {
+    margin: 0px auto;
+    width: 80%;
+    height: calc(100vh - 200px);
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-row: auto auto;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.box {
+    width: 100%;
+    padding: 20px;
+    border-radius: 0px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.dashboardBox {
+    width: 100%;
+    padding: 20px;
+    border-radius: 0px;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.introContainer {
+    width: 100%;
+    height: 100%;
+    font-size: 42px;
+    padding-top: 140px;
+    text-align: center;
+}
+
+.loginContainer {
+    margin: 32px;
+    border: 0px solid #ffffff;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0);
+    padding: 16px;
+    color: #fefefe;
+    transition: all 0.25s;
+}
+
+.loginContainer:hover {
+    transform: scale(1.01);
+}
+
+.loginHeader {
+    font-size: 46px;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+input[type='text'] {
+    height: 64px;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 36px;
+    line-height: 36px;
+    color: #313638;
+}
+
+.loginSubmit {
+    margin-top: 0px;
+    background: #E84855;
+    font-family: 'Fira Sans', sans-serif;
+    color: #E0DFD5;
+    font-size: 18px;
+    line-height: 18px;
+    text-transform: none;
+    border: 2px solid #E0DFD5;
+    height: 48px;
+    width: 100%;
+    transition: all 0.5s;
+}
+
+.loginSubmit:hover {
+    background: #E84855;
+    font-family: 'Fira Sans', sans-serif;
+    border: 2px solid #E0DFD5;
+    height: 48px;
+    width: 100%;
+    margin-top: 0px;
+}
+
+.lobbyContainer {
+    margin: 0px auto;
+    width: 70%;
+    height: calc(100vh);
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-row: auto auto;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.footerlink {
+    line-height: 32px;
+    vertical-align: top;
+}
+
+.footerlink:hover {
+    opacity: 0.6;
+}
+
+.dashboard-footer {
+    position: absolute;
+    bottom: 0px;
+    height: 200px;
+    width: 100%;
+    background-color: #2D3047;
+    z-index: 1;
+    font-size: 15px;
+}
+
+@media only screen and (max-width: 1800px) {
+    .homeContainer {
+        margin: 0px auto;
+        width: 100%;
+        transform: scale(0.7);
+    }
+}
+
+.card-panel {
+    padding: 6px 24px;
+    margin: 6px;
+}
+
+.row {
+    margin-bottom: 0px;
+}

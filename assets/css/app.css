@@ -2,3 +2,201 @@
 
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
+@import "./homepage.css";
+body {
+    margin: 0px;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+}
+
+.mainContainer {
+    margin: 0 auto;
+    padding: 0px;
+    position: relative;
+    width: 100%
+}
+
+.gameWindowContainer {
+    width: 100%;
+    margin: 0px auto;
+    height: 800px;
+    /* background: url(https://www.joshmorony.com/media/2016/04/mountains-back.png); */
+    background-repeat: repeat-x;
+    background-size: 40%;
+    background-position: bottom;
+}
+
+/* .wrapper {
+    width: calc(100vw);
+    height: 1400px;
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.wave {
+    width: calc(200vw);
+    height: 2400px;
+    position: absolute;
+    top: -25%;
+    left: 50%;
+    margin-left: calc(-100vw);
+    margin-top: -1000px;
+    border-radius: 35%;
+    background: rgba(163, 71, 92, 1);
+    animation: wave 15s infinite linear;
+}
+
+@keyframes wave {
+    from {
+        transform: rotate(0deg);
+    }
+    from {
+        transform: rotate(360deg);
+    }
+} */
+
+.gameWindow {
+    width: 800px;
+    margin: 0px auto;
+    height: 800px;
+    position: relative;
+}
+
+.playerPhoenix {
+    position: absolute;
+    width: 40px;
+    height: 22px;
+}
+
+.playerPhoenixSimple {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    background-color: #0a0a0a;
+}
+
+.seaContainer {
+    background: linear-gradient(180deg, rgb(27, 26, 43), rgb(42, 30, 99));
+    height: calc(100vh - 800px);
+    z-index: 5;
+}
+
+.seaBlur {
+    background-color: #363457;
+    opacity: 0.5;
+    height: calc(100vh - 800px);
+    z-index: 10;
+}
+
+.infoCard {
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    width: 140px;
+    height: 80px;
+    line-height: 48px;
+    padding: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: left;
+    border-radius: 2px;
+    background-color: seashell;
+    opacity: 1;
+    color: #000000;
+}
+
+.flex {
+    /*Flexbox for containers*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.waves {
+    position: relative;
+    width: 100%;
+    height: 15vh;
+    margin-bottom: -7px;
+    /*Fix for safari gap*/
+    min-height: 100px;
+    max-height: 150px;
+}
+
+.content {
+    position: relative;
+    height: 20vh;
+    text-align: center;
+    background-color: white;
+}
+
+/* Animation */
+
+.parallax>use {
+    animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
+}
+
+.parallax>use:nth-child(1) {
+    animation-delay: -2s;
+    animation-duration: 7s;
+}
+
+.parallax>use:nth-child(2) {
+    animation-delay: -3s;
+    animation-duration: 10s;
+}
+
+.parallax>use:nth-child(3) {
+    animation-delay: -4s;
+    animation-duration: 13s;
+}
+
+.parallax>use:nth-child(4) {
+    animation-delay: -5s;
+    animation-duration: 20s;
+}
+
+@keyframes move-forever {
+    0% {
+        transform: translate3d(-90px, 0, 0);
+    }
+    100% {
+        transform: translate3d(85px, 0, 0);
+    }
+}
+
+/*Shrinking for mobile*/
+
+@media (max-width: 768px) {
+    .waves {
+        height: 40px;
+        min-height: 40px;
+    }
+    .content {
+        height: 30vh;
+    }
+    h1 {
+        font-size: 24px;
+    }
+}
+
+.playTitle {
+    font-size: 32px;
+    padding: 80px 0px;
+    text-align: right;
+}
