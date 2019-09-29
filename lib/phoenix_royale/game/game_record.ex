@@ -38,7 +38,8 @@ defmodule PhoenixRoyale.GameRecord do
         multiplayer_games_played: a.multiplayer_games_played
       },
       group_by: [gr.winner, a.multiplayer_games_played],
-      order_by: [desc: count(gr), asc: a.multiplayer_games_played]
+      order_by: [desc: count(gr), asc: a.multiplayer_games_played],
+      limit: 5
     )
     |> Repo.all()
   end
