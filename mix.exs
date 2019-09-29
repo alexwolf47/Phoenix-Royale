@@ -46,7 +46,8 @@ defmodule PhoenixRoyale.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:calendar, "~> 0.17.6"},
       {:uuid, "~> 1.1"},
-      {:distillery, "~> 2.1", runtime: false}
+      {:distillery, "~> 2.1", runtime: false},
+      {:earmark, "> 1.0.0"}
     ]
   end
 
