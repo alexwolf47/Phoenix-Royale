@@ -48,10 +48,10 @@ defmodule PhoenixRoyaleWeb.SessionController do
   defp check_for_account(username) do
     Account.by_unique_id(username)
     |> case do
-      [] ->
+      nil ->
         {:error, :no_account}
 
-      [account] ->
+      account ->
         {:ok, account}
     end
   end

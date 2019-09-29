@@ -54,6 +54,15 @@ defmodule PhoenixRoyale.Game do
     player = Map.get(state.players, player_number)
     experience_earned = player.x / 10
 
+    multiplayer_games_played =
+      case state.player_count do
+        1 ->
+          account.multiplayer_games_played
+
+        _ ->
+          account.multiplayer_games_played + 1
+      end
+
     max_distance =
       if player.x > account.max_distance do
         round(player.x)
@@ -64,7 +73,8 @@ defmodule PhoenixRoyale.Game do
     Account.update(account, %{
       experience: round(account.experience + experience_earned),
       games_played: account.games_played + 1,
-      max_distance: max_distance
+      max_distance: max_distance,
+      multiplayer_games_played: multiplayer_games_played
     })
 
     updated_player =

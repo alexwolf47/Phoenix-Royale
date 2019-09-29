@@ -1,141 +1,188 @@
-
 <div class="homepage">
 
-    <div class="homeWrapper">
-        <div class="homeContainer">
-            <div class="dashboardBox">
-                <div>
-                 <div class="row">
-                    <div class="col s12 m12">
-                      <div class="card blue-grey darken-4">
-                        <div class="card-content white-text">
-                          <span class="card-title">Hey <%= @account.name %></span>
+  <div class="homeWrapper">
+    <div class="homeContainer">
+      <div class="dashboardBox">
+        <div>
+          <div class="row">
+            <div class="col s12 m12">
+              <div class="card blue-grey darken-4">
+                <div class="card-content white-text">
+                  <span class="card-title">Hey <%= @account.name %></span>
 
-                             <ul class="collection" style="margin-top: 32px; font-size: 16px;">
-                              <li class="collection-item blue-grey darken-4 "><span style="font-weight: 300; font-size: 12px;">Login ID:</span> <span style="color: red;"><%= @account.unique_id %></span><br>   <span style="font-weight: 300; font-size: 10px;">(Make a note of this if you want to log back in)</span></li>
-                          
-                              <li class="collection-item blue-grey darken-4 "><span style="font-weight: 300; font-size: 12px;">Display Name:</span> <%= @account.name %></li>
-                            </ul>
+                  <ul class="collection" style="margin-top: 32px; font-size: 16px;">
+                    <li class="collection-item blue-grey darken-4 "><span
+                        style="font-weight: 300; font-size: 12px;">Login ID:</span> <span
+                        style="color: red;"><%= @account.unique_id %></span><br> <span
+                        style="font-weight: 300; font-size: 10px;">(Make a note of this if you want to log back
+                        in)</span></li>
 
-                          <span class="card-title" style="margin-top: 32px;">Account Stats</span>
+                    <li class="collection-item blue-grey darken-4 "><span
+                        style="font-weight: 300; font-size: 12px;">Display Name:</span> <%= @account.name %></li>
+                  </ul>
 
-                          <div style="display: flex;">
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel blue-grey darken-2" style="text-align: right;">
-                                        <span class="white-text" style="font-size:16px; text-align: right;">
-                                        Games Played:
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-          
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel grey darken-4">
-                                          <span class="white-text" style="font-size:16px;">
-                                        <%= @account.games_played %>
-                                        </span>
-      
-                                      </div>
-                                    </div>
-                                  </div>
-                      
-                          </div>
+                  <span class="card-title" style="margin-top: 32px;">Account Stats</span>
 
-                                  <div style="display: flex;">
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel blue-grey darken-2" style="text-align: right;">
-                                        <span class="white-text" style="font-size:16px; font-weight: 300;">
-                                        Wins:
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-          
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel grey darken-4">
-                                         <span class="white-text" style="font-size:16px; font-weight: 300;">
-                                        <%= @account_wins %>
-                                        </span>
-      
-                                      </div>
-                                    </div>
-                                  </div>
-                      
-                          </div>
+                  <div style="display: flex;">
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel blue-grey darken-2" style="text-align: right;">
+                          <span class="white-text" style="font-size:16px; text-align: right;">
+                            Games Played:
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel grey darken-4">
+                          <span class="white-text" style="font-size:16px;">
+                            <%= @account.games_played %>
+                          </span>
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div style="display: flex;">
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel blue-grey darken-2" style="text-align: right;">
+                          <span class="white-text" style="font-size:16px; font-weight: 300;">
+                            Multiplayer wins:
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel grey darken-4">
+                          <span class="white-text" style="font-size:16px; font-weight: 300;">
+                            <%= @account.wins %>
+                          </span>
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div style="display: flex;">
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel blue-grey darken-2" style="text-align: right;">
+                          <span class="white-text" style="font-size:16px; font-weight: 300;">
+                            Record distance:
+                          </span>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel grey darken-4">
+                          <span class="white-text" style="font-size:16px; font-weight: 300;">
+                            <%= @account.max_distance %>m
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div style="display: flex;">
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel blue-grey darken-2" style="text-align: right;">
+                          <span class="white-text" style="font-size:16px; font-weight: 300;">
+                            Distance travelled:
+                          </span>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel grey darken-4">
+                          <span class="white-text" style="font-size:16px; font-weight: 300;">
+                            <%= @account.experience %>m
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div style="display: flex;">
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel blue-grey darken-2" style="text-align: right;">
+                          <span class="white-text" style="font-size:16px; font-weight: 300;">
+                            Level:
+                          </span>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel grey darken-4">
+                          <span class="white-text" style="font-size:16px; font-weight: 300;">
+                            <%= determine_level(@account.experience) %>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
 
 
-                          <div style="display: flex;">
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel blue-grey darken-2" style="text-align: right;">
-                                        <span class="white-text" style="font-size:16px; font-weight: 300;">
-                                        Distance travelled:
-                                        </span>
+                  </div>
 
-                                      </div>
-                                    </div>
-                                  </div>
-          
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel grey darken-4">
-                                      <span class="white-text" style="font-size:16px; font-weight: 300;">
-                                         <%= @account.experience %>
-                                        </span>        
-                                      </div>
-                                    </div>
-                                  </div>
 
-                          </div>
+                </div>
+                <div class="card-action">
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                                                    <div style="display: flex;">
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel blue-grey darken-2" style="text-align: right;">
-                                        <span class="white-text" style="font-size:16px; font-weight: 300;">
-                                        Level:
-                                        </span>
 
-                                      </div>
-                                    </div>
-                                  </div>
-          
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel grey darken-4">
-                                      <span class="white-text" style="font-size:16px; font-weight: 300;">
-                                         <%= determine_level(@account.experience) %>
-                                        </span>        
-                                      </div>
-                                    </div>
-                                  </div>
+        </div>
+      </div>
+      <div class="dashboardBox">
 
-                          </div>
+        <div>
+          <div class="row">
+            <div class="col s12 m12">
+              <div class="card blue-grey darken-4">
+                <div class="card-content white-text">
 
-                              <span class="card-title" style="margin-top: 32px;">Game Statistics</span>
-    
-                          <div style="display: flex;">
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel blue-grey darken-2" style="text-align: right;">
-                                        <span class="white-text" style="font-size:16px;">
-                                        Games in progress:
-                                        </span>
-                                         <span class="white-text">
-                                        
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-          
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel grey darken-4">
-                                      <span class="white-text" style="font-size:16px;"">
+                  <span class="card-title">Phoenix Royale Statistics</span>
+
+                  <div style="display: flex;">
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel blue-grey darken-2" style="text-align: right;">
+                          <span class="white-text" style="font-size:16px;">
+                            Games in progress:
+                          </span>
+                          <span class="white-text">
+
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col s12 m12">
+                        <div class="card-panel grey darken-4">
+                          <span class="white-text" style="font-size:16px;"">
                                         <%= @stats.current_games %>
                                         </span>
                                       </div>
@@ -143,24 +190,24 @@
                                   </div>
                           </div>
 
-                                                    <div style="display: flex;">
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel blue-grey darken-2" style="text-align: right;">
-                                        <span class="white-text" style="font-size:16px;">
-                                        Total games:
-                                        </span>
-                                         <span class="white-text">
-                                        
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-          
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel grey darken-4">
-                                      <span class="white-text" style="font-size:16px;"">
+                                                    <div style=" display: flex;">
+                            <div class="row">
+                              <div class="col s12 m12">
+                                <div class="card-panel blue-grey darken-2" style="text-align: right;">
+                                  <span class="white-text" style="font-size:16px;">
+                                    Total games played:
+                                  </span>
+                                  <span class="white-text">
+
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col s12 m12">
+                                <div class="card-panel grey darken-4">
+                                  <span class="white-text" style="font-size:16px;"">
                                         <%= @stats.total_games_played %>
                                         </span>
                                       </div>
@@ -170,145 +217,207 @@
 
 
 
-                          <div style="display: flex;">
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel blue-grey darken-2" style="text-align: right;">
-                                        <span class="white-text" style="font-size:16px;">
-                                        Total players:
-                                        </span>
+                          <div style=" display: flex;">
+                                    <div class="row">
+                                      <div class="col s12 m12">
+                                        <div class="card-panel blue-grey darken-2" style="text-align: right;">
+                                          <span class="white-text" style="font-size:16px;">
+                                            Total players:
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-          
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel grey darken-4">
-                                      <span class="white-text" style="font-size:16px; font-weightL 300;">
-                                        <%= @stats.unique_players %>
-                                        </span>
 
+                                    <div class="row">
+                                      <div class="col s12 m12">
+                                        <div class="card-panel grey darken-4">
+                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                            <%= @stats.unique_players %>
+                                          </span>
+
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
 
-                          </div>
-
-                                <div style="display: flex;">
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel blue-grey darken-2" style="text-align: right;">
-                                        <span class="white-text" style="font-size:16px;">
-                                        Players online:
-                                        </span>
-
-                                      </div>
-                                    </div>
-                                  </div>
-          
-                                  <div class="row">
-                                    <div class="col s12 m12">
-                                      <div class="card-panel grey darken-4">
-                                      <span class="white-text" style="font-size:16px; font-weightL 300;">
-                                        <%= @stats.playing_now %>
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                          </div>
+                                </div>
 
 
+
+                              </div>
+                            </div>
                         </div>
-                        <div class="card-action">
-                          <a href="/logout">Logout</a>
-                        </div>
+
                       </div>
                     </div>
-                  </div>
-                    
-    
-                </div>
-            </div>
-            <div class="dashboardBox">
-                  <a href="/play">
-                    <div>
-                      <div class="row">
-                          <div class="col s12 m12">
-                            <div class="card play-game-title" style="border-radius: 4px;">
-                              <div class="card-content white-text">
-                                <span class="card-title" style="font-size: 48px; padding: 32px 0px; color: #fff; font-weight: 800;">Play a game!</span>
-                              </div>
 
+                          <div class="card blue-grey darken-4">
+                <div class="card-content white-text">
+                    <div id=leaderboard>
+                      <span class="card-title">Leaderboard</span>
+   <div style=" display: flex; ">
+                               
+                                        <div class="card-panel red darken-4" style="text-align: right;">
+                                          <span class="white-text" style="font-size:16px;">
+                                            Rank
+                                          </span>
+                                        </div>
+                              
+                                   
+                                        <div class="card-panel grey darken-4">
+                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                            Name
+                                          </span>
+                                        </div>
+
+                                         <div class="card-panel green darken-4">
+                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
+                              Wins
+                                          </span>
+                                        </div>
+
+
+                                         <div class="card-panel orange darken-4">
+                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                            Win %
+                                          </span>
+                                        </div>
+                                </div>
+
+                                <div style="width:100%; height: 2px; background-colour: #fff;"></div>
+
+
+                  
+
+                      <%= for {score, position} <- Enum.with_index(@leaderboard) do %>
+                              <div style=" display: flex; ">
+                               
+                                        <div class="card-panel red darken-4" style="text-align: right;">
+                                          <span class="white-text" style="font-size:16px;">
+                                            <%= position + 1 %>
+                                          </span>
+                                        </div>
+                              
+                                   
+                                        <div class="card-panel grey darken-4">
+                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                            <% {name, _} = String.split_at(score.winner, 12) %>
+                                            <%= name %>
+                                          </span>
+                                        </div>
+
+                                         <div class="card-panel green darken-4">
+                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                            <%= score.wins %> 
+                                            <%= if score.wins == 1 do %>win<% else %>wins<% end %>
+                                          </span>
+                                        </div>
+
+
+                                         <div class="card-panel orange darken-4">
+                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                            <%= win_percentage(score) %>%
+                                          </span>
+                                        </div>
+                                </div>
+                      <% end %>
+                    </div>
+
+                  </div>
+                  </div>
+                  </div>
+
+         <div class="dashboardBox">
+                    <div>
+                      <a href="/play">
+                        <div>
+                          <div class="row">
+                            <div class="col s12 m12">
+                              <div class="card play-game-title" style="border-radius: 4px;">
+                                <div class="card-content white-text">
+                                  <span class="card-title"
+                                    style="font-size: 48px; padding: 32px 0px; color: #fff; font-weight: 800;">Play a
+                                    game!</span>
+                                </div>
+
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                  </a>
+                      </a>
+                    </div>
+                    <div>
+                      <div class="row">
+                        <div class="col s12 m12">
+                          <div class="card blue-grey darken-4">
+                            <div class="card-content white-text">
+                              <span class="card-title">Chat</span>
+                              <%= unless @chat_messages == [] do %>
+                              <ul class="collection" style="margin-top: 32px; font-size: 16px;">
 
-
-            </div>
-            <div class="dashboardBox">
-                <div>
-                 <div class="row">
-                    <div class="col s12 m12">
-                      <div class="card blue-grey darken-4">
-                        <div class="card-content white-text">
-                          <span class="card-title">Chat</span>
-                            <%= unless @chat_messages == [] do %>
-                            <ul class="collection" style="margin-top: 32px; font-size: 16px;">
-                              
-                                <%= for {author, content} <- Enum.slice(@chat_messages, 0..12) do %>
-                                  <li class="collection-item blue-grey darken-4 "><span style="font-weight: 300; font-size: 12px; color: #E84855;"><%= author %>:</span> <%= content %></li>                          
+                                <%= for {author, content} <- Enum.reverse(Enum.slice(@chat_messages, 0..9)) do %>
+                                <li class="collection-item blue-grey darken-4 "><span
+                                    style="font-weight: 300; font-size: 12px; color: #E84855;"><%= author %>:</span>
+                                  <%= content %></li>
                                 <% end %>
-                              
-                            </ul>
-                          <% end %>
-                          <%= f = form_for :message, "#", [phx_submit: :new_message] %>
-                          <input id="message" name="message"" type="text" value="" class="chatInput grey lighten-3" style="padding: 8px 0px; color: #E84855;">
-                          <%= submit "enter" %>
-                          </form>
-                        </div>
 
+                              </ul>
+                              <% end %>
+                              <%= f = form_for :message, "#", [phx_submit: :new_message] %>
+                              <input id="message" name="message"" type=" text" value="" class="chatInput grey lighten-3"
+                                style="padding: 8px 0px; color: #E84855; width: 100%;">
+                              <%= submit "enter" %>
+                              </form>
+                            </div>
+
+                          </div>
+                        </div>
                       </div>
+
+
                     </div>
                   </div>
-                    
-    
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-    <div class="dashboard-footer">
-    <footer class="page-footer grey darken-4 dashboard-footer">
-          <div class="container">
-            <div class="row">
-              <div class="col l6 s12">
-                <h5 class="white-text" >Phoenix Royale</h5>
-                <p class="grey-text text-lighten-4">A multiplayer side scrolling battle royale built using Phoenix Liveview. <br>
-                <a href="/about">About the game.</a>
-                </p>
-                
               </div>
-              <div class="col l4 offset-l2 s12" style="padding-top: 32px;">
-                <ul>
-                  <li><a class="footerlink grey-text text-lighten-3" target="_blank" href="https://github.com/alexwolf47/live_view_demo">
-                  <svg  height="32" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="oddeven" fill="#ffffff" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
-                   <span style="padding: 8px 0px 0px 12px; line-height: 32px; vertical-align:top;">View on GitHub</span></a></li>
-                  <li><a class="footerlink grey-text text-lighten-3" target="_blank" href="https://phoenixphrenzy.com/">
- <img style="width: 32px; height: 32px;" src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
-                   <span style="padding: 8px 0px 0px 12px; line-height: 32px;vertical-align:top;">Competition Homepage</span></a></li>
-                </ul>
-              </div>
+
+              
             </div>
-          </div>
-
-        </footer>
-    </div>
 
 
+
+
+            <div class="dashboard-footer">
+              <footer class="page-footer grey darken-4 dashboard-footer">
+                <div class="container">
+                  <div class="row">
+                    <div class="col l6 s12">
+                      <h5 class="white-text">Phoenix Royale</h5>
+                      <p class="grey-text text-lighten-4">A multiplayer side scrolling battle royale built using Phoenix
+                        Liveview. <br>
+                        <a href="/about">About the game.</a>
+                      </p>
+
+                    </div>
+                    <div class="col l4 offset-l2 s12" style="padding-top: 32px;">
+                      <ul>
+                        <li><a class="footerlink grey-text text-lighten-3" target="_blank"
+                            href="https://github.com/alexwolf47/live_view_demo">
+                            <svg height="32" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true">
+                              <path fill-rule="oddeven" fill="#ffffff"
+                                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+                              </path>
+                            </svg>
+                            <span style="padding: 8px 0px 0px 12px; line-height: 32px; vertical-align:top;">View on
+                              GitHub</span></a></li>
+                        <li><a class="footerlink grey-text text-lighten-3" target="_blank"
+                            href="https://phoenixphrenzy.com/">
+                            <img style="width: 32px; height: 32px;"
+                              src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
+                            <span style="padding: 8px 0px 0px 12px; line-height: 32px;vertical-align:top;">Competition
+                              Homepage</span></a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+              </footer>
+            </div>

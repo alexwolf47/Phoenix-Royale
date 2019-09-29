@@ -3,7 +3,7 @@ defmodule PhoenixRoyale.Repo.Migrations.AddingMaxDistance do
 
   def change do
     alter table(:accounts) do
-      add :max_distance, :integer
+      add :max_distance, :integer, default: 0
     end
   end
 end
