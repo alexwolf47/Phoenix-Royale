@@ -10,6 +10,7 @@ defmodule PhoenixRoyale.Account do
     field :experience, :integer
     field :wins, :integer
     field :games_played, :integer
+    field :max_distance, :integer, default: 0
 
     timestamps()
   end
@@ -17,7 +18,7 @@ defmodule PhoenixRoyale.Account do
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:name, :unique_id, :experience, :wins, :games_played])
+    |> cast(attrs, [:name, :unique_id, :experience, :wins, :games_played, :max_distance])
     |> validate_required([:name])
   end
 

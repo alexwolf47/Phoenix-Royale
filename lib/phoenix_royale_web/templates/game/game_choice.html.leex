@@ -82,7 +82,7 @@
                             <% end %>
                             Starting in:
                             <%= game.start_countdown %>
-                            <br> 
+                           
                         <% end %>
                         
                           <span class="card-title">Current games</span>
@@ -132,7 +132,7 @@
                             <%= unless @global_chat_messages == [] do %>
                             <ul class="collection" style="margin-top: 32px; font-size: 16px;">
                               
-                                <%= for {author, content} <- Enum.slice(@global_chat_messages, 0..12) do %>
+                                <%= for {author, content} <- Enum.reverse(Enum.slice(@global_chat_messages, 0..12)) do %>
                                   <li class="collection-item blue-grey darken-4 "><span style="font-weight: 300; font-size: 12px; color: #E84855;"><%= author %>:</span> <%= content %></li>                          
                                 <% end %>
                               

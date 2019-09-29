@@ -2,7 +2,7 @@
 <div class="homepage">
 
     <div class="homeWrapper">
-        <div class="loginContainer">
+        <div class="homeContainer" style="grid-template-columns: 50% 50%;">
             <div class="box">
                 <div class="introContainer">
            <img src="/images/game_logo.png" />
@@ -11,10 +11,10 @@
             <div class="box card-panel blue-grey darken-4" style="margin: 128px;">
                 <div class="loginContainer">
                     <div class="loginHeader">
-                    Play a game!
+                    Welcome to Phoenix Royale!
                     </div>
                     <div style="font-size: 18px;">
-                    Enter a username to get started, or your account id if you want to log back in!
+                    Enter a username to get started, or your Login ID if you want to log back in!
                     </div>
                     <div style="padding: 24px 0px;">
 
@@ -33,13 +33,17 @@
         </div>
     </div>
 </div>
-    <div style="position: absolute; bottom: 0px; height: 320px; width: 100%; background-color: #2D3047; z-index: 1;">
-    <footer class="page-footer grey darken-4" style="height:320px;">
+
+    <div class="dashboard-footer">
+    <footer class="page-footer grey darken-4 dashboard-footer">
           <div class="container">
             <div class="row">
               <div class="col l6 s12">
                 <h5 class="white-text" >Phoenix Royale</h5>
-                <p class="grey-text text-lighten-4">A multiplayer side scrolling battle royale built using Phoenix Liveview.</p>
+                <p class="grey-text text-lighten-4">A multiplayer side scrolling battle royale built using Phoenix Liveview. <br>
+                <a href="/about">About the game.</a>
+                </p>
+                
               </div>
               <div class="col l4 offset-l2 s12" style="padding-top: 32px;">
                 <ul>
@@ -53,13 +57,7 @@
               </div>
             </div>
           </div>
-          <div class="footer-copyright">
-            <div class="container">
-            Alex Wolf
-            <a class="grey-text text-lighten-4 right" href="/about">About</a>
-            </div>
-          </div>
+
         </footer>
     </div>
-
 

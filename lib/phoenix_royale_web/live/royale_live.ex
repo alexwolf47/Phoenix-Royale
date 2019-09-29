@@ -14,13 +14,13 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   def render(assigns) do
     case assigns.game_state do
       nil ->
-        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "landing.html", assigns)
+        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game_choice.html", assigns)
 
       %{server_status: :need_players} ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "lobby.html", assigns)
 
       %{server_status: :game_over} ->
-        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "dead.html", assigns)
+        Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game_over.html", assigns)
 
       _ ->
         Phoenix.View.render(PhoenixRoyaleWeb.GameView, "game_v2.html", assigns)
@@ -44,7 +44,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
        player_list: [],
        start_countdown: nil,
        tick: 0,
-       game_over: 1000,
+       game_over: 100,
        live_games: GameStats.live_games(),
        global_chat_messages: GameChat.state().messages,
        game_needing_players: GameStats.games_waiting()
@@ -110,20 +110,7 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
       {:noreply,
        assign(socket, game_state: updated_game_state, tick: socket.assigns.game_state.tick + 1)}
     else
-      :timer.send_after(GameSettings.tick_interval(), self(), :game_over_update)
-
       {:noreply, assign(socket, game_state: Map.put(updated_game_state, :dead, true))}
-    end
-  end
-
-  def handle_info(:game_over_update, socket) do
-    cond do
-      socket.assigns.game_over > 0 ->
-        :timer.send_after(GameSettings.tick_interval(), self(), :game_over_update)
-        {:noreply, assign(socket, game_over: socket.assigns.game_over - 1)}
-
-      true ->
-        {:noreply, socket}
     end
   end
 
@@ -140,6 +127,6 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
 
   def handle_info(:chat_update, socket) do
     :timer.send_after(500, self(), :chat_update)
-    {:noreply, assign(socket, chat_messages: GameChat.state().messages)}
+    {:noreply, assign(socket, global_chat_messages: GameChat.state().messages)}
   end
 end

@@ -27,7 +27,6 @@ defmodule PhoenixRoyale.GameServer do
   end
 
   def init(server) do
-    :timer.send_interval(1000 * 60 * 5, self(), :close)
     :timer.send_after(1000, self(), :lobby_timer)
     {:ok, server}
   end
@@ -108,6 +107,7 @@ defmodule PhoenixRoyale.GameServer do
     winner = Map.get(state.players, player_number)
     updated_state = %{state | alive_count: 0, server_status: :game_over, winner: winner.name}
     PhoenixRoyale.GameCoordinator.finish_game(updated_state)
+    :timer.send_interval(1000 * 60 * 2, self(), :close)
     {:noreply, updated_state}
   end
 

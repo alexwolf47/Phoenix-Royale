@@ -19,17 +19,6 @@
     grid-row-gap: 0px;
 }
 
-.loginContainer {
-    margin: 0px auto;
-    width: 80%;
-    height: calc(100vh - 200px);
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-row: auto auto;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-}
-
 .box {
     width: 100%;
     padding: 20px;
