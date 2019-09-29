@@ -30,9 +30,8 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   def mount(session, socket) do
     account = Account.by_id(session.account_id)
 
-    :timer.send_after(3000, self(), :live_games_update)
+    :timer.send_after(1000, self(), :live_games_update)
     :timer.send_after(500, self(), :chat_update)
-    live_games = GameStats.live_games()
 
     {:ok,
      assign(socket,
@@ -46,8 +45,9 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
        start_countdown: nil,
        tick: 0,
        game_over: 1000,
-       live_games: live_games,
-       global_chat_messages: GameChat.state().messages
+       live_games: GameStats.live_games(),
+       global_chat_messages: GameChat.state().messages,
+       game_needing_players: GameStats.games_waiting()
      )}
   end
 
@@ -128,9 +128,14 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   end
 
   def handle_info(:live_games_update, socket) do
-    :timer.send_after(3000, self(), :live_games_update)
+    :timer.send_after(1000, self(), :live_games_update)
     live_games = GameStats.live_games()
-    {:noreply, assign(socket, live_games: live_games)}
+
+    {:noreply,
+     assign(socket,
+       live_games: live_games,
+       game_needing_players: GameStats.games_waiting()
+     )}
   end
 
   def handle_info(:chat_update, socket) do
