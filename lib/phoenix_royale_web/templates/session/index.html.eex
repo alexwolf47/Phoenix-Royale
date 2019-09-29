@@ -2,7 +2,7 @@
 <div class="homepage">
 
     <div class="homeWrapper">
-        <div class="homeContainer">
+        <div class="loginContainer">
             <div class="box">
                 <div class="introContainer">
            <img src="/images/game_logo.png" />
