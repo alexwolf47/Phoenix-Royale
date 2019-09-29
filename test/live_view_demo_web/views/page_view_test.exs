@@ -1,3 +1,3 @@
-defmodule LiveViewDemoWeb.PageViewTest do
-  use LiveViewDemoWeb.ConnCase, async: true
+defmodule PhoenixRoyaleWeb.PageViewTest do
+  use PhoenixRoyaleWeb.ConnCase, async: true
 end

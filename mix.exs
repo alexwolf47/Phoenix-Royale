@@ -1,11 +1,11 @@
-defmodule LiveViewDemo.MixProject do
+defmodule PhoenixRoyale.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :live_view_demo,
+      app: :phoenix_royale,
       version: "0.1.0",
-      elixir: "~> 1.9.1",
+      elixir: "~> 1.8.2",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -19,7 +19,7 @@ defmodule LiveViewDemo.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {LiveViewDemo.Application, []},
+      mod: {PhoenixRoyale.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -44,7 +44,10 @@ defmodule LiveViewDemo.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:calendar, "~> 0.17.6"}
+      {:calendar, "~> 0.17.6"},
+      {:uuid, "~> 1.1"},
+      {:distillery, "~> 2.1", runtime: false},
+      {:earmark, "> 1.0.0"}
     ]
   end
 
