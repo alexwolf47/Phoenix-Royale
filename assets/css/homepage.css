@@ -19,6 +19,17 @@
     grid-row-gap: 0px;
 }
 
+.loginContainer {
+    margin: 0px auto;
+    width: 80%;
+    height: calc(100vh - 200px);
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-row: auto auto;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
 .box {
     width: 100%;
     padding: 20px;
@@ -104,7 +115,7 @@ input[type='text'] {
     width: 70%;
     height: calc(100vh);
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 33% 33% 33%;
     grid-row: auto auto;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
@@ -133,7 +144,12 @@ input[type='text'] {
     .homeContainer {
         margin: 0px auto;
         width: 100%;
-        transform: scale(0.7);
+        transform: scale(0.8) translateY(-80px);
+    }
+    .lobbyContainer {
+        margin: 0px auto;
+        width: 100%;
+        transform: scale(0.8) translateY(-80px);
     }
 }
 

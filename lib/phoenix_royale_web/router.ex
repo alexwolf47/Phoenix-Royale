@@ -30,6 +30,7 @@ defmodule PhoenixRoyaleWeb.Router do
 
     live "/dashboard", DashboardLive, session: [:account_id]
     live "/play", RoyaleLive, session: [:account_id]
+    live "/about", AboutLive
   end
 
   # Other scopes may use custom stacks.

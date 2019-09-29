@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans&display=swap" rel="stylesheet">
 
+    <%= if @conn.request_path == "/play" do %>
+    <style>
+      body {
+           overflow: hidden; 
+      }
+    </style>
+    <% end %>
      <!-- Compiled and minified CSS -->
 
 

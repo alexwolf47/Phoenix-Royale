@@ -1,6 +1,15 @@
 defmodule PhoenixRoyaleWeb.RoyaleLive do
   use Phoenix.LiveView
-  alias PhoenixRoyale.{Account, GameCoordinator, GameServer, GameInstance, GameSettings}
+
+  alias PhoenixRoyale.{
+    Account,
+    GameCoordinator,
+    GameChat,
+    GameServer,
+    GameInstance,
+    GameStats,
+    GameSettings
+  }
 
   def render(assigns) do
     case assigns.game_state do
@@ -21,6 +30,10 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
   def mount(session, socket) do
     account = Account.by_id(session.account_id)
 
+    :timer.send_after(3000, self(), :live_games_update)
+    :timer.send_after(500, self(), :chat_update)
+    live_games = GameStats.live_games()
+
     {:ok,
      assign(socket,
        account_id: session.account_id,
@@ -32,7 +45,9 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
        player_list: [],
        start_countdown: nil,
        tick: 0,
-       game_over: 1000
+       game_over: 1000,
+       live_games: live_games,
+       global_chat_messages: GameChat.state().messages
      )}
   end
 
@@ -72,6 +87,11 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
     {:noreply, socket}
   end
 
+  def handle_event("new_global_message", %{"message" => message}, socket) do
+    GameChat.new_message(socket.assigns.account.name, message)
+    {:noreply, assign(socket, global_chat_messages: GameChat.state().messages)}
+  end
+
   def handle_info(:update_player_list, socket) do
     state = GameServer.state(socket.assigns.game_state.server_uuid)
     :timer.send_after(500, self(), :update_player_list)
@@ -105,5 +125,16 @@ defmodule PhoenixRoyaleWeb.RoyaleLive do
       true ->
         {:noreply, socket}
     end
+  end
+
+  def handle_info(:live_games_update, socket) do
+    :timer.send_after(3000, self(), :live_games_update)
+    live_games = GameStats.live_games()
+    {:noreply, assign(socket, live_games: live_games)}
+  end
+
+  def handle_info(:chat_update, socket) do
+    :timer.send_after(500, self(), :chat_update)
+    {:noreply, assign(socket, chat_messages: GameChat.state().messages)}
   end
 end

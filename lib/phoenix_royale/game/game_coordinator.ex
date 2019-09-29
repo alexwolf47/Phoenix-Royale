@@ -3,7 +3,7 @@ defmodule PhoenixRoyale.GameCoordinator do
   alias PhoenixRoyale.{GameServer, Player, GameRecord, Account}
 
   @server_name {:global, __MODULE__}
-  @max_players 5
+  @max_players 10
 
   defmodule GameCoordinator do
     defstruct need_players: %{},

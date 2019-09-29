@@ -1,7 +1,9 @@
 
 <%= if @game_state.server_status == :countdown do %>
-    <div style="position: absolute; top: 200px; left: 200px; font-size: 64px;">
+    <div style="position: absolute; top: 200px; width: calc(100vw); font-size: 128px; font-weight: 800; color: #fff; transform: rotate(<%= (round(@game_state.countdown/1000) - @game_state.countdown/1000) * 60  %>deg)">
+    <div style="width:50px; margin: 0px auto;">
     <p><%= round(@game_state.countdown/1000) %></p>
+    </div>
     </div>
 <% end %>
 
