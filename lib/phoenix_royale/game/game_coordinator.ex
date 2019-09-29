@@ -1,6 +1,6 @@
 defmodule PhoenixRoyale.GameCoordinator do
   use GenServer
-  alias PhoenixRoyale.{GameServer, Player}
+  alias PhoenixRoyale.{GameServer, Player, GameRecord, Account}
 
   @server_name {:global, __MODULE__}
   @max_players 5
@@ -57,7 +57,16 @@ defmodule PhoenixRoyale.GameCoordinator do
 
   def handle_cast({:finish_game, game_state}, state) do
     updated_full_games = Map.drop(state.full_games, [game_state.uuid])
-    PhoenixRoyale.GameRecord.new(game_state)
+    GameRecord.new(game_state)
+
+    if game_state.player_count > 1 do
+      winner = Account.by_name(game_state.winner)
+
+      Account.update(winner, %{
+        wins: winner.wins + 1
+      })
+    end
+
     new_state = %{state | full_games: updated_full_games}
     {:noreply, new_state}
   end

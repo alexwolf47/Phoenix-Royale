@@ -12,7 +12,11 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
     :timer.send_after(500, self(), :chat_update)
     stats = GameStats.fetch_stats()
     live_games = GameStats.live_games()
-    account_wins = GameRecord.get_account_wins(account.name)
+
+    # Leaderboard
+    GameRecord.order_by_account_wins() |> IO.inspect(label: "*** LEADERBOARD")
+    total_multiplayer_games = GameRecord.total_multiplayer_games()
+    |> IO.inspect(label: "*** total multiplayer games")
 
     {:ok,
      assign(socket,
@@ -20,7 +24,6 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
        account: account,
        stats: stats,
        live_games: live_games,
-       account_wins: account_wins,
        chat_messages: GameChat.state().messages
      )}
   end
