@@ -48,7 +48,7 @@
                                     <div class="col s12 m12">
                                       <div class="card-panel blue-grey darken-2" style="text-align: right;">
                                         <span class="white-text" style="font-size:16px; font-weight: 300;">
-                                        Wins:
+                                        Multiplayer wins:
                                         </span>
                                       </div>
                                     </div>
@@ -231,6 +231,7 @@
                 </div>
             </div>
             <div class="dashboardBox">
+                <div>
                   <a href="/play">
                     <div>
                       <div class="row">
@@ -245,7 +246,16 @@
                         </div>
                       </div>
                   </a>
+                </div>
 
+                <div id=leaderboard>
+                  <p> Leaderboard </p>
+                  <%= for {score, position} <- Enum.with_index(@leaderboard) do %>
+                    <p>
+                      Rank: <%= position + 1 %> - User: <%=score.winner %> - Wins: <%= score.wins %> - Win percentage <%= win_percentage(score) %> %
+                    </p>
+                  <% end %>
+                </div>
 
             </div>
             <div class="dashboardBox">
