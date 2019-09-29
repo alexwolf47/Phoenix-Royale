@@ -10,6 +10,7 @@ defmodule PhoenixRoyale.Account do
     field :experience, :integer
     field :wins, :integer
     field :games_played, :integer
+    field :multiplayer_games_played, :integer
 
     timestamps()
   end
@@ -17,7 +18,7 @@ defmodule PhoenixRoyale.Account do
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:name, :unique_id, :experience, :wins, :games_played])
+    |> cast(attrs, [:name, :unique_id, :experience, :wins, :games_played, :multiplayer_games_played])
     |> validate_required([:name])
   end
 
@@ -32,7 +33,17 @@ defmodule PhoenixRoyale.Account do
         where: a.unique_id == ^unique_id
       )
 
-    Repo.all(query)
+    Repo.one(query)
+  end
+
+  def by_name(name) do
+    query =
+      from(
+        a in __MODULE__,
+        where: a.name == ^name
+      )
+
+    Repo.one(query)
   end
 
   def get_all() do
@@ -40,7 +51,7 @@ defmodule PhoenixRoyale.Account do
   end
 
   def create(params) do
-    changeset(%__MODULE__{experience: 0, wins: 0, games_played: 0}, params)
+    changeset(%__MODULE__{experience: 0, wins: 0, games_played: 0, multiplayer_games_played: 0}, params)
     |> Repo.insert()
   end
 

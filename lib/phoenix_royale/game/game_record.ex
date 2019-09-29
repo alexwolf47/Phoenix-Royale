@@ -17,7 +17,7 @@ defmodule PhoenixRoyale.GameRecord do
   end
 
   def new(game_state) do
-    record = %{winner: game_state.winner, player_count: Enum.count(game_state.players)}
+    record = %{winner: game_state.winner, player_count: game_state.player_count}
 
     changeset(%__MODULE__{}, record)
     |> Repo.insert()
@@ -27,12 +27,19 @@ defmodule PhoenixRoyale.GameRecord do
     Repo.all(__MODULE__)
   end
 
-  def get_account_wins(account_name) do
+  def order_by_account_wins() do
     from(gr in PhoenixRoyale.GameRecord,
-      where: gr.winner == ^account_name,
+      join: a in PhoenixRoyale.Account,
+      on: a.name == gr.winner,
       where: gr.player_count != 1,
-      select: count(gr)
+      select: %{
+        winner: gr.winner,
+        wins: count(gr),
+        multiplayer_games_played: a.multiplayer_games_played
+      },
+      group_by: [gr.winner, a.multiplayer_games_played],
+      order_by: [desc: count(gr), asc: a.multiplayer_games_played]
     )
-    |> Repo.one()
+    |> Repo.all()
   end
 end
