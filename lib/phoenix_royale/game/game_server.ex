@@ -5,7 +5,7 @@ defmodule PhoenixRoyale.GameServer do
   defmodule GameState do
     defstruct server_status: :need_players,
               uuid: nil,
-              start_countdown: 12,
+              start_countdown: 20,
               game_map: %{},
               player_count: 0,
               alive_count: 0,

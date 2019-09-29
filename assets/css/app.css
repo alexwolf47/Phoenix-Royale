@@ -7,7 +7,7 @@ body {
     margin: 0px;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    /* overflow: hidden; */
     font-family: 'Fira Sans', sans-serif;
 }
 
@@ -199,4 +199,12 @@ img {
     font-size: 32px;
     padding: 80px 0px;
     text-align: right;
+}
+
+.play-game {
+    transition: all 0.25s ease-in-out;
+}
+
+.play-game:hover {
+    transform: scale(0.96);
 }

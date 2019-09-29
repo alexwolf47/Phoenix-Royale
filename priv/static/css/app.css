@@ -318,7 +318,7 @@ input[type='text'] {
     width: 70%;
     height: calc(100vh);
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 33% 33% 33%;
     grid-row: auto auto;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
@@ -347,7 +347,12 @@ input[type='text'] {
     .homeContainer {
         margin: 0px auto;
         width: 100%;
-        transform: scale(0.7);
+        transform: scale(0.8) translateY(-80px);
+    }
+    .lobbyContainer {
+        margin: 0px auto;
+        width: 100%;
+        transform: scale(0.8) translateY(-80px);
     }
 }
 
@@ -376,7 +381,7 @@ body {
     margin: 0px;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    /* overflow: hidden; */
     font-family: 'Fira Sans', sans-serif;
 }
 
@@ -568,4 +573,12 @@ img {
     font-size: 32px;
     padding: 80px 0px;
     text-align: right;
+}
+
+.play-game {
+    transition: all 0.25s ease-in-out;
+}
+
+.play-game:hover {
+    transform: scale(0.96);
 }
