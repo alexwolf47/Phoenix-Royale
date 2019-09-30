@@ -5,7 +5,7 @@ defmodule PhoenixRoyaleWeb.AboutLive do
   Why is this a LiveView controller? I was going to add some animations and effects to this page. I ran out of time :(
   """
   def render(_assigns) do
-    Phoenix.View.render(PhoenixRoyaleWeb.AboutView, "about.html", about: about)
+    Phoenix.View.render(PhoenixRoyaleWeb.AboutView, "about.html")
   end
 
   def mount(_session, socket) do
