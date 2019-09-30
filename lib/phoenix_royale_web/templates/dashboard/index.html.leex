@@ -250,81 +250,116 @@
                       </div>
                     </div>
 
-                          <div class="card blue-grey darken-4">
+              <div class="card blue-grey darken-4">
                 <div class="card-content white-text">
                     <div id=leaderboard>
-                      <span class="card-title">Leaderboard</span>
-   <div style=" display: flex; ">
-                               
-                                        <div class="card-panel red darken-4" style="text-align: right;">
-                                          <span class="white-text" style="font-size:16px;">
-                                            Rank
-                                          </span>
-                                        </div>
-                              
-                                   
-                                        <div class="card-panel grey darken-4">
-                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
-                                            Name
-                                          </span>
-                                        </div>
+                      <span class="card-title">Wins Leaderboard</span>
+                        <div style=" display: flex; ">   
+                          <div class="card-panel red darken-4" style="text-align: right;">
+                            <span class="white-text" style="font-size:16px;">
+                              Rank
+                            </span>
+                          </div>   
+                          <div class="card-panel grey darken-4">
+                            <span class="white-text" style="font-size:16px; font-weightL 300;">
+                              Name
+                            </span>
+                          </div>
 
-                                         <div class="card-panel green darken-4">
-                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
+                          <div class="card-panel green darken-4">
+                            <span class="white-text" style="font-size:16px; font-weightL 300;">
                               Wins
-                                          </span>
-                                        </div>
+                            </span>
+                          </div>
+                          <div class="card-panel orange darken-4">
+                            <span class="white-text" style="font-size:16px; font-weightL 300;">
+                              Win %
+                            </span>
+                          </div>
+                        </div>
 
+                        <div style="width:100%; height: 2px; background-colour: #fff;"></div>
 
-                                         <div class="card-panel orange darken-4">
-                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
-                                            Win %
-                                          </span>
-                                        </div>
-                                </div>
-
-                                <div style="width:100%; height: 2px; background-colour: #fff;"></div>
-
-
-                  
-
-                      <%= for {score, position} <- Enum.with_index(@leaderboard) do %>
-                              <div style=" display: flex; ">
+                        <%= for {score, position} <- Enum.with_index(@leaderboard_wins) do %>
+                          <div style=" display: flex; ">
                                
-                                        <div class="card-panel red darken-4" style="text-align: right;">
-                                          <span class="white-text" style="font-size:16px;">
-                                            <%= position + 1 %>
-                                          </span>
-                                        </div>
-                              
-                                   
-                                        <div class="card-panel grey darken-4">
-                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
-                                            <% {name, _} = String.split_at(score.winner, 12) %>
-                                            <%= name %>
-                                          </span>
-                                        </div>
-
-                                         <div class="card-panel green darken-4">
-                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
-                                            <%= score.wins %> 
-                                            <%= if score.wins == 1 do %>win<% else %>wins<% end %>
-                                          </span>
-                                        </div>
-
-
-                                         <div class="card-panel orange darken-4">
-                                          <span class="white-text" style="font-size:16px; font-weightL 300;">
-                                            <%= win_percentage(score) %>%
-                                          </span>
-                                        </div>
-                                </div>
-                      <% end %>
-                    </div>
-
+                            <div class="card-panel red darken-4" style="text-align: right;">
+                              <span class="white-text" style="font-size:16px;">
+                                <%= position + 1 %>
+                              </span>
+                            </div>
+                            <div class="card-panel grey darken-4">
+                              <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                <%= score.name %>
+                              </span>
+                            </div>
+                            <div class="card-panel green darken-4">
+                              <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                <%= score.wins %> 
+                                <%= if score.wins == 1 do %>win<% else %>wins<% end %>
+                              </span>
+                            </div>
+                            <div class="card-panel orange darken-4">
+                              <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                <%= win_percentage(score) %>%
+                              </span>
+                            </div>
+                         </div>
+                        <% end %>
+                      </div>
                   </div>
+            </div>
+
+            <div class="card blue-grey darken-4">
+                <div class="card-content white-text">
+                    <div id=leaderboard>
+                      <span class="card-title">Max Distance Leaderboard</span>
+                        <div style=" display: flex; ">   
+                          <div class="card-panel red darken-4" style="text-align: right;">
+                            <span class="white-text" style="font-size:16px;">
+                              Rank
+                            </span>
+                          </div>   
+                          <div class="card-panel grey darken-4">
+                            <span class="white-text" style="font-size:16px; font-weightL 300;">
+                              Name
+                            </span>
+                          </div>
+
+                          <div class="card-panel green darken-4">
+                            <span class="white-text" style="font-size:16px; font-weightL 300;">
+                              Max Distance
+                            </span>
+                          </div>
+                        </div>
+
+                        <div style="width:100%; height: 2px; background-colour: #fff;"></div>
+
+                        <%= for {score, position} <- Enum.with_index(@leaderboard_max_distance) do %>
+                          <div style=" display: flex; ">
+                               
+                            <div class="card-panel red darken-4" style="text-align: right;">
+                              <span class="white-text" style="font-size:16px;">
+                                <%= position + 1 %>
+                              </span>
+                            </div>
+                            <div class="card-panel grey darken-4">
+                              <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                <%= score.name %>
+                              </span>
+                            </div>
+                            <div class="card-panel green darken-4">
+                              <span class="white-text" style="font-size:16px; font-weightL 300;">
+                                <%= score.max_distance %> 
+                              </span>
+                            </div>
+                         </div>
+                        <% end %>
+                      </div>
                   </div>
-                  </div>
+            </div>
+
+          </div>
 
          <div class="dashboardBox">
                     <div>
