@@ -253,7 +253,24 @@
               <div class="card blue-grey darken-4">
                 <div class="card-content white-text">
                     <div id=leaderboard>
-                      <span class="card-title">Wins Leaderboard</span>
+                      <span class="card-title">Leaderboard</span>
+                         <div style=" display: flex; ">   
+                         <a phx-click="by_wins" style="width: 50%;">
+                          <div class="card-panel leaderboard-option blue-grey darken-3" style="cursor: pointer; text-align: right; width:100%;">
+                            <span class="white-text" style="font-size:16px;">
+                              by Wins
+                            </span>
+                          </div>
+                          </a>
+                          <a phx-click="by_distance"  style="width: 50%;">
+                            <div class="card-panel leaderboard-option blue-grey darken-2" style="cursor: pointer; text-align: right; width:100%;">
+                            <span class="white-text" style="font-size:16px;">
+                              by Distance
+                            </span>
+                          </div>
+                          </a>
+                          </div>
+                   <%= unless @by_distance do %>
                         <div style=" display: flex; ">   
                           <div class="card-panel red darken-4" style="text-align: right; width:10%;">
                             <span class="white-text" style="font-size:16px;">
@@ -304,14 +321,9 @@
                             </div>
                          </div>
                         <% end %>
-                      </div>
-                  </div>
-            </div>
+                      <% end %>
+                        <%= if @by_distance do %>
 
-            <div class="card blue-grey darken-4">
-                <div class="card-content white-text">
-                    <div id=leaderboard>
-                      <span class="card-title">Max Distance Leaderboard</span>
                         <div style=" display: flex; ">   
                           <div class="card-panel red darken-4" style="text-align: right;  width: 10%;">
                             <span class="white-text" style="font-size:16px;">
@@ -326,7 +338,7 @@
 
                           <div class="card-panel green darken-4" style="width: 50%;">
                             <span class="white-text" style="font-size:16px;  width: 50%;">
-                              Max Distance
+                              Max Distance (m)
                             </span>
                           </div>
                         </div>
@@ -351,9 +363,12 @@
                             </div>
                          </div>
                         <% end %>
+          <% end %>
                       </div>
                   </div>
             </div>
+
+
 
           </div>
 
