@@ -4,7 +4,7 @@
 }
 
 .homeWrapper {
-    background-color: #E26D5C;
+    background-color: #e6305a;
     width: 100%;
 }
 
@@ -78,7 +78,7 @@ input[type='text'] {
 
 .loginSubmit {
     margin-top: 0px;
-    background: #E84855;
+    background: #e6305a;
     font-family: 'Fira Sans', sans-serif;
     color: #E0DFD5;
     font-size: 18px;
@@ -91,7 +91,7 @@ input[type='text'] {
 }
 
 .loginSubmit:hover {
-    background: #E84855;
+    background: #e6305a;
     font-family: 'Fira Sans', sans-serif;
     border: 2px solid #E0DFD5;
     height: 48px;
