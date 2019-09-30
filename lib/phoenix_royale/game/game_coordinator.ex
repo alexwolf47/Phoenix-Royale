@@ -57,6 +57,7 @@ defmodule PhoenixRoyale.GameCoordinator do
 
   def handle_cast({:finish_game, game_state}, state) do
     updated_full_games = Map.drop(state.full_games, [game_state.uuid])
+    IO.inspect(game_state)
     GameRecord.new(game_state)
 
     if game_state.player_count > 1 do
@@ -79,7 +80,13 @@ defmodule PhoenixRoyale.GameCoordinator do
     new_game_uuid = UUID.uuid4()
     {:ok, new_game_pid} = GameServer.start_link(new_game_uuid, 1)
 
-    player = %Player{name: account.name, pid: pid, uuid: UUID.uuid4()}
+    player = %Player{
+      name: account.name,
+      unique_id: account.unique_id,
+      pid: pid,
+      uuid: UUID.uuid4()
+    }
+
     gameid = GameServer.join(account, player, new_game_uuid)
 
     new_state = %{state | need_players: %{new_game_uuid => %{pid: new_game_pid}}}
@@ -95,7 +102,13 @@ defmodule PhoenixRoyale.GameCoordinator do
     new_game_uuid = UUID.uuid4()
     {:ok, new_game_pid} = GameServer.start_link(new_game_uuid, @max_players)
 
-    player = %Player{name: account.name, pid: pid, uuid: UUID.uuid4()}
+    player = %Player{
+      name: account.name,
+      unique_id: account.unique_id,
+      pid: pid,
+      uuid: UUID.uuid4()
+    }
+
     gameid = GameServer.join(account, player, new_game_uuid)
 
     new_state = %{state | need_players: %{new_game_uuid => %{pid: new_game_pid}}}
@@ -105,7 +118,13 @@ defmodule PhoenixRoyale.GameCoordinator do
   def handle_call({:find_game, account}, {pid, _ref} = _from, %{need_players: games} = state) do
     game_uuid = Enum.at(Map.keys(games), 0)
 
-    player = %Player{name: account.name, pid: pid, uuid: UUID.uuid4()}
+    player = %Player{
+      name: account.name,
+      unique_id: account.unique_id,
+      pid: pid,
+      uuid: UUID.uuid4()
+    }
+
     gameid = GameServer.join(account, player, game_uuid)
 
     {:reply, gameid, state}
