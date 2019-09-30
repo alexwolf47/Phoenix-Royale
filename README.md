@@ -6,11 +6,11 @@ Hey! I'm Alex and this is my entry in [Phoenix Phrenzy](https://phoenixphrenzy.c
 
 # Introduction
 
-Phoenix Royale is a multiplayer, side-scrolling battle royale type game which aims to push Phoenix LiveView to it's limits. Whilst a game such as this may not be the optimal use of LiveView, I have had a lot of fun trying to create a playable game which is rendered fully server-side. It also aims to demonstrate how easy it is to build a game which can handle many multiplayer games running simultaenously using Elixir/Erlang's GenServers, and how well this can be implemented on the frontend using Phoenix LiveView. 
+Phoenix Royale is a multiplayer, side-scrolling battle royale type game which aims to push Phoenix LiveView to it's limits (at least in terms on animation). Whilst a game such as this may not be the optimal use of LiveView, I've had a lot of fun trying to create a playable game which is rendered fully server-side. It also aims to demonstrate how easy it is to build a game which can handle many multiplayer games running simultaenously using Elixir/Erlang's GenServers, and how well this can be implemented on the frontend using Phoenix LiveView. 
 
 ## How to play
 
-Visit [Phoenix Royale](phoenixroyale.com)to play with others, or run the project locally using the guide detailed below.
+Visit [Phoenix Royale](http://phoenixroyale.com) to play with others, or run the project locally using the guide detailed below.
 
 ## About me
 
@@ -18,33 +18,47 @@ I currently work as an Elixir/Phoenix developer in Newcastle-upon-Tyne, in the N
 
 # The game
 
-## Concept
-
 ## Aim of the game
 
-In order to win, you simply need to be the last alive. Avoid comets and other obstacles and collect Elixirs to increase your speed, whilst trying to fly away from the storm.
+In order to win, you simply need to be the last alive. Avoid comets and other obstacles and collect Elixirs to increase your speed, whilst trying to fly away from the JavaStorm.
 
-## Questions
+## Questions / Further comments
 
-1. **How many people can play simultaneously in one game?** I'm not sure! I have set a maximum of 10 players in each game for now, I haven't been able to test this with more players.
+1. **How many people can play simultaneously in one game?** 
 
-2. **The hitboxes aren't perfect?** I know! I ran out of time developing the actual game itself, there was a lot more to be added and refining the hitboxes was something I would have liked to do with a bit more time. I think (*hope*) they are good enough to demonstrate the concept.
+I'm not sure! I have set a maximum of 10 players in each game for now, I haven't been able to test this with more players.
+
+2. **The hitboxes aren't perfect?** 
+
+I know! I ran out of time developing the actual game itself, there was a lot more to be added and refining the hitboxes was something I would have liked to do with a bit more time. I think (*hope*) they are good enough to demonstrate the concept.
+
+3. **Why is it the "JavaStorm"?** 
+
+I wanted to make it so snippets of Java were chasing your Phoenix in a storm, but I did not have time to add this.
+
+4. **It can lag quite a bit :(**
+
+I'd love it if anyone would help out and make it smoother. I got it performing as well as I could. It is also hosted in the US, so please consider this! I am sure my HTML could also be cleaned up further to improve the framerate.
+
+## How it works
+
+When the application is started, a GameCoordinator GenServer starts up, this handles finding both single player and multiplayer games. When a player tries to start a game and there currently are no servers running, a GameServer GenServer is started up. For each player in the game there is an additional GameInstance GenServer. This is what each LiveView session talks to. This was the only way I could make it playable with a number of players! 
+
+In addition, each player's GameInstance keeps the others updated, using a function I called `waterfall`, I am not really sure where I came to this name from as it doesn't really describe what it is doing.
+
+The best way to look at what is going on is to dive in to the code itself! (If you're interested)
 
 ## The code
 
 The code in this project is by no means fully finished. There is absolutely no documentation and not one test. There have been a number of iterations on how the live_view module connects to the GenServers actually running the game, in order to try and make it as playable as possible.
 
-I have had many ideas for this game which I have had to omit due to being unable to dedicate enough time to working on this project. There's a list of tasks included in this readme which needs doing with the game in it's current state, and also a list of further features which I had in mind.
+I have had many ideas for this game which I have had to omit due to being unable to dedicate enough time to working on this project. I have a big list of tasks which need doing with the game in it's current state, and also a list of further features which I had in mind. There is a lot of potential for refactoring the code, in particular the templates themselves need some tidying up. 
 
 Hopefully the important parts of the code are reasonably succint and easy to read (The game server and instances, along with the corresponding royale_live module), whilst other areas could definitely be improved significantly (such as the map generation and game logic).
 
 # Deployment
 
-## Online
-
-[Phoenix Royale](phoenixroyale.com)
-
-This app is currently deployed on Gigalixir using their free service which allows one the deployment on one application. The cluster is in the US so please bear in mind that performance may be affected when playing in the EU or elsewhere.
+Phoenix Royale is deployed online [here!](http://phoenixroyale.com). It is currently deployed on Gigalixir using their free service which allows one the deployment on one application. The cluster is in the US so please bear in mind that performance may be affected when playing in the EU or elsewhere. Gigalixir was super easy to use and I would 100% recommend looking in to if you haven't used it already.
 
 - [Gigalixir](https://gigalixir.com/)
 
@@ -61,14 +75,15 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser an
 
 # Credits / Thanks
 
-The vast majority of the credit for this application belongs with the creator's of Elixir, Phoenix and Phoenix LiveView as I simply did not need to worry about so many things to get this working.
+The vast majority of the credit for this application belongs with the creator's of Elixir, Phoenix and Phoenix LiveView as I simply did not need to worry about so many things to get this working!
 
 There are a number of images and resources that have been used to create this application, these are listed here:
 
-  * CSS Waves
-  * Lightouse png
-  * Boat pngs
-  * Comet png
+  * Materialize CSS - https://materializecss.com
+  * CSS Waves - https://csspoints.com/css-wave-effect-responsive-design/
+  * Lightouse png - http://www.freepngclipart.com/free-png/87867-lighthouse-free-download-png-hq
+  * Boat png - https://pngtree.com/so/red_vessel
+  * Comet png - https://pngtree.com/freepng/fireball-planet-planet-comet-halleys-comet_3929072.html
 
 # Learn more
 
