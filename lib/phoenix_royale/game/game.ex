@@ -63,9 +63,17 @@ defmodule PhoenixRoyale.Game do
           account.multiplayer_games_played + 1
       end
 
-    Account.update(state.account, %{
+    max_distance =
+      if player.x > account.max_distance do
+        round(player.x)
+      else
+        account.max_distance
+      end
+
+    Account.update(account, %{
       experience: round(account.experience + experience_earned),
       games_played: account.games_played + 1,
+      max_distance: max_distance,
       multiplayer_games_played: multiplayer_games_played
     })
 
@@ -120,9 +128,7 @@ defmodule PhoenixRoyale.Game do
 
     Task.start(fn -> check_collisions(player_number, {x, y}, state) end)
 
-    updated_state = update_coords(player_state, x, y, x_speed, y_speed)
-
-    updated_state
+    update_coords(player_state, x, y, x_speed, y_speed)
   end
 
   def update_coords(%{pipe: pipe} = player_state, x, y, x_speed, y_speed) when pipe - x > 0 do

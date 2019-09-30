@@ -22,7 +22,12 @@ defmodule PhoenixRoyaleWeb.DashboardView do
     end
   end
 
+  def win_percentage(%{wins: _wins, multiplayer_games_played: 0}) do
+    0
+  end
+
   def win_percentage(%{wins: wins, multiplayer_games_played: multiplayer_games_played}) do
-    Float.round(wins/multiplayer_games_played, 1) * 100
+    IO.inspect({wins, multiplayer_games_played})
+    Float.round(wins / multiplayer_games_played, 1) * 100
   end
 end

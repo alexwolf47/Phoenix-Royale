@@ -32,8 +32,16 @@ defmodule PhoenixRoyale.GameStats do
     |> Enum.count()
   end
 
-  def live_games do
+  def live_games() do
     GameCoordinator.state().full_games
+    |> Map.to_list()
+    |> Enum.map(fn {uuid, _} ->
+      GameServer.state(uuid)
+    end)
+  end
+
+  def games_waiting() do
+    GameCoordinator.state().need_players
     |> Map.to_list()
     |> Enum.map(fn {uuid, _} ->
       GameServer.state(uuid)
