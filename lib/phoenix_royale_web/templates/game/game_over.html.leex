@@ -128,7 +128,7 @@
 
                                         <%= for {author, content} <- Enum.reverse(Enum.slice(@global_chat_messages, 0..9)) do %>
                                         <li class="collection-item blue-grey darken-4 "><span
-                                                style="font-weight: 300; font-size: 12px; color: #E84855;"><%= author %>:</span>
+                                                style="font-weight: 300; font-size: 12px; color: #e6305a;"><%= author %>:</span>
                                             <%= content %></li>
                                         <% end %>
 
@@ -136,7 +136,7 @@
                                     <% end %>
                                     <%= f = form_for :message, "#", [phx_submit: :new_global_message] %>
                                     <input id="message" name="message"" type=" text" value=""
-                                        class="chatInput grey lighten-3" style="width: 100%; padding: 8px 0px; color: #E84855;">
+                                        class="chatInput grey lighten-3" style="width: 100%; padding: 8px 0px; color: #e6305a;">
                                     <%= submit "enter" %>
                                     </form>
                                 </div>
