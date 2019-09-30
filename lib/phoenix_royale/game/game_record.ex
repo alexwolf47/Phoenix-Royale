@@ -30,14 +30,14 @@ defmodule PhoenixRoyale.GameRecord do
   def order_by_account_wins() do
     from(gr in PhoenixRoyale.GameRecord,
       join: a in PhoenixRoyale.Account,
-      on: a.name == gr.winner,
+      on: a.unique_id == gr.winner,
       where: gr.player_count != 1,
       select: %{
-        winner: gr.winner,
+        winner: a.name,
         wins: count(gr),
         multiplayer_games_played: a.multiplayer_games_played
       },
-      group_by: [gr.winner, a.multiplayer_games_played],
+      group_by: [a.name, a.multiplayer_games_played],
       order_by: [desc: count(gr), asc: a.multiplayer_games_played],
       limit: 5
     )

@@ -105,7 +105,7 @@ defmodule PhoenixRoyale.GameServer do
 
   def handle_cast({:kill, player_number}, %{alive_count: 1} = state) do
     winner = Map.get(state.players, player_number)
-    updated_state = %{state | alive_count: 0, server_status: :game_over, winner: winner.name}
+    updated_state = %{state | alive_count: 0, server_status: :game_over, winner: winner.unique_id}
     PhoenixRoyale.GameCoordinator.finish_game(updated_state)
     :timer.send_interval(1000 * 60 * 4, self(), :close)
     {:noreply, updated_state}
