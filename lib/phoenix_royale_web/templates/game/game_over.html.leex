@@ -20,6 +20,7 @@
                             <div class="card blue-grey darken-4">
                                 <div class="card-content white-text">
                                     <span class="card-title" style="font-size: 32px;">Game over!</span>
+                                    <p style="font-size:18px;">You were killed by <%= death_type(player.death_type) %></p>
 
                                     <span class="card-title" style="font-size: 20px; padding-top: 12px;">Your results!</span>
                                     <div style="display: flex; width: 100%;">
@@ -72,7 +73,7 @@
                                     </div>
 
 
-                                    <span class="card-title" style="font-size: 20px; padding-top: 12px;">Game results!</span>
+                                    <span class="card-title" style="font-size: 32px; padding-top: 12px;">Game results!</span>
                                     <br>
                                         <% sorted_players = @game_state.players |> Map.to_list() |> Enum.sort(&(elem(&1,1).position < elem(&2,1).position)) %>
                                     <%= for {number, player} <- sorted_players do %>
@@ -105,15 +106,15 @@
                         <div class="col s12 m12">
                         <div style="display: flex;">
                         <a href="/play">
-                        <div class="card teal darken-2" style="width: 200px;">
-                        <div class="card-content white-text">
-                            <span class="card-title" style="font-size: 18px;">Play again?</span>
+                        <div class="card blue-grey darken-4" style="width: 240px; height: 60px;">
+                        <div class="card-content white-text" style="padding: 14px;">
+                            <span class="card-title" style="font-size: 24px;">|> Play again?</span>
                         </div>
                          </div>
                         </a>
                          <a href="/dashboard">
-                        <div class="card red darken-3">
-                        <div class="card-content white-text">
+                        <div class="card blue-grey darken-2" style="width: 240px; height: 60px;">
+                        <div class="card-content white-text" style="padding: 14px;">
                             <span class="card-title" style="font-size: 18px;">Return to dashboard</span>
                         </div>
                          </div>

@@ -125,7 +125,7 @@ defmodule PhoenixRoyale.GameServer do
 
   def handle_cast({:update_players, updated_players}, state) do
     gameuuid = find_p1_gameid(state)
-
+    :timer.sleep(10)
     GameInstance.waterfall(gameuuid, 1, updated_players, state.alive_count)
     {:noreply, %{state | players: updated_players}}
   end

@@ -1,4 +1,7 @@
 
+<% ## Setting variables to be used throughout template %>
+<% player = Map.get(@game_state.players, @player_number) %>
+
 <%= if @game_state.server_status == :countdown do %>
     <div style="position: absolute; top: 200px; width: calc(100vw); font-size: 128px; font-weight: 800; color: #fff; transform: rotate(<%= (round(@game_state.countdown/1000) - @game_state.countdown/1000) * 60  %>deg)">
     <div style="width:50px; margin: 0px auto;">
@@ -6,12 +9,6 @@
     </div>
     </div>
 <% end %>
-
-
-
-<% ## Setting variables to be used throughout template %>
-<% player = Map.get(@game_state.players, @player_number) %>
-
 
 <% zone_map = PhoenixRoyale.Game.fetch_zone_map_from_x(@game_state.game_map, player.x) %>
 
@@ -80,10 +77,10 @@ viewBox="0 24 150 57" preserveAspectRatio="none" shape-rendering="auto">
             <%= if @game_state.server_status do %>
                 <!-- THE STORM -->
                     <%= if player.alive  do %>
-                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.2; z-index: 100; height: 800px; position: absolute; right: <%= round(700 + (player.x - @game_state.storm)) %>px">
+                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.4; z-index: 100; height: 800px; position: absolute; right: <%= round(700 + (player.x - @game_state.storm)) %>px">
                     </div>
                     <% else %>
-                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.2; z-index: 100; height: 800px; position: absolute; right: <%= 700 + (player.x - player.storm_at_death) %>px">
+                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.4; z-index: 100; height: 800px; position: absolute; right: <%= 700 + (player.x - player.storm_at_death) %>px">
                     </div>
                     <% end %>
                 <!-- MAP ELEMENTS -->
@@ -113,7 +110,6 @@ viewBox="0 24 150 57" preserveAspectRatio="none" shape-rendering="auto">
             <div class="playerPhoenix" style="bottom: <%= round(player.y * 8) %>px; left: 100px; transform: scaleX(-1) rotate(<%= round(player.y_speed/2.5) %>deg)"><img src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img></div>
             <div style="position: absolute; bottom: <%= round(player.y * 8 - 20) %>px; left: 110px; font-size: 8px; color: #ffffff;"><%= player.name %></div>
             <!-- OTHER PLAYERS -->
-            <%= if true do %>
                 <%= for other_player <- Map.to_list(Map.delete(@game_state.players, @player_number)) do %>
                 <% {number, player_state} = other_player %>
                 <% x_diff = player.x - player_state.x %>
@@ -124,7 +120,6 @@ viewBox="0 24 150 57" preserveAspectRatio="none" shape-rendering="auto">
                 <%= player_state.name %>
                 </div>
                 <% end %>
-            <% end %>
         </div>
     </div>
 </div>
@@ -134,5 +129,59 @@ viewBox="0 24 150 57" preserveAspectRatio="none" shape-rendering="auto">
     <div class="seaBlur">
     </div>
 </div>
+
+<%= if player.alive == false do %>
+    <div style="position: absolute; top: 200px; width: calc(100vw); font-size: 64px; font-weight: 800; color: #fff;">
+    <div style="width:500px; margin: 0px auto;">
+    <p>You died :(</p><br>
+    <p style="font-size:18px;">You were killed by <%= death_type(player.death_type) %></p>
+
+    </div>
+    </div>
+
+    <div style="position: absolute; top: 600px; left: 32px; width: calc(100vw); z-index: 233000;">
+    <div style="width: 400px;">
+<div class="dashboardBox">
+        <div>
+          <div class="row">
+            <div class="col s12 m12">
+              <div class="card blue-grey darken-4">
+                <div class="card-content white-text">
+                  <span class="card-title">In Game Summary</span>
+                 <% {_, lead_player} = hd(Map.to_list(@game_state.players) |> Enum.sort(&(elem(&1,1).x > elem(&2,1).x)))  %>
+                <%= for {number, player_state} <- Map.to_list(@game_state.players) |> Enum.sort(&(elem(&1,1).x > elem(&2,1).x)) do %>
+                <% colour = if number == @player_number do "orange" else "blue-grey" end %>
+                                    <div style="display: flex; width: 100%;">
+                                    <div class="card-panel <%= colour %> darken-2"
+                                        style="text-align: right; margin: 4px 0px; padding-top:15px;">
+                                        <span class="white-text" style="font-size:18px; line-height: 32px;">
+                                            <%= player_state.name %>
+                                        </span>
+                                    </div>
+                                      <div class="card-panel <%= colour %>  darken-3"
+                                        style="text-align: left; margin: 4px 0px;">
+                                        <span class="white-text" style="font-size:32px;">
+                                            <%= if player_state.alive do %>
+                                            <%= round(player_state.x)/10%>m
+                                            <% else %>
+                                            :( <%= round(player_state.x)/10 %>m
+                                            <% end %>
+                                        </span>
+                                    </div>
+                                    </div>
+
+                <% end %>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    </div>
+<% end %>
 
 

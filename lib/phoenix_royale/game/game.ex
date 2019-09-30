@@ -109,7 +109,7 @@ defmodule PhoenixRoyale.Game do
       state
       | players: updated_players,
         storm: state.storm + state.storm_speed,
-        storm_speed: state.storm_speed + 0.7 / @tick,
+        storm_speed: state.storm_speed + 0.28 / @tick,
         tick: state.tick + 1
     }
   end
@@ -228,7 +228,7 @@ defmodule PhoenixRoyale.Game do
                 |> check_elixirs(filter(zone_map, :elixir), player_number, uuid)
                 |> case do
                   true ->
-                    GameInstance.slow(player_number, 1.09, uuid)
+                    GameInstance.slow(player_number, 1.03, uuid)
                     {x, y}
 
                   false ->
