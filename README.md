@@ -2,7 +2,7 @@
 
 Hey! I'm Alex and this is my entry in [Phoenix Phrenzy](https://phoenixphrenzy.com), showing off what [Phoenix](https://phoenixframework.org/) and [LiveView](https://github.com/phoenixframework/phoenix_live_view) can do.
 
-![PhoenixRoyale Preview](https://i.imgur.com/qAlbExD.jpg "PhoenixRoyale")
+![PhoenixRoyale Preview](https://i.imgur.com/qAlbExD.jpg)
 
 # Introduction
 
