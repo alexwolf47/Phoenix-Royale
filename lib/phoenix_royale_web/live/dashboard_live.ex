@@ -13,7 +13,8 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
     stats = GameStats.fetch_stats()
     live_games = GameStats.live_games()
     chat_messages = GameChat.state().messages
-    leaderboard_stats = GameRecord.order_by_account_wins()
+    leaderboard_wins_stats = Account.order_by_account_wins()
+    leaderboard_max_distance_stats = Account.order_by_account_distance_record()
 
     {:ok,
      assign(socket,
@@ -22,7 +23,8 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
        stats: stats,
        live_games: live_games,
        chat_messages: chat_messages,
-       leaderboard: leaderboard_stats
+       leaderboard_wins: leaderboard_wins_stats,
+       leaderboard_max_distance: leaderboard_max_distance_stats
      )}
   end
 
