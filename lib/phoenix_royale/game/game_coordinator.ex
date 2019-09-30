@@ -61,7 +61,7 @@ defmodule PhoenixRoyale.GameCoordinator do
     GameRecord.new(game_state)
 
     if game_state.player_count > 1 do
-      winner = Account.by_name(game_state.winner)
+      winner = Account.by_unique_id(game_state.winner)
 
       Account.update(winner, %{
         wins: winner.wins + 1
