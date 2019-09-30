@@ -31,9 +31,9 @@
 
                     <%= for {x, y, length} <- @game_state.game_map.trees do %>
                         <%= if x - player.x <= 1000 && x - player.x > -800 do %>
-                        <div style="width:<%= length %>px; border-radius: 25px 25px 0px 0px; height: <%= y*6 %>px; position: absolute; bottom: 0px; left: <%= (100 + x - player.x) %>px; background-color: #E84855;"></div>
+                        <div style="width:<%= length %>px; border-radius: 25px 25px 0px 0px; height: <%= y*6 %>px; position: absolute; bottom: 0px; left: <%= (100 + x - player.x) %>px; background-color: #e6305a;"></div>
                        
-                        <div style="width:<%= length %>px; border-radius: 0px 0px 25px 25px; height: <%= 600- (y*6) - 240 %>px; position: absolute;  left: <%= (100 + x - player.x) %>px; background-color: #E84855;">
+                        <div style="width:<%= length %>px; border-radius: 0px 0px 25px 25px; height: <%= 600- (y*6) - 240 %>px; position: absolute;  left: <%= (100 + x - player.x) %>px; background-color: #e6305a;">
 
                 </div>
                         <% end %>

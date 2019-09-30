@@ -1,5 +1,6 @@
 defmodule PhoenixRoyale.Player do
   defstruct name: "",
+            unique_id: "",
             uuid: nil,
             alive: true,
             death_type: nil,

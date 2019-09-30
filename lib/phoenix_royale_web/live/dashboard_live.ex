@@ -13,7 +13,7 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
     stats = GameStats.fetch_stats()
     live_games = GameStats.live_games()
     chat_messages = GameChat.state().messages
-    leaderboard_stats = GameRecord.order_by_account_wins()
+    leaderboard_stats = Account.order_by_account_wins()
 
     {:ok,
      assign(socket,

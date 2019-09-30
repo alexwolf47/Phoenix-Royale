@@ -7,5 +7,5 @@ defmodule PhoenixRoyale.GameSettings do
 
   def server_update_interval(), do: 1500
 
-  def postgame_screen_timeout(), do: 20 * 1000
+  def postgame_screen_timeout(), do: 180 * 1000
 end

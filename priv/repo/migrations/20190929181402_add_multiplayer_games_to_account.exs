@@ -3,7 +3,7 @@ defmodule PhoenixRoyale.Repo.Migrations.AddMultiplayerGamesToAccount do
 
   def change do
     alter table(:accounts) do
-      add :multiplayer_games_played, :integer
+      add :multiplayer_games_played, :integer, default: 0
     end
   end
 end

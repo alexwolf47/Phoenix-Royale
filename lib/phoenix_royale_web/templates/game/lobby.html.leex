@@ -1,30 +1,102 @@
-
 <div class="homepage">
 
-    <div class="homeWrapper">
-        <div class="lobbyContainer">
-            <div class="box">
-                <div class="introContainer">
-                    
-                    Game Lobby
-                    <br>
-                    <span style="font-size: 18px;">These players are currently ready to play:</span><br>
-                    <%= for player <- @player_list do %>
-                    <span style="font-size: 14px;"><%= player %></span><br>
-                    <%= end %>
+  <div class="homeWrapper">
+    <div class="homeContainer" style="grid-template-columns: 50% 50%;">
 
+
+
+      <div class="dashboardBox">
+
+
+                <div>
+                 <div class="row">
+                    <div class="col s12 m12">
+                      <div class="card blue-grey darken-4">
+                        <div class="card-content white-text">
+                          <span class="card-title">Waiting for players!</span>
+                            Players:
+                            <br>
+                            <%= for player <- @player_list do %>
+
+                                    <div class="card-panel blue-grey darken-2" style="text-align: right; margin: 4px 0px;">
+                                        <span class="white-text" style="font-size:18px;">
+                                        <%= player %>
+                                        </span>
+
+                                      </div>
+                               
+                            <% end %>
+                            Starting in:
+                            <%= @start_countdown %>
+
+                        
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                    
+    
+                </div> 
+      </div>
+
+                  <div class="dashboardBox">
+                <div>
+                 <div class="row">                 
+                    <div class="col s12 m12">
+                      <div class="card blue-grey darken-4">
+                        <div class="card-content white-text">
+                          <span class="card-title">Chat</span>
+                            <%= unless @global_chat_messages == [] do %>
+                            <ul class="collection" style="margin-top: 32px; font-size: 16px;">
+                              
+                                <%= for {author, content} <- Enum.reverse(Enum.slice(@global_chat_messages, 0..12)) do %>
+                                  <li class="collection-item blue-grey darken-4 "><span style="font-weight: 300; font-size: 12px; color: #e6305a;"><%= author %>:</span> <%= content %></li>                          
+                                <% end %>
+                              
+                            </ul>
+                          <% end %>
+                          <%= f = form_for :message, "#", [phx_submit: :new_global_message] %>
+                          <input id="message" name="message"" type="text" value="" class="chatInput grey lighten-3" style="padding: 8px 0px; color: #e6305a;">
+                          <%= submit "enter" %>
+                          </form>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                    
+    
                 </div>
             </div>
-            <div class="box">
 
-                    <div style="font-size: 14px;">
-                    Game will start when either ten people have joined or in
-                    <span style="font-size: 18px;"><%= @start_countdown %> </span>seconds.
-                    </div>
-
-            </div>
-        </div>
     </div>
+  </div>
 </div>
 
+    <div class="dashboard-footer">
+    <footer class="page-footer grey darken-4 dashboard-footer">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text" >Phoenix Royale</h5>
+                <p class="grey-text text-lighten-4">A multiplayer side scrolling battle royale built using Phoenix Liveview. <br>
+                <a href="/about">About the game.</a>
+                </p>
+                
+              </div>
+              <div class="col l4 offset-l2 s12" style="padding-top: 32px;">
+                <ul>
+                  <li><a class="footerlink grey-text text-lighten-3" target="_blank" href="https://github.com/alexwolf47/live_view_demo">
+                  <svg  height="32" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="oddeven" fill="#ffffff" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+                   <span style="padding: 8px 0px 0px 12px; line-height: 32px; vertical-align:top;">View on GitHub</span></a></li>
+                  <li><a class="footerlink grey-text text-lighten-3" target="_blank" href="https://phoenixphrenzy.com/">
+ <img style="width: 32px; height: 32px;" src="https://seeklogo.com/images/P/phoenix-logo-D15F067911-seeklogo.com.png"></img>
+                   <span style="padding: 8px 0px 0px 12px; line-height: 32px;vertical-align:top;">Competition Homepage</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
 
+        </footer>
+    </div>
