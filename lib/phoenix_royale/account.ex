@@ -66,6 +66,20 @@ defmodule PhoenixRoyale.Account do
     name <> "-" <> words <> "-" <> numbers
   end
 
+  def order_by_account_wins() do
+    from( a in PhoenixRoyale.Account,
+      where: a.multiplayer_games_played != 0,
+      where: a.wins != 0,
+      select: %{
+        winner: a.name,
+        wins: a.wins,
+        multiplayer_games_played: a.multiplayer_games_played
+      },
+      order_by: [desc: a.wins, asc: a.multiplayer_games_played]
+    )
+    |> Repo.all()
+  end
+
   @p_words [
     "pace",
     "pack",
