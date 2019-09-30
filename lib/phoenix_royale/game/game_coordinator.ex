@@ -57,7 +57,6 @@ defmodule PhoenixRoyale.GameCoordinator do
 
   def handle_cast({:finish_game, game_state}, state) do
     updated_full_games = Map.drop(state.full_games, [game_state.uuid])
-    IO.inspect(game_state)
     GameRecord.new(game_state)
 
     if game_state.player_count > 1 do

@@ -77,10 +77,10 @@ viewBox="0 24 150 57" preserveAspectRatio="none" shape-rendering="auto">
             <%= if @game_state.server_status do %>
                 <!-- THE STORM -->
                     <%= if player.alive  do %>
-                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.2; z-index: 100; height: 800px; position: absolute; right: <%= round(700 + (player.x - @game_state.storm)) %>px">
+                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.4; z-index: 100; height: 800px; position: absolute; right: <%= round(700 + (player.x - @game_state.storm)) %>px">
                     </div>
                     <% else %>
-                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.2; z-index: 100; height: 800px; position: absolute; right: <%= 700 + (player.x - player.storm_at_death) %>px">
+                    <div style="background: #0a0a0a; width: 100vw; opacity: 0.4; z-index: 100; height: 800px; position: absolute; right: <%= 700 + (player.x - player.storm_at_death) %>px">
                     </div>
                     <% end %>
                 <!-- MAP ELEMENTS -->
@@ -161,10 +161,10 @@ viewBox="0 24 150 57" preserveAspectRatio="none" shape-rendering="auto">
                                       <div class="card-panel <%= colour %>  darken-3"
                                         style="text-align: left; margin: 4px 0px;">
                                         <span class="white-text" style="font-size:32px;">
-                                            <%= if player.alive do %>
-                                            <%= round(player_state.x)/10 %>
+                                            <%= if player_state.alive do %>
+                                            <%= round(player_state.x)/10%>m
                                             <% else %>
-                                            :( <%= round(player_state.x)/10 %>
+                                            :( <%= round(player_state.x)/10 %>m
                                             <% end %>
                                         </span>
                                     </div>

@@ -1,5 +1,5 @@
 defmodule PhoenixRoyale.GameMap do
-  def zone_size(), do: 10000
+  def zone_size(), do: 20000
   def zone_interval(), do: 2000
   def zone_total(), do: zone_size() + zone_interval()
 
@@ -42,7 +42,7 @@ defmodule PhoenixRoyale.GameMap do
     zone_four =
       generate_zone(
         [],
-        [:lighthouse, :lighthouse, :comet, :elixir, :comet, :elixir, :elixir],
+        [:comet, :elixir, :lighthouse],
         3 * zone_total(),
         3 * zone_total() + zone_size()
       )
@@ -55,12 +55,48 @@ defmodule PhoenixRoyale.GameMap do
         4 * zone_total() + zone_size()
       )
 
+    zone_six =
+      generate_zone(
+        [],
+        [:comet, :elixir, :elixir],
+        5 * zone_total(),
+        5 * zone_total() + zone_size()
+      )
+
+    zone_seven =
+      generate_zone(
+        [],
+        [:elixir, :lighthouse],
+        5 * zone_total(),
+        5 * zone_total() + zone_size()
+      )
+
+    zone_eight =
+      generate_zone(
+        [],
+        [:lighthouse, :comet, :comet, :comet, :comet, :comet, :elixir],
+        5 * zone_total(),
+        5 * zone_total() + zone_size()
+      )
+
+    zone_nine =
+      generate_zone(
+        [],
+        [:comet],
+        5 * zone_total(),
+        5 * zone_total() + zone_size()
+      )
+
     %{
       zone_1: zone_one,
       zone_2: zone_two,
       zone_3: zone_three,
       zone_4: zone_four,
-      zone_5: zone_five
+      zone_5: zone_five,
+      zone_6: zone_six,
+      zone_7: zone_seven,
+      zone_8: zone_eight,
+      zone_9: zone_nine
     }
   end
 
