@@ -24,7 +24,8 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
        live_games: live_games,
        chat_messages: chat_messages,
        leaderboard_wins: leaderboard_wins_stats,
-       leaderboard_max_distance: leaderboard_max_distance_stats
+       leaderboard_max_distance: leaderboard_max_distance_stats,
+       by_distance: false
      )}
   end
 
@@ -35,6 +36,14 @@ defmodule PhoenixRoyaleWeb.DashboardLive do
   def handle_event("new_message", %{"message" => message}, socket) do
     GameChat.new_message(socket.assigns.account.name, message)
     {:noreply, assign(socket, chat_messages: GameChat.state().messages)}
+  end
+
+  def handle_event("by_wins", _, socket) do
+    {:noreply, assign(socket, by_distance: false)}
+  end
+
+  def handle_event("by_distance", _, socket) do
+    {:noreply, assign(socket, by_distance: true)}
   end
 
   def handle_info(:update, socket) do

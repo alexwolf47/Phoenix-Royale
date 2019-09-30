@@ -365,6 +365,10 @@ input[type='text'] {
     transform: scale(0.97);
     background-image: linear-gradient(118deg, rgba(34, 219, 231, 1) -0.9%, rgba(52, 118, 246, 1) 88.7%);
 }
+
+.leaderboard-option:hover {
+    opacity: 0.5;
+}
 /* This file is for your main application css. */
 body {
     margin: 0px;
